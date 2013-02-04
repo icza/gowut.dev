@@ -1,4 +1,17 @@
-// Copyright 2013 Andras Belicza. All rights reserved.
+// Copyright (C) 2013 Andras Belicza. All rights reserved.
+// 
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Implementation of the GWU session.
 
@@ -92,7 +105,7 @@ func newSessionImpl(private bool) sessionImpl {
 	}
 
 	now := time.Now()
-	
+
 	// Initialzie private sessions as new, but not the public session
 	return sessionImpl{id: id, isNew: private, created: now, accessed: now, windows: make(map[string]Window),
 		attrs: make(map[string]interface{}), timeout: 30 * time.Minute}
