@@ -3,7 +3,9 @@ package main
 import (
 	"code.google.com/p/gowut/gwu"
 	"fmt"
+	"log"
 	"math/rand"
+	"os"
 	"strconv"
 )
 
@@ -315,6 +317,7 @@ func main() {
 	server.AddWin(win)
 
 	//server.SetTheme("debug")
+	server.SetLogger(log.New(os.Stdout, "", log.LstdFlags))
 
 	// Start GUI server
 	if err := server.Start(); err != nil {
