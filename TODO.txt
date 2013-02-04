@@ -1,10 +1,14 @@
 
+-Refactor: TabBarPlacement => SidePlacement (same constants: TOP, BOTTOM, LEFT, RIGHT)?
+
 -ImageButton or SetImage() method for Button
 
 -Add possibility to serve static content, so users can register a folder to
 	server their images, custom css and js. 
 
 -Add a style chooser list box to the top of the window.
+
+-Implement Comp.RemoveEHandler() and Comp.RemoveEHandlerFunc() (and use it when removing Tabs...)
 
 -New components:
 	-new comps for input type (problem: weak support, mostly just by Chrome and Opera): date; color; range (jslider) 
