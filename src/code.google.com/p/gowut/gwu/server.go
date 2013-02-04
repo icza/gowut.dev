@@ -7,6 +7,7 @@ package gwu
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os/exec"
 	"runtime"
@@ -120,6 +121,11 @@ type Server interface {
 	// SetTheme sets the default CSS theme of the server.
 	SetTheme(theme string)
 
+	// SetLogger sets the logger to be used
+	// to log incoming requests.
+	// Pass nil to disable logging. This is the default.
+	SetLogger(logger *log.Logger)
+
 	// Start starts the GUI server and waits for incoming connections.
 	// 
 	// Sessionless window names may be specified as optional parameters
@@ -143,6 +149,7 @@ type serverImpl struct {
 	sessCreatorNames  map[string]string  // Session creator names
 	sessionHandlers   []SessionHandler   // Registered session handlers
 	theme             string             // Default CSS theme of the server
+	logger            *log.Logger        // Logger.
 }
 
 // NewServer creates a new GUI server in HTTP mode.
@@ -233,6 +240,10 @@ func (s *serverImpl) newSession(e *eventImpl) Session {
 	// Store new session
 	s.sessions[sess.Id()] = sess
 
+	if s.logger != nil {
+		s.logger.Println("SESSION created:", s.Id())
+	}
+
 	// Notify session handlers
 	for _, handler := range s.sessionHandlers {
 		handler.Created(sess)
@@ -257,6 +268,10 @@ func (s *serverImpl) removeSess(e *eventImpl) {
 // the public session is a no-op.
 func (s *serverImpl) removeSess2(sess Session) {
 	if sess.Private() {
+		if s.logger != nil {
+			s.logger.Println("SESSION removed:", s.Id())
+		}
+
 		// Notify session handlers
 		for _, handler := range s.sessionHandlers {
 			handler.Removed(sess)
@@ -304,6 +319,10 @@ func (s *serverImpl) SetTheme(theme string) {
 	s.theme = theme
 }
 
+func (s *serverImpl) SetLogger(logger *log.Logger) {
+	s.logger = logger
+}
+
 // open opens the specified URL in the default browser of the user.
 func open(url string) error {
 	var cmd string
@@ -332,6 +351,9 @@ func (s *serverImpl) Start(openWins ...string) error {
 	})
 
 	fmt.Println("Starting GUI server on:", s.appUrl)
+	if s.logger != nil {
+		s.logger.Println("Starting GUI server on:", s.appUrl)
+	}
 
 	for _, winName := range openWins {
 		open(s.appUrl + winName)
@@ -401,7 +423,9 @@ func (s *serverImpl) serveStatic(w http.ResponseWriter, r *http.Request) {
 // Renders of the URL-selected window,
 // and also handles event dispatching.
 func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Incoming: ", r.URL.Path)
+	if s.logger != nil {
+		s.logger.Println("Incoming: ", r.URL.Path)
+	}
 
 	// Check session
 	var sess Session
@@ -482,7 +506,7 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 		s.handleEvent(sess, win, w, r)
 	case _PATH_RENDER_COMP:
 		// Render just a component
-		renderComp(win, w, r)
+		s.renderComp(win, w, r)
 	default:
 		// Render the whole window
 		win.RenderWin(NewWriter(w), s)
@@ -491,7 +515,9 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 
 // renderWinList renders the window list of a session as HTML document with clickable links. 
 func (s *serverImpl) renderWinList(sess Session, wr http.ResponseWriter, r *http.Request) {
-	fmt.Println("\tRending windows list.")
+	if s.logger != nil {
+		s.logger.Println("\tRending windows list.")
+	}
 	wr.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	w := NewWriter(wr)
@@ -535,14 +561,16 @@ func (s *serverImpl) renderWinList(sess Session, wr http.ResponseWriter, r *http
 }
 
 // renderComp renders just a component. 
-func renderComp(win Window, w http.ResponseWriter, r *http.Request) {
+func (s *serverImpl) renderComp(win Window, w http.ResponseWriter, r *http.Request) {
 	id, err := AtoID(r.FormValue(_PARAM_COMP_ID))
 	if err != nil {
 		http.Error(w, "Invalid component id!", http.StatusBadRequest)
 		return
 	}
 
-	fmt.Println("\tRendering comp:", id)
+	if s.logger != nil {
+		s.logger.Println("\tRendering comp:", id)
+	}
 
 	comp := win.ById(id)
 	if comp == nil {
@@ -569,7 +597,9 @@ func (s *serverImpl) handleEvent(sess Session, win Window, wr http.ResponseWrite
 
 	comp := win.ById(id)
 	if comp == nil {
-		fmt.Println("\tComp not found:", id)
+		if s.logger != nil {
+			s.logger.Println("\tComp not found:", id)
+		}
 		http.Error(wr, fmt.Sprint("Component not found: ", id), http.StatusBadRequest)
 		return
 	}
@@ -579,7 +609,9 @@ func (s *serverImpl) handleEvent(sess Session, win Window, wr http.ResponseWrite
 		http.Error(wr, "Invalid event type!", http.StatusBadRequest)
 		return
 	}
-	fmt.Println("\tEvent from comp:", id, " event:", etype)
+	if s.logger != nil {
+		s.logger.Println("\tEvent from comp:", id, " event:", etype)
+	}
 
 	event := newEventImpl(s, EventType(etype), comp, sess)
 
