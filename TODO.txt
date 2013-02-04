@@ -1,0 +1,40 @@
+
+-ImageButton or SetImage() method for Button
+
+-Add possibility to serve static content, so users can register a folder to
+	server their images, custom css and js. 
+
+-Add a style chooser list box to the top of the window.
+
+-New components:
+	-new comps for input type (problem: weak support, mostly just by Chrome and Opera): date; color; range (jslider) 
+	-SuggestBox
+	-Disclosure Panel
+	-Absolute Panel
+	-Slider
+	-Form (+ fileuploader, submit button)
+	-Audio and Video (HTML5)
+	-YouTube
+
+
+-On client side display a progress icon while waiting for events or refreshing comps.
+Also display an error icon if an ajax call fails, gather messages and list them all when clicked.
+
+
+-Rewrite window list to use gwu components (be a real Window); also allow replacing it (at Server)
+	-Consider a Home Window (also replacable)
+
+
+-Add "AddFiller()" to panel which adds a comp with full size, and its cellformatter also set to full size.
+	Returns it (so it can be referenced/removed later). 
+
+-Ability to "push" from server to client (not just when an event is received).
+	-websocket?
+	-Timer component which periodically sends an event?
+
+-Somehow save window state and reload. (serialization)
+
+-LIMITATIONS @ doc.go
+
+-More return actions for events: "redirect to a URL (e.g. another window)", "show an alert or confirm. dialog"
+
