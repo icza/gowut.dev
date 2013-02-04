@@ -269,6 +269,7 @@ func (c *tabPanelImpl) Add(tab, content Comp) {
 		c.SetSelected(0)
 	}
 
+	// TODO would be nice to remove this internal handler func when a tab is removed!
 	tab.AddEHandlerFunc(func(e Event) {
 		c.SetSelected(c.CompIdx(content))
 		e.MarkDirty(c)
