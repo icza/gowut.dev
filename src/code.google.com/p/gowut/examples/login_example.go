@@ -79,7 +79,6 @@ func buildPrivateWins(s gwu.Session) {
 	img.Style().SetSize("25%", "25%")
 	p.Add(img)
 	win.Add(p)
-	//p.Add(gwu.NewImage("","http://google.com/images/srpr/logo3w.png"))
 	button := gwu.NewButton("Click me")
 	button.AddEHandler(&MyButtonHandler{text: ":-)"}, gwu.ETYPE_CLICK)
 	win.Add(button)
