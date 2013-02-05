@@ -202,9 +202,7 @@ func (c *compImpl) renderAttrsAndStyle(w writer) {
 		w.WriteAttr(name, value)
 	}
 
-	if c.styleImpl != nil {
-		c.styleImpl.render(w)
-	}
+	c.styleImpl.render(w)
 }
 
 func (c *compImpl) AddEHandler(handler EventHandler, etypes ...EventType) {

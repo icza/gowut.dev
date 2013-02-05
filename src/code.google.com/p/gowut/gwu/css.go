@@ -52,8 +52,10 @@ body {font-family:Arial}
 .gwu-Button {}
 
 .gwu-CheckBox {}
+.gwu-CheckBox-Disabled {color:#888}
 
 .gwu-RadioButton {}
+.gwu-RadioButton-Disabled {color:#888}
 
 .gwu-ListBox {}
 
