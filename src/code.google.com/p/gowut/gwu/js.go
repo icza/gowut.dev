@@ -177,20 +177,20 @@ function getSelectedIndices(select) {
 	return selected;
 }
 
-function getAndUpdateSwitchBtnValue(event, onButtonId, offButtonId) {
-	var onButton = document.getElementById(onButtonId);
-	var offButton = document.getElementById(offButtonId);
+function getAndUpdateSwitchBtnValue(event, onBtnId, offBtnId) {
+	var onBtn = document.getElementById(onBtnId);
+	var offBtn = document.getElementById(offBtnId);
 	
-	if (onButton == null)
+	if (onBtn == null)
 		return false;
 	
-	var value = onButton == document.elementFromPoint(event.clientX, event.clientY);
+	var value = onBtn == document.elementFromPoint(event.clientX, event.clientY);
 	if (value) {
-		onButton.className = "gwu-SwitchButton-On-Active";
-		offButton.className = "gwu-SwitchButton-Off-Inactive";
+		onBtn.className = "gwu-SwitchButton-On-Active";
+		offBtn.className = "gwu-SwitchButton-Off-Inactive";
 	} else {
-		onButton.className = "gwu-SwitchButton-On-Inactive";
-		offButton.className = "gwu-SwitchButton-Off-Active";
+		onBtn.className = "gwu-SwitchButton-On-Inactive";
+		offBtn.className = "gwu-SwitchButton-Off-Active";
 	}
 	
 	return value;
