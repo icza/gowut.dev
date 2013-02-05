@@ -289,6 +289,7 @@ func buildLoginWin(s gwu.Session) {
 	p.Add(gwu.NewLabel("And the other one:"))
 	sw2 := gwu.NewSwitchButton()
 	sw2.SetEnabled(true)
+	sw2.Style().SetWidthPx(100)
 	p.Add(sw2)
 	sw.AddEHandlerFunc(func(e gwu.Event) {
 		sw2.SetEnabled(sw.State())

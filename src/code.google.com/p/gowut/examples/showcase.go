@@ -22,6 +22,135 @@ import (
 	"fmt"
 )
 
+func plural(i int) string {
+	if i == 1 {
+		return ""
+	}
+	return "s"
+}
+
+func buildCheckBoxShow() gwu.Comp {
+	p := gwu.NewPanel()
+
+	suml := gwu.NewLabel("")
+
+	p.Add(gwu.NewLabel("Check the days you want to work on:"))
+
+	cbs := []gwu.CheckBox{gwu.NewCheckBox("Monday"), gwu.NewCheckBox("Tuesday"), gwu.NewCheckBox("Wednesday"),
+		gwu.NewCheckBox("Thursday"), gwu.NewCheckBox("Friday"), gwu.NewCheckBox("Saturday"), gwu.NewCheckBox("Sunday")}
+	cbs[5].SetEnabled(false)
+	cbs[6].SetEnabled(false)
+
+	for _, cb := range cbs {
+		p.Add(cb)
+		cb.AddEHandlerFunc(func(e gwu.Event) {
+			sum := 0
+			for _, cb2 := range cbs {
+				if cb2.State() {
+					fmt.Println(cb2.Text())
+					sum++
+				}
+			}
+			suml.SetText(fmt.Sprintf("%d day%s is %d hours a week.", sum, plural(sum), sum*8))
+			e.MarkDirty(suml)
+		}, gwu.ETYPE_CLICK)
+	}
+
+	p.Add(suml)
+
+	return p
+}
+
+func buildListBoxShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildTextBoxShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildPasswBoxShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildRadioButtonShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildSwitchButtonShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildLinkShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildPanelShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildTableShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildTabPanelShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildWindowShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildButtonShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildHtmlShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildImageShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildLabelShow() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
+func buildLinkShow2() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
 func buildShowcase(sess gwu.Session) {
 	win := gwu.NewWindow("show", "Showcase of Features - Gowut")
 	win.Style().SetFullWidth()
@@ -43,43 +172,87 @@ func buildShowcase(sess gwu.Session) {
 	themespan.Add(themes)
 	header.Add(themespan)
 	header.CellFmt(themespan).SetHAlign(gwu.HA_RIGHT)
+	logout := gwu.NewLink("Logout", "#")
+	logout.SetTarget("")
+	logout.AddEHandlerFunc(func(e gwu.Event) {
+		e.RemoveSess()
+		e.ReloadWin("login")
+	}, gwu.ETYPE_CLICK)
+	header.Add(logout)
+	header.CellFmt(logout).SetHAlign(gwu.HA_RIGHT)
+	header.CellFmt(logout).Style().SetWidthPx(100)
 	win.Add(header)
 
 	content := gwu.NewPanel()
 	content.SetLayout(gwu.LAYOUT_HORIZONTAL)
+	content.SetVAlign(gwu.VA_TOP)
 	content.Style().SetFullWidth()
 
+	showWrapper := gwu.NewPanel()
+	selectedShow := gwu.NewLabel("")
+	selectedShow.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("110%")
+	showWrapper.Add(selectedShow)
+
 	links := gwu.NewPanel()
-	links.Style().SetWidthPx(200).Set("border-right", "2px solid #777777")
+
+	// Lazily initialized, cached show components
+	showComps := make(map[string]gwu.Comp)
+	var selectedLink gwu.Label
+	addShowLink := func(show string, buildFunc func() gwu.Comp) {
+		link := gwu.NewLabel(show)
+		link.Style().SetFullWidth().SetCursor(gwu.CURSOR_POINTER).SetDisplay(gwu.DISPLAY_BLOCK).SetColor(gwu.CLR_BLUE)
+		link.AddEHandlerFunc(func(e gwu.Event) {
+			if selectedLink != nil {
+				selectedLink.Style().SetBackground("")
+				e.MarkDirty(selectedLink)
+				showWrapper.Remove(showComps[selectedLink.Text()])
+			}
+			selectedLink = link
+			selectedLink.Style().SetBackground("#aaffaa")
+			selectedShow.SetText(show)
+			showComp := showComps[show]
+			if showComp == nil {
+				showComp = buildFunc()
+				showComps[show] = showComp
+			}
+			showWrapper.Add(showComp)
+			e.MarkDirty(selectedLink, showWrapper)
+		}, gwu.ETYPE_CLICK)
+		links.Add(link)
+	}
+
+	links.Style().SetFullWidth().Set("border-right", "2px solid #777777")
 	l = gwu.NewLabel("Component Palette")
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("120%")
 	links.Add(l)
 	l = gwu.NewLabel("Input components")
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)
 	links.Add(l)
-	links.Add(gwu.NewLink("CheckBox", "#"))
-	links.Add(gwu.NewLink("Listbox", "#"))
-	links.Add(gwu.NewLink("TextBox", "#"))
-	links.Add(gwu.NewLink("PasswBox", "#"))
-	links.Add(gwu.NewLink("RadioButton", "#"))
-	links.Add(gwu.NewLink("SwitchButton", "#"))
+	addShowLink("CheckBox", buildCheckBoxShow)
+	addShowLink("ListBox", buildListBoxShow)
+	addShowLink("TextBox", buildTextBoxShow)
+	addShowLink("PasswBox", buildPasswBoxShow)
+	addShowLink("RadioButton", buildRadioButtonShow)
+	addShowLink("SwitchButton", buildSwitchButtonShow)
 	l = gwu.NewLabel("Containers")
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)
 	links.Add(l)
-	links.Add(gwu.NewLink("Link", "#"))
-	links.Add(gwu.NewLink("Panel", "#"))
-	links.Add(gwu.NewLink("Table", "#"))
-	links.Add(gwu.NewLink("TabPanel", "#"))
-	links.Add(gwu.NewLink("Window", "#"))
+	addShowLink("Link", buildLinkShow)
+	addShowLink("Panel", buildPanelShow)
+	addShowLink("Table", buildTableShow)
+	addShowLink("TabPanel", buildTabPanelShow)
+	addShowLink("Window", buildWindowShow)
 	l = gwu.NewLabel("Other components")
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)
 	links.Add(l)
-	links.Add(gwu.NewLink("Button", "#"))
-	links.Add(gwu.NewLink("Html", "#"))
-	links.Add(gwu.NewLink("Image", "#"))
-	links.Add(gwu.NewLink("Label", "#"))
-	links.Add(gwu.NewLink("Link", "#"))
+	addShowLink("Button", buildButtonShow)
+	addShowLink("Html", buildHtmlShow)
+	addShowLink("Image", buildImageShow)
+	addShowLink("Label", buildLabelShow)
+	addShowLink("Link", buildLinkShow2)
 	content.Add(links)
+	content.CellFmt(links).Style().SetWidthPx(200)
+	content.Add(showWrapper)
 
 	win.Add(content)
 
@@ -126,7 +299,7 @@ func buildLoginWin(sess gwu.Session) {
 	b := gwu.NewButton("OK")
 	b.AddEHandlerFunc(func(e gwu.Event) {
 		if tb.Text() == "admin" && pb.Text() == "a" {
-			e.Session().RemoveWin(win) // Login win is removed, password will not be retrievable from the browser
+			e.Session().RemoveWin(win)
 			buildShowcase(e.Session())
 			e.ReloadWin("show")
 		} else {
