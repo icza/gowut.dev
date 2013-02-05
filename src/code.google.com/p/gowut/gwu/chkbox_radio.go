@@ -42,7 +42,7 @@ type StateButton interface {
 // 
 // Suggested event type to handle changes: ETYPE_CLICK
 // 
-// Default style class: "gwu-CheckBox"
+// Default style classes: "gwu-CheckBox", "gwu-CheckBox-Disabled"
 type CheckBox interface {
 	// CheckBox is a StateButton.
 	StateButton
@@ -105,7 +105,7 @@ type RadioGroup interface {
 // 
 // Suggested event type to handle changes: ETYPE_CLICK
 // 
-// Default style class: "gwu-RadioButton"
+// Default style classes: "gwu-RadioButton", "gwu-RadioButton-Disabled"
 type RadioButton interface {
 	// RadioButton is a StateButton.
 	StateButton
@@ -129,10 +129,11 @@ type radioGroupImpl struct {
 type stateButtonImpl struct {
 	buttonImpl // Button implementation 
 
-	state     bool       // State of the button
-	inputType string     // Type of the underlying input tag
-	group     RadioGroup // Group of the button
-	inputId   ID         // distinct id for the rendered input tag
+	state         bool       // State of the button
+	inputType     string     // Type of the underlying input tag
+	group         RadioGroup // Group of the button
+	inputId       ID         // distinct id for the rendered input tag
+	disabledClass string     // Disabled style class
 }
 
 // SwitchButton implementation.
@@ -151,7 +152,7 @@ func NewRadioGroup(name string) RadioGroup {
 // NewCheckBox creates a new CheckBox.
 // The initial state is false.
 func NewCheckBox(text string) CheckBox {
-	c := newStateButtonImpl(text, "checkbox", nil)
+	c := newStateButtonImpl(text, "checkbox", nil, "gwu-CheckBox-Disabled")
 	c.Style().AddClass("gwu-CheckBox")
 	return c
 }
@@ -180,14 +181,14 @@ func NewSwitchButton() SwitchButton {
 // NewRadioButton creates a new radio button.
 // The initial state is false.
 func NewRadioButton(text string, group RadioGroup) RadioButton {
-	c := newStateButtonImpl(text, "radio", group)
+	c := newStateButtonImpl(text, "radio", group, "gwu-RadioButton-Disabled")
 	c.Style().AddClass("gwu-RadioButton")
 	return c
 }
 
 // newStateButtonImpl creates a new stateButtonImpl.
-func newStateButtonImpl(text, inputType string, group RadioGroup) *stateButtonImpl {
-	c := &stateButtonImpl{newButtonImpl("this.checked", text), false, inputType, group, nextCompId()}
+func newStateButtonImpl(text, inputType string, group RadioGroup, disabledClass string) *stateButtonImpl {
+	c := &stateButtonImpl{newButtonImpl("this.checked", text), false, inputType, group, nextCompId(), disabledClass}
 	// Use ETYPE_CLICK because IE fires onchange only when focus is lost...
 	c.AddSyncOnETypes(ETYPE_CLICK)
 	return c
@@ -208,6 +209,19 @@ func (r *radioGroupImpl) PrevSelected() RadioButton {
 func (r *radioGroupImpl) setSelected(selected RadioButton) {
 	r.prevSelected = r.selected
 	r.selected = selected
+}
+
+// SetEnabled sets the enabled property.
+// We have some extra job to do when changing enabled status:
+// we have to manage disabled class style.
+func (c *stateButtonImpl) SetEnabled(enabled bool) {
+	if enabled {
+		c.Style().RemoveClass(c.disabledClass)
+	} else {
+		c.Style().AddClass(c.disabledClass)
+	}
+
+	c.hasEnabledImpl.SetEnabled(enabled)
 }
 
 func (c *stateButtonImpl) State() bool {
