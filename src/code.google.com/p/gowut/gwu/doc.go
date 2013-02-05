@@ -116,7 +116,7 @@ position in case of a mouse event etc.). 2) The Event is an accessor to the
 Session associated with the client the event is originating from. Through
 the event an event handler may access the current Session, create a new
 Session or may remove it (invalidate it). 3) The event is also used
-to define actions to be executed (automatically by GWU) after the  event
+to define actions to be executed (automatically by Gowut) after the  event
 handling. For example if the event handler changes a component, the handler
 has to mark it dirty causing it to be re-rendered in the client browser,
 or an event handler can change the focused component, or reload another window.
@@ -131,10 +131,10 @@ SessionHandler can be used then to create the window prior to it being served.
 Here's an example how to do it:
 	// A SessionHandler implementation:
 	type MySessHandler struct {}
-	func (h SessHandler) Created(s gwu.Session) {
+	func (h SessHandler) Created(sess gwu.Session) {
 		win := gwu.NewWindow("login", "Login Window")
 		// ...add content to the login window...
-		session.AddWindow(win)
+		s.AddWindow(win)
 	}
 	func (h SessHandler) Removed(s gwu.Session) {}
 
@@ -158,7 +158,7 @@ document. The Window will recursively include its child components.
 Components render themselves into HTML codes.
 When a component generates an event, the page in the browser will make an
 AJAX call sending the event to the server. The event will be passed to all the
-appropriate even handlers. Event handlers can mark components dirty,
+appropriate event handlers. Event handlers can mark components dirty,
 specifying that they may have changed and they must be re-rendered.
 When all the even handlers are done, the ids of the dirty components are sent
 back, and the browser will request only to render the dirty components,
