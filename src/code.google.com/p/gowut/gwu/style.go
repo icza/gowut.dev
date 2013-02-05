@@ -27,6 +27,7 @@ const (
 	ST_BORDER      = "border"      // Border
 	ST_COLOR       = "color"       // (Foreground) color
 	ST_CURSOR      = "cursor"      // Cursor
+	ST_DISPLAY     = "display"     // Display
 	ST_FONT_SIZE   = "font-size"   // Font size
 	ST_FONT_STYLE  = "font-style"  // Font style
 	ST_FONT_WEIGHT = "font-weight" // Font weight
@@ -95,6 +96,13 @@ const (
 	CURSOR_TEXT      = "text"      // Text
 	CURSOR_WAIT      = "wait"      // Wait
 	CURSOR_INHERIT   = "inherit"   // The cursor should be inherited from the parent element.
+)
+
+// Some display mode constants.
+const (
+	DISPLAY_NONE   = "none"   // The element will not be displayed.
+	DISPLAY_BLOCK  = "block"  // The element is displayed as a block.
+	DISPLAY_INLINE = "inline" // The element is displayed as an in-line element. This is the default.
 )
 
 // Style interface contains utility methods for manipulating
@@ -195,6 +203,12 @@ type Style interface {
 
 	// SetCursor sets the (mouse) cursor.
 	SetCursor(value string) Style
+
+	// Display returns the display mode.
+	Display() string
+
+	// SetDisplay sets the display mode
+	SetDisplay(value string) Style
 
 	// FontSize returns the font size.
 	FontSize() string
@@ -390,6 +404,14 @@ func (s *styleImpl) Cursor() string {
 
 func (s *styleImpl) SetCursor(value string) Style {
 	return s.Set(ST_CURSOR, value)
+}
+
+func (s *styleImpl) Display() string {
+	return s.Get(ST_DISPLAY)
+}
+
+func (s *styleImpl) SetDisplay(value string) Style {
+	return s.Set(ST_DISPLAY, value)
 }
 
 func (s *styleImpl) FontSize() string {
