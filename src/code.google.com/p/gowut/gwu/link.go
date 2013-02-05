@@ -108,7 +108,11 @@ func (c *linkImpl) Target() string {
 }
 
 func (c *linkImpl) SetTarget(target string) {
-	c.attrs["target"] = target
+	if len(target) == 0 {
+		delete(c.attrs, "target")
+	} else {
+		c.attrs["target"] = target
+	}
 }
 
 func (c *linkImpl) Comp() Comp {
