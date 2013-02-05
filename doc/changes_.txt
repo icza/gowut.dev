@@ -1,0 +1,11 @@
+
+Changes and new features in 0.7.0:
+----------------------------------
+
+-A new example application: "Showcase of Features".
+
+-CheckBox and RadioButton now have additional style classes for the disabled state.
+
+-Added new methods and constants to the style builder.
+
+-Other minor changes, improvements and bug fixes.
