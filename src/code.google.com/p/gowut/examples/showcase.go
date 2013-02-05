@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// A Gowut showcase of features application.
+// A Gowut "Showcase of Features" application.
 
 package main
 
@@ -47,11 +47,10 @@ func buildCheckBoxShow() gwu.Comp {
 			sum := 0
 			for _, cb2 := range cbs {
 				if cb2.State() {
-					fmt.Println(cb2.Text())
 					sum++
 				}
 			}
-			suml.SetText(fmt.Sprintf("%d day%s is %d hours a week.", sum, plural(sum), sum*8))
+			suml.SetText(fmt.Sprintf("%d day%s is a total of %d hours a week.", sum, plural(sum), sum*8))
 			e.MarkDirty(suml)
 		}, gwu.ETYPE_CLICK)
 	}
@@ -81,7 +80,32 @@ func buildPasswBoxShow() gwu.Comp {
 
 func buildRadioButtonShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	p.Add(gwu.NewLabel("Select your favorite programming language:"))
+
+	group := gwu.NewRadioGroup("lang")
+	rbs := []gwu.RadioButton{gwu.NewRadioButton("Go", group), gwu.NewRadioButton("Java", group), gwu.NewRadioButton("C", group),
+		gwu.NewRadioButton("C++", group), gwu.NewRadioButton("QBasic (nah this can't be your favorite)", group)}
+	rbs[4].SetEnabled(false)
+
+	for _, rb := range rbs {
+		p.Add(rb)
+	}
+
+	space := gwu.NewLabel("")
+	p.Add(space)
+	p.CellFmt(space).Style().SetHeightPx(20)
+
+	p.Add(gwu.NewLabel("Select your favorite computer game:"))
+
+	group = gwu.NewRadioGroup("game")
+	rbs = []gwu.RadioButton{gwu.NewRadioButton("StarCraft - Broodwar", group), gwu.NewRadioButton("StarCraft II", group),
+		gwu.NewRadioButton("Other", group)}
+
+	for _, rb := range rbs {
+		p.Add(rb)
+	}
+
 	return p
 }
 
@@ -153,7 +177,7 @@ func buildLinkShow2() gwu.Comp {
 
 func buildShowcase(sess gwu.Session) {
 	win := gwu.NewWindow("show", "Showcase of Features - Gowut")
-	win.Style().SetFullWidth()
+	win.Style().SetFullSize()
 
 	header := gwu.NewPanel()
 	header.SetLayout(gwu.LAYOUT_HORIZONTAL)
@@ -186,7 +210,7 @@ func buildShowcase(sess gwu.Session) {
 	content := gwu.NewPanel()
 	content.SetLayout(gwu.LAYOUT_HORIZONTAL)
 	content.SetVAlign(gwu.VA_TOP)
-	content.Style().SetFullWidth()
+	content.Style().SetFullSize()
 
 	showWrapper := gwu.NewPanel()
 	selectedShow := gwu.NewLabel("")
@@ -195,7 +219,7 @@ func buildShowcase(sess gwu.Session) {
 
 	links := gwu.NewPanel()
 
-	// Lazily initialized, cached show components
+	// Lazily initialized, cached "Show" components
 	showComps := make(map[string]gwu.Comp)
 	var selectedLink gwu.Label
 	addShowLink := func(show string, buildFunc func() gwu.Comp) {
@@ -221,7 +245,7 @@ func buildShowcase(sess gwu.Session) {
 		links.Add(link)
 	}
 
-	links.Style().SetFullWidth().Set("border-right", "2px solid #777777")
+	links.Style().SetFullSize().Set("border-right", "2px solid #777777")
 	l = gwu.NewLabel("Component Palette")
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("120%")
 	links.Add(l)
@@ -250,11 +274,15 @@ func buildShowcase(sess gwu.Session) {
 	addShowLink("Image", buildImageShow)
 	addShowLink("Label", buildLabelShow)
 	addShowLink("Link", buildLinkShow2)
+	filler := gwu.NewLabel("")
+	links.Add(filler)
+	links.CellFmt(filler).Style().SetFullSize()
 	content.Add(links)
 	content.CellFmt(links).Style().SetWidthPx(200)
 	content.Add(showWrapper)
 
 	win.Add(content)
+	win.CellFmt(content).Style().SetFullSize()
 
 	footer := gwu.NewPanel()
 	footer.SetLayout(gwu.LAYOUT_HORIZONTAL)
@@ -330,8 +358,6 @@ func main() {
 
 	server.AddSessCreatorName("login", "Login Window")
 	server.AddSHandler(SessHandler{})
-
-	//server.SetTheme("debug")
 
 	// Start GUI server
 	if err := server.Start("login"); err != nil {
