@@ -22,6 +22,8 @@ import (
 	"fmt"
 )
 
+// plural returns an empty string if i is equal to 1,
+// "s" otherwise.
 func plural(i int) string {
 	if i == 1 {
 		return ""
@@ -84,8 +86,8 @@ func buildRadioButtonShow() gwu.Comp {
 	p.Add(gwu.NewLabel("Select your favorite programming language:"))
 
 	group := gwu.NewRadioGroup("lang")
-	rbs := []gwu.RadioButton{gwu.NewRadioButton("Go", group), gwu.NewRadioButton("Java", group), gwu.NewRadioButton("C", group),
-		gwu.NewRadioButton("C++", group), gwu.NewRadioButton("QBasic (nah this can't be your favorite)", group)}
+	rbs := []gwu.RadioButton{gwu.NewRadioButton("Go", group), gwu.NewRadioButton("Java", group), gwu.NewRadioButton("C / C++", group),
+		gwu.NewRadioButton("Python", group), gwu.NewRadioButton("QBasic (nah this can't be your favorite)", group)}
 	rbs[4].SetEnabled(false)
 
 	for _, rb := range rbs {
@@ -99,7 +101,7 @@ func buildRadioButtonShow() gwu.Comp {
 	p.Add(gwu.NewLabel("Select your favorite computer game:"))
 
 	group = gwu.NewRadioGroup("game")
-	rbs = []gwu.RadioButton{gwu.NewRadioButton("StarCraft - Broodwar", group), gwu.NewRadioButton("StarCraft II", group),
+	rbs = []gwu.RadioButton{gwu.NewRadioButton("StarCraft II", group), gwu.NewRadioButton("Minecraft", group),
 		gwu.NewRadioButton("Other", group)}
 
 	for _, rb := range rbs {
@@ -147,7 +149,34 @@ func buildWindowShow() gwu.Comp {
 
 func buildButtonShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	l := gwu.NewLabel("")
+
+	btnp := gwu.NewPanel()
+	btnp.SetLayout(gwu.LAYOUT_HORIZONTAL)
+	b := gwu.NewButton("Normal Button")
+	b.AddEHandlerFunc(func(e gwu.Event) {
+		switch e.Type() {
+		case gwu.ETYPE_MOUSE_OVER:
+			l.SetText("Mouse is over...")
+		case gwu.ETYPE_MOUSE_OUT:
+			l.SetText("Mouse is out.")
+		case gwu.ETYPE_CLICK:
+			x, y := e.Mouse()
+			l.SetText(fmt.Sprintf("Clicked at x=%d, y=%d", x, y))
+		}
+		e.MarkDirty(l)
+	}, gwu.ETYPE_CLICK, gwu.ETYPE_MOUSE_OVER, gwu.ETYPE_MOUSE_OUT)
+	btnp.Add(b)
+
+	b = gwu.NewButton("Disabled Button")
+	b.SetEnabled(false)
+	btnp.Add(b)
+
+	p.Add(btnp)
+
+	p.Add(l)
+
 	return p
 }
 
@@ -216,6 +245,9 @@ func buildShowcase(sess gwu.Session) {
 	selectedShow := gwu.NewLabel("")
 	selectedShow.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("110%")
 	showWrapper.Add(selectedShow)
+	space := gwu.NewLabel("")
+	showWrapper.Add(space)
+	showWrapper.CellFmt(space).Style().SetHeightPx(10)
 
 	links := gwu.NewPanel()
 
@@ -247,10 +279,10 @@ func buildShowcase(sess gwu.Session) {
 
 	links.Style().SetFullSize().Set("border-right", "2px solid #777777")
 	l = gwu.NewLabel("Component Palette")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("120%")
+	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("120%").SetDisplay(gwu.DISPLAY_BLOCK).Set("padding-bottom", "5px")
 	links.Add(l)
 	l = gwu.NewLabel("Input components")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)
+	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetDisplay(gwu.DISPLAY_BLOCK).Set("padding-top", "5px")
 	links.Add(l)
 	addShowLink("CheckBox", buildCheckBoxShow)
 	addShowLink("ListBox", buildListBoxShow)
@@ -259,7 +291,7 @@ func buildShowcase(sess gwu.Session) {
 	addShowLink("RadioButton", buildRadioButtonShow)
 	addShowLink("SwitchButton", buildSwitchButtonShow)
 	l = gwu.NewLabel("Containers")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)
+	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetDisplay(gwu.DISPLAY_BLOCK).Set("padding-top", "5px")
 	links.Add(l)
 	addShowLink("Link", buildLinkShow)
 	addShowLink("Panel", buildPanelShow)
@@ -267,7 +299,7 @@ func buildShowcase(sess gwu.Session) {
 	addShowLink("TabPanel", buildTabPanelShow)
 	addShowLink("Window", buildWindowShow)
 	l = gwu.NewLabel("Other components")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)
+	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetDisplay(gwu.DISPLAY_BLOCK).Set("padding-top", "5px")
 	links.Add(l)
 	addShowLink("Button", buildButtonShow)
 	addShowLink("Html", buildHtmlShow)
