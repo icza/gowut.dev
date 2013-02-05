@@ -100,9 +100,10 @@ const (
 
 // Some display mode constants.
 const (
-	DISPLAY_NONE   = "none"   // The element will not be displayed.
-	DISPLAY_BLOCK  = "block"  // The element is displayed as a block.
-	DISPLAY_INLINE = "inline" // The element is displayed as an in-line element. This is the default.
+	DISPLAY_NONE    = "none"    // The element will not be displayed.
+	DISPLAY_BLOCK   = "block"   // The element is displayed as a block.
+	DISPLAY_INLINE  = "inline"  // The element is displayed as an in-line element. This is the default.
+	DISPLAY_INHERIT = "inherit" // The display property value will be inherited from the parent element.
 )
 
 // Style interface contains utility methods for manipulating
