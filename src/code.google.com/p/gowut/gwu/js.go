@@ -147,7 +147,7 @@ function procEresp(xmlhttp) {
 
 function rerenderComp(compId) {
 	var e = document.getElementById(compId);
-	if (e != null) // Component removed or not visible (e.g. on inactive tab of TabPanel)
+	if (!e) // Component removed or not visible (e.g. on inactive tab of TabPanel)
 		return;
 	
 	var xmlhttp=createXmlHttp();
@@ -199,7 +199,7 @@ function getAndUpdateSwitchBtnValue(event, onBtnId, offBtnId) {
 function focusComp(compId) {
 	if (compId != null) {
 		var e = document.getElementById(compId);
-		if (e != null) // Component removed or not visible (e.g. on inactive tab of TabPanel)
+		if (e) // Else component removed or not visible (e.g. on inactive tab of TabPanel)
 			e.focus();
 	}
 }
