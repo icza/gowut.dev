@@ -64,19 +64,87 @@ func buildCheckBoxShow() gwu.Comp {
 
 func buildListBoxShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	row := gwu.NewHorizontalPanel()
+	l := gwu.NewLabel("Select a background color:")
+	row.Add(l)
+	lb := gwu.NewListBox([]string{"", "Black", "Red", "Green", "Blue", "White"})
+	lb.AddEHandlerFunc(func(e gwu.Event) {
+		l.Style().SetBackground(lb.SelectedValue())
+		e.MarkDirty(l)
+	}, gwu.ETYPE_CHANGE)
+	row.Add(lb)
+	p.Add(row)
+
+	p.AddVSpace(10)
+	p.Add(gwu.NewLabel("Select numbers that add up to 89:"))
+	sumLabel := gwu.NewLabel("")
+	lb2 := gwu.NewListBox([]string{"1", "2", "4", "8", "16", "32", "64", "128"})
+	lb2.SetMulti(true)
+	lb2.SetRows(10)
+	lb2.AddEHandlerFunc(func(e gwu.Event) {
+		sum := 0
+		for _, idx := range lb2.SelectedIndices() {
+			sum += 1 << uint(idx)
+		}
+		if sum == 89 {
+			sumLabel.SetText("Hooray! You did it!")
+		} else {
+			sumLabel.SetText(fmt.Sprintf("Now quite there... (sum = %d)", sum))
+		}
+		e.MarkDirty(sumLabel)
+	}, gwu.ETYPE_CHANGE)
+	p.Add(lb2)
+	p.Add(sumLabel)
+
 	return p
 }
 
 func buildTextBoxShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	p.Add(gwu.NewLabel("Enter your name (max 15 characters):"))
+	row := gwu.NewHorizontalPanel()
+	tb := gwu.NewTextBox("")
+	tb.SetMaxLength(15)
+	tb.AddSyncOnETypes(gwu.ETYPE_KEY_UP)
+	length := gwu.NewLabel("")
+	length.Style().SetFontSize("80%").SetFontStyle(gwu.FONT_STYLE_ITALIC)
+	tb.AddEHandlerFunc(func(e gwu.Event) {
+		rem := 15 - len(tb.Text())
+		length.SetText(fmt.Sprintf("(%d character%s left...)", rem, plural(rem)))
+		e.MarkDirty(length)
+	}, gwu.ETYPE_CHANGE, gwu.ETYPE_KEY_UP)
+	row.Add(tb)
+	row.Add(length)
+	p.Add(row)
+
+	p.AddVSpace(10)
+	p.Add(gwu.NewLabel("Short biography:"))
+	bio := gwu.NewTextBox("")
+	bio.SetRows(5)
+	bio.SetCols(40)
+	p.Add(bio)
+
+	p.AddVSpace(10)
+	rtb := gwu.NewTextBox("This is just a read-only text box...")
+	rtb.SetReadOnly(true)
+	p.Add(rtb)
+
+	p.AddVSpace(10)
+	dtb := gwu.NewTextBox("...and a disabled one.")
+	dtb.SetEnabled(false)
+	p.Add(dtb)
+
 	return p
 }
 
 func buildPasswBoxShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	p.Add(gwu.NewLabel("Enter your password:"))
+	p.Add(gwu.NewPasswBox(""))
+
 	return p
 }
 
@@ -110,7 +178,27 @@ func buildRadioButtonShow() gwu.Comp {
 
 func buildSwitchButtonShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	row := gwu.NewHorizontalPanel()
+	row.Add(gwu.NewLabel("Here's an ON/OFF switch which enables/disables the other one:"))
+	sw := gwu.NewSwitchButton()
+	sw.SetOnOff("ENB", "DISB")
+	sw.SetState(true)
+	row.Add(sw)
+	p.Add(row)
+
+	row = gwu.NewHorizontalPanel()
+	row.Add(gwu.NewLabel("And the other one:"))
+	sw2 := gwu.NewSwitchButton()
+	sw2.SetEnabled(true)
+	sw2.Style().SetWidthPx(100)
+	row.Add(sw2)
+	sw.AddEHandlerFunc(func(e gwu.Event) {
+		sw2.SetEnabled(sw.State())
+		e.MarkDirty(sw2)
+	}, gwu.ETYPE_CLICK)
+	p.Add(row)
+
 	return p
 }
 
@@ -149,8 +237,7 @@ func buildButtonShow() gwu.Comp {
 
 	l := gwu.NewLabel("")
 
-	btnp := gwu.NewPanel()
-	btnp.SetLayout(gwu.LAYOUT_HORIZONTAL)
+	btnp := gwu.NewHorizontalPanel()
 	b := gwu.NewButton("Normal Button")
 	b.AddEHandlerFunc(func(e gwu.Event) {
 		switch e.Type() {
@@ -205,8 +292,7 @@ func buildShowcase(sess gwu.Session) {
 	win := gwu.NewWindow("show", "Showcase of Features - Gowut")
 	win.Style().SetFullSize()
 
-	header := gwu.NewPanel()
-	header.SetLayout(gwu.LAYOUT_HORIZONTAL)
+	header := gwu.NewHorizontalPanel()
 	header.Style().SetFullWidth().SetBorderBottom2(2, gwu.BRD_STYLE_SOLID, "#777777").SetWhiteSpace(gwu.WHITE_SPACE_NOWRAP)
 	l := gwu.NewLabel("Gowut - Showcase of Features")
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("120%")
@@ -229,8 +315,7 @@ func buildShowcase(sess gwu.Session) {
 	header.Add(logout)
 	win.Add(header)
 
-	content := gwu.NewPanel()
-	content.SetLayout(gwu.LAYOUT_HORIZONTAL)
+	content := gwu.NewHorizontalPanel()
 	content.SetVAlign(gwu.VA_TOP)
 	content.Style().SetFullSize()
 
@@ -306,8 +391,7 @@ func buildShowcase(sess gwu.Session) {
 	win.Add(content)
 	win.CellFmt(content).Style().SetFullSize()
 
-	footer := gwu.NewPanel()
-	footer.SetLayout(gwu.LAYOUT_HORIZONTAL)
+	footer := gwu.NewHorizontalPanel()
 	footer.Style().SetFullWidth().SetBorderTop2(2, gwu.BRD_STYLE_SOLID, "#777777").SetWhiteSpace(gwu.WHITE_SPACE_NOWRAP)
 	footer.AddHConsumer()
 	l = gwu.NewLabel("This app is written in and showcases Gowut version " + gwu.GOWUT_VERSION + ".")
