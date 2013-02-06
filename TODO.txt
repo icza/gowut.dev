@@ -16,6 +16,7 @@
 	-Disclosure Panel
 	-Absolute Panel
 	-Slider
+	-iframe
 	-ProgressBar
 	-Form (+ fileuploader, submit button)
 	-Audio and Video (HTML5)

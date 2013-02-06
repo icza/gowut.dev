@@ -204,7 +204,15 @@ func buildSwitchButtonShow() gwu.Comp {
 
 func buildLinkShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	link := gwu.NewLink("Obvious link to Google Home", "https://google.com")
+	inside := gwu.NewPanel()
+	inside.Style().SetBorder2(1, gwu.BRD_STYLE_SOLID, gwu.CLR_GRAY)
+	inside.Add(gwu.NewLabel("Everything inside this box also links to Google!"))
+	inside.Add(gwu.NewButton("Me too!"))
+	link.SetComp(inside)
+	p.Add(link)
+
 	return p
 }
 
@@ -284,7 +292,21 @@ func buildLabelShow() gwu.Comp {
 
 func buildLinkShow2() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	p.Add(gwu.NewLink("Visit Gowut Home page", "https://sites.google.com/site/gowebuitoolkit/"))
+	p.Add(gwu.NewLink("Visit Gowut Project page", "http://code.google.com/p/gowut/"))
+
+	row := gwu.NewHorizontalPanel()
+	row.Add(gwu.NewLabel("Discussion forum:"))
+	row.Add(gwu.NewLink("https://groups.google.com/d/forum/gowebuitoolkit", "https://groups.google.com/d/forum/gowebuitoolkit"))
+	p.Add(row)
+
+	row = gwu.NewHorizontalPanel()
+	row.Add(gwu.NewLabel("Send e-mail to the author of Gowut:"))
+	email := "iczaaa" + "@" + "gmail.com"
+	row.Add(gwu.NewLink("András Belicza <"+email+">", "mailto:"+email))
+	p.Add(row)
+
 	return p
 }
 
@@ -370,7 +392,7 @@ func buildShowcase(sess gwu.Session) {
 	l = gwu.NewLabel("Containers")
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetDisplay(gwu.DISPLAY_BLOCK).SetPaddingTopPx(5)
 	links.Add(l)
-	addShowLink("Link", buildLinkShow)
+	addShowLink("Link (as Container)", buildLinkShow)
 	addShowLink("Panel", buildPanelShow)
 	addShowLink("Table", buildTableShow)
 	addShowLink("TabPanel", buildTabPanelShow)
@@ -427,10 +449,10 @@ func buildLoginWin(sess gwu.Session) {
 	table := gwu.NewTable()
 	table.EnsureSize(2, 2)
 	table.Add(gwu.NewLabel("User name:"), 0, 0)
-	tb := gwu.NewTextBox("")
+	tb := gwu.NewTextBox("admin")
 	table.Add(tb, 0, 1)
 	table.Add(gwu.NewLabel("Password:"), 1, 0)
-	pb := gwu.NewPasswBox("")
+	pb := gwu.NewPasswBox("a")
 	table.Add(pb, 1, 1)
 	win.Add(table)
 	b := gwu.NewButton("OK")
@@ -447,7 +469,7 @@ func buildLoginWin(sess gwu.Session) {
 	}, gwu.ETYPE_CLICK)
 	win.Add(b)
 
-	win.SetFocusedCompId(tb.Id())
+	win.SetFocusedCompId(b.Id())
 
 	sess.AddWin(win)
 }
