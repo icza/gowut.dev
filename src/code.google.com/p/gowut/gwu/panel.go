@@ -79,6 +79,26 @@ type Panel interface {
 	// successfully, false otherwise. idx=CompsCount() is also allowed
 	// in which case comp will be the last component.
 	Insert(c Comp, idx int) bool
+
+	// AddHSpace adds and returns a fixed-width horizontal space consumer.
+	// Useful when layout is LAYOUT_HORIZONTAL.
+	AddHSpace(width int) Comp
+
+	// AddVSpace adds and returns a fixed-height vertical space consumer.
+	// Useful when layout is LAYOUT_VERTICAL.
+	AddVSpace(height int) Comp
+
+	// AddHConsumer adds and returns a horizontal (free) space consumer.
+	// Useful when layout is LAYOUT_HORIZONTAL.
+	// 
+	// Tip: When adding a horizontal space consumer, you may set the
+	// white space style attribute of the panel to WHITE_SPACE_NOWRAP
+	// to avoid texts getting wrapped to multiple lines.
+	AddHConsumer() Comp
+
+	// AddVConsumer adds and returns a vertical (free) space consumer.
+	// Useful when layout is LAYOUT_VERTICAL.
+	AddVConsumer() Comp
 }
 
 // Panel implementation.
@@ -226,6 +246,34 @@ func (c *panelImpl) Insert(c2 Comp, idx int) bool {
 	c2.setParent(c)
 
 	return true
+}
+
+func (c *panelImpl) AddHSpace(width int) Comp {
+	l := NewLabel("")
+	c.Add(l)
+	c.CellFmt(l).Style().SetWidthPx(width)
+	return l
+}
+
+func (c *panelImpl) AddVSpace(height int) Comp {
+	l := NewLabel("")
+	c.Add(l)
+	c.CellFmt(l).Style().SetHeightPx(height)
+	return l
+}
+
+func (c *panelImpl) AddHConsumer() Comp {
+	l := NewLabel("")
+	c.Add(l)
+	c.CellFmt(l).Style().SetFullWidth()
+	return l
+}
+
+func (c *panelImpl) AddVConsumer() Comp {
+	l := NewLabel("")
+	c.Add(l)
+	c.CellFmt(l).Style().SetFullHeight()
+	return l
 }
 
 func (c *panelImpl) Render(w writer) {
