@@ -3,9 +3,14 @@ Changes and new features in 0.7.0:
 ----------------------------------
 
 -A new example application: "Showcase of Features".
+The application is written using Gowut (of course) and showcases the component library.
 
 -CheckBox and RadioButton now have additional style classes for the disabled state.
 
--Added new methods and constants to the style builder.
+-Added many new methods and constants to the style builder.
+
+-Panel improvements:
+* Constructors to create panels initialized with a different layout, e.g. NewHorizontalPanel(). 
+* New helper methods to add space consumer components. 
 
 -Other minor changes, improvements and bug fixes.

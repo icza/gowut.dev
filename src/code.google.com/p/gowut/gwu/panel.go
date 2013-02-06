@@ -121,6 +121,34 @@ func NewPanel() Panel {
 	return &c
 }
 
+// NewNaturalPanel creates a new Panel initialized with
+// LAYOUT_NATURAL layout.
+// Default horizontal alignment is HA_DEFAULT,
+// default vertical alignment is VA_DEFAULT.
+func NewNaturalPanel() Panel {
+	p := NewPanel()
+	p.SetLayout(LAYOUT_NATURAL)
+	return p
+}
+
+// NewHorizontalPanel creates a new Panel initialized with
+// LAYOUT_HORIZONTAL layout.
+// Default horizontal alignment is HA_DEFAULT,
+// default vertical alignment is VA_DEFAULT.
+func NewHorizontalPanel() Panel {
+	p := NewPanel()
+	p.SetLayout(LAYOUT_HORIZONTAL)
+	return p
+}
+
+// NewVerticalPanel creates a new Panel initialized with
+// LAYOUT_VERTICAL layout.
+// Default horizontal alignment is HA_DEFAULT,
+// default vertical alignment is VA_DEFAULT.
+func NewVerticalPanel() Panel {
+	return NewPanel()
+}
+
 // newPanelImpl creates a new panelImpl.
 func newPanelImpl() panelImpl {
 	return panelImpl{compImpl: newCompImpl(""), hasHVAlignImpl: newHasHVAlignImpl(HA_DEFAULT, VA_DEFAULT),

@@ -240,7 +240,7 @@ Source of this application is available here: TODO
 		counter int
 		text    string
 	}
-
+	
 	func (h *MyButtonHandler) HandleEvent(e gwu.Event) {
 		if b, isButton := e.Src().(gwu.Button); isButton {
 			b.SetText(b.Text() + h.text)
@@ -249,20 +249,19 @@ Source of this application is available here: TODO
 			e.MarkDirty(b)
 		}
 	}
-
+	
 	func main() {
 		// Create and build a window
 		win := gwu.NewWindow("main", "Test GUI Window")
 		win.Style().SetFullWidth()
 		win.SetHAlign(gwu.HA_CENTER)
-
+	
 		// Button which changes window content
 		win.Add(gwu.NewLabel("I'm a label! Try clicking on the button=>"))
 		btn := gwu.NewButton("Click me")
 		btn.AddEHandler(&MyButtonHandler{text: ":-)"}, gwu.ETYPE_CLICK)
 		win.Add(btn)
-		btnsPanel := gwu.NewPanel()
-		btnsPanel.SetLayout(gwu.LAYOUT_NATURAL)
+		btnsPanel := gwu.NewNaturalPanel()
 		btn.AddEHandlerFunc(func(e gwu.Event) {
 			// Create and add a new button...
 			newbtn := gwu.NewButton("Extra #" + strconv.Itoa(btnsPanel.CompsCount()))
@@ -274,10 +273,9 @@ Source of this application is available here: TODO
 			e.MarkDirty(btnsPanel)
 		}, gwu.ETYPE_CLICK)
 		win.Add(btnsPanel)
-
+	
 		// ListBox examples
-		p := gwu.NewPanel()
-		p.SetLayout(gwu.LAYOUT_HORIZONTAL)
+		p := gwu.NewHorizontalPanel()
 		p.Style().SetBorder2(1, gwu.BRD_STYLE_SOLID, gwu.CLR_BLACK)
 		p.Add(gwu.NewLabel("A drop-down list being"))
 		widelb := gwu.NewListBox([]string{"50", "100", "150", "200", "250"})
@@ -299,7 +297,7 @@ Source of this application is available here: TODO
 		}, gwu.ETYPE_CHANGE)
 		p.Add(countLabel)
 		win.Add(p)
-
+	
 		// Self-color changer check box
 		greencb := gwu.NewCheckBox("I'm a check box. When checked, I'm green!")
 		greencb.AddEHandlerFunc(func(e gwu.Event) {
@@ -311,10 +309,9 @@ Source of this application is available here: TODO
 			e.MarkDirty(greencb)
 		}, gwu.ETYPE_CLICK)
 		win.Add(greencb)
-
+	
 		// TextBox with echo
-		p = gwu.NewPanel()
-		p.SetLayout(gwu.LAYOUT_HORIZONTAL)
+		p = gwu.NewHorizontalPanel()
 		p.Add(gwu.NewLabel("Enter your name:"))
 		tb := gwu.NewTextBox("")
 		tb.AddSyncOnETypes(gwu.ETYPE_KEY_UP)
@@ -328,7 +325,7 @@ Source of this application is available here: TODO
 		}, gwu.ETYPE_CHANGE, gwu.ETYPE_KEY_UP)
 		p.Add(nameLabel)
 		win.Add(p)
-
+	
 		// Create and start a GUI server (omitting error check)
 		server := gwu.NewServer("guitest", "localhost:8081")
 		server.SetText("Test GUI App")
