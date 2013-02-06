@@ -1,2 +1,2 @@
 call setgopath.cmd
-go run src/code.google.com/p/gowut/examples/login_example.go
+go run src/code.google.com/p/gowut/examples/showcase.go
