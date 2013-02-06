@@ -47,8 +47,7 @@ func main() {
 	btn := gwu.NewButton("Click me")
 	btn.AddEHandler(&MyButtonHandler{text: ":-)"}, gwu.ETYPE_CLICK)
 	win.Add(btn)
-	btnsPanel := gwu.NewPanel()
-	btnsPanel.SetLayout(gwu.LAYOUT_NATURAL)
+	btnsPanel := gwu.NewNaturalPanel()
 	btn.AddEHandlerFunc(func(e gwu.Event) {
 		// Create and add a new button...
 		newbtn := gwu.NewButton("Extra #" + strconv.Itoa(btnsPanel.CompsCount()))
@@ -62,8 +61,7 @@ func main() {
 	win.Add(btnsPanel)
 
 	// ListBox examples
-	p := gwu.NewPanel()
-	p.SetLayout(gwu.LAYOUT_HORIZONTAL)
+	p := gwu.NewHorizontalPanel()
 	p.Style().SetBorder2(1, gwu.BRD_STYLE_SOLID, gwu.CLR_BLACK)
 	p.Add(gwu.NewLabel("A drop-down list being"))
 	widelb := gwu.NewListBox([]string{"50", "100", "150", "200", "250"})
@@ -99,8 +97,7 @@ func main() {
 	win.Add(greencb)
 
 	// TextBox with echo
-	p = gwu.NewPanel()
-	p.SetLayout(gwu.LAYOUT_HORIZONTAL)
+	p = gwu.NewHorizontalPanel()
 	p.Add(gwu.NewLabel("Enter your name:"))
 	tb := gwu.NewTextBox("")
 	tb.AddSyncOnETypes(gwu.ETYPE_KEY_UP)
