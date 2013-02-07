@@ -20,6 +20,8 @@ package main
 import (
 	"code.google.com/p/gowut/gwu"
 	"fmt"
+	"os"
+	"strconv"
 )
 
 // plural returns an empty string if i is equal to 1,
@@ -178,6 +180,7 @@ func buildRadioButtonShow() gwu.Comp {
 
 func buildSwitchButtonShow() gwu.Comp {
 	p := gwu.NewPanel()
+	p.SetCellPadding(1)
 
 	row := gwu.NewHorizontalPanel()
 	row.Add(gwu.NewLabel("Here's an ON/OFF switch which enables/disables the other one:"))
@@ -218,13 +221,85 @@ func buildLinkShow() gwu.Comp {
 
 func buildPanelShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	p.Add(gwu.NewLabel("Panel with horizontal layout:"))
+	h := gwu.NewHorizontalPanel()
+	for i := 1; i <= 5; i++ {
+		h.Add(gwu.NewButton("Button " + strconv.Itoa(i)))
+	}
+	p.Add(h)
+
+	p.AddVSpace(20)
+	p.Add(gwu.NewLabel("Panel with vertical layout:"))
+	v := gwu.NewVerticalPanel()
+	for i := 1; i <= 5; i++ {
+		v.Add(gwu.NewButton("Button " + strconv.Itoa(i)))
+	}
+	p.Add(v)
+
+	p.AddVSpace(20)
+	p.Add(gwu.NewLabel("Panel with natural layout:"))
+	n := gwu.NewNaturalPanel()
+	for i := 1; i <= 20; i++ {
+		n.Add(gwu.NewButton("LONG BUTTON " + strconv.Itoa(i)))
+	}
+	p.Add(n)
+
 	return p
 }
 
 func buildTableShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	l := gwu.NewLabel("Tip: Switch to the 'debug' theme (top right) to see cell borders.")
+	l.Style().SetColor(gwu.CLR_RED).SetFontStyle(gwu.FONT_STYLE_ITALIC)
+	p.Add(l)
+
+	p.AddVSpace(20)
+	p.Add(gwu.NewLabel("A simple form aligned with a table:"))
+	t := gwu.NewTable()
+	t.SetCellPadding(2)
+	t.EnsureSize(2, 2)
+	var c gwu.Comp
+	t.Add(gwu.NewLabel("User name:"), 0, 0)
+	c = gwu.NewTextBox("")
+	c.Style().SetWidthPx(160)
+	t.Add(c, 0, 1)
+	t.Add(gwu.NewLabel("Password:"), 1, 0)
+	c = gwu.NewPasswBox("")
+	c.Style().SetWidthPx(160)
+	t.Add(c, 1, 1)
+	t.Add(gwu.NewLabel("Go to:"), 2, 0)
+	c = gwu.NewListBox([]string{"Inbox", "User preferences", "Last visited page"})
+	c.Style().SetWidthPx(160)
+	t.Add(c, 2, 1)
+	p.Add(t)
+
+	p.AddVSpace(30)
+	p.Add(gwu.NewLabel("Advanced table structure with modified alignment, row and col spans:"))
+	t = gwu.NewTable()
+	t.Style().SetBorder2(1, gwu.BRD_STYLE_SOLID, gwu.CLR_GREY)
+	t.SetAlign(gwu.HA_RIGHT, gwu.VA_TOP)
+	t.EnsureSize(5, 5)
+	for row := 0; row < 5; row++ {
+		for col := 0; col < 5; col++ {
+			t.Add(gwu.NewButton("Button "+strconv.Itoa(row)+strconv.Itoa(col)), row, col)
+		}
+	}
+	t.SetColSpan(2, 1, 2)
+	t.SetRowSpan(3, 1, 2)
+	t.CellFmt(2, 2).Style().SetSizePx(150, 80)
+	t.CellFmt(2, 2).SetAlign(gwu.HA_RIGHT, gwu.VA_BOTTOM)
+	t.RowFmt(2).SetAlign(gwu.HA_DEFAULT, gwu.VA_MIDDLE)
+	t.CompAt(2, 1).Style().SetFullSize()
+	t.CompAt(4, 2).Style().SetFullWidth()
+	t.RowFmt(0).Style().SetBackground(gwu.CLR_RED)
+	t.RowFmt(1).Style().SetBackground(gwu.CLR_GREEN)
+	t.RowFmt(2).Style().SetBackground(gwu.CLR_BLUE)
+	t.RowFmt(3).Style().SetBackground(gwu.CLR_GREY)
+	t.RowFmt(4).Style().SetBackground(gwu.CLR_TEAL)
+	p.Add(t)
+
 	return p
 }
 
@@ -292,17 +367,20 @@ func buildLabelShow() gwu.Comp {
 
 func buildLinkShow2() gwu.Comp {
 	p := gwu.NewPanel()
+	p.SetCellPadding(3)
 
 	p.Add(gwu.NewLink("Visit Gowut Home page", "https://sites.google.com/site/gowebuitoolkit/"))
 	p.Add(gwu.NewLink("Visit Gowut Project page", "http://code.google.com/p/gowut/"))
 
 	row := gwu.NewHorizontalPanel()
+	row.SetCellPadding(3)
 	row.Add(gwu.NewLabel("Discussion forum:"))
 	row.Add(gwu.NewLink("https://groups.google.com/d/forum/gowebuitoolkit", "https://groups.google.com/d/forum/gowebuitoolkit"))
 	p.Add(row)
 
 	row = gwu.NewHorizontalPanel()
-	row.Add(gwu.NewLabel("Send e-mail to the author of Gowut:"))
+	row.SetCellPadding(3)
+	row.Add(gwu.NewLabel("Send e-mail to the Gowut author:"))
 	email := "iczaaa" + "@" + "gmail.com"
 	row.Add(gwu.NewLink("András Belicza <"+email+">", "mailto:"+email))
 	p.Add(row)
@@ -338,17 +416,20 @@ func buildShowcase(sess gwu.Session) {
 	win.Add(header)
 
 	content := gwu.NewHorizontalPanel()
+	content.SetCellPadding(1)
 	content.SetVAlign(gwu.VA_TOP)
 	content.Style().SetFullSize()
 
 	showWrapper := gwu.NewPanel()
+	showWrapper.Style().SetPaddingLeftPx(5)
 	selectedShow := gwu.NewLabel("")
 	selectedShow.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("110%")
 	showWrapper.Add(selectedShow)
 	showWrapper.AddVSpace(10)
 
 	links := gwu.NewPanel()
-	links.Style().SetWhiteSpace(gwu.WHITE_SPACE_NOWRAP)
+	links.SetCellPadding(1)
+	links.Style().SetWhiteSpace(gwu.WHITE_SPACE_NOWRAP).SetPaddingRightPx(5)
 
 	// Lazily initialized, cached "Show" components
 	showComps := make(map[string]gwu.Comp)
@@ -447,12 +528,15 @@ func buildLoginWin(sess gwu.Session) {
 	win.Add(errL)
 
 	table := gwu.NewTable()
+	table.SetCellPadding(2)
 	table.EnsureSize(2, 2)
 	table.Add(gwu.NewLabel("User name:"), 0, 0)
 	tb := gwu.NewTextBox("admin")
+	tb.Style().SetWidthPx(160)
 	table.Add(tb, 0, 1)
 	table.Add(gwu.NewLabel("Password:"), 1, 0)
 	pb := gwu.NewPasswBox("a")
+	pb.Style().SetWidthPx(160)
 	table.Add(pb, 1, 1)
 	win.Add(table)
 	b := gwu.NewButton("OK")
@@ -483,6 +567,21 @@ func (h SessHandler) Created(s gwu.Session) {
 func (h SessHandler) Removed(s gwu.Session) {}
 
 func main() {
+	// Allow app control from command line:
+	fmt.Println("Type 'r' to restart, 'e' to exit.")
+	go func() {
+		var cmd string
+		for {
+			fmt.Scanf("%s", &cmd)
+			switch cmd {
+			case "r": // restart
+				os.Exit(1)
+			case "e": // exit
+				os.Exit(0)
+			}
+		}
+	}()
+
 	// Create GUI server
 	server := gwu.NewServer("showcase", "")
 	server.SetText("Gowut - Showcase of Features")
