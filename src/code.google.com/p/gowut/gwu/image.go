@@ -39,6 +39,7 @@ type imageImpl struct {
 }
 
 // NewImage creates a new Image component.
+// The text is used as the alternate text for the image.
 func NewImage(text, url string) Image {
 	c := &imageImpl{newCompImpl(""), newHasTextImpl(text), newHasUrlImpl(url)}
 	c.Style().AddClass("gwu-Image")

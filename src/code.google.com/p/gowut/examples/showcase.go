@@ -409,19 +409,64 @@ func buildButtonShow() gwu.Comp {
 
 func buildHtmlShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	html := "<span onclick=\"alert('Hi from Html!');\">Hi! I'm inserted as HTML. Click on me!</span>"
+
+	p.Add(gwu.NewLabel("The following HTML code is inserted after the text area as an Html component:"))
+	ta := gwu.NewTextBox(html)
+	ta.SetReadOnly(true)
+	ta.Style().SetWidthPx(500)
+	ta.SetRows(4)
+	p.Add(ta)
+
+	p.AddVSpace(20)
+	h := gwu.NewHtml(html)
+	p.Add(h)
+
 	return p
 }
 
 func buildImageShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	p.Add(gwu.NewLabel("Google's logo:"))
+	img := gwu.NewImage("Google's logo", "https://www.google.com/images/srpr/logo3w.png")
+	img.Style().SetSizePx(275, 95)
+	p.Add(img)
+
+	p.AddVSpace(20)
+	p.Add(gwu.NewLabel("Go's Gopher:"))
+	img = gwu.NewImage("Go's Gopher", "http://golang.org/doc/gopher/frontpage.png")
+	img.Style().SetSizePx(250, 340)
+	p.Add(img)
+
 	return p
 }
 
 func buildLabelShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	p.Add(gwu.NewLabel("This is a Label."))
+	p.Add(gwu.NewLabel("世界 And another one. ㅈㅈ"))
+	p.Add(gwu.NewLabel("Nothing special about them, but they may be the mostly used components."))
+
+	p.AddVSpace(20)
+	p.Add(gwu.NewLabel("You can change their text:"))
+	b := gwu.NewButton("Change!")
+	b.AddEHandlerFunc(func(e gwu.Event) {
+		for i := 0; i < p.CompsCount(); i++ {
+			if l, ok := p.CompAt(i).(gwu.Label); ok && l != b {
+				reversed := []rune(l.Text())
+				for i, j := 0, len(reversed)-1; i < j; i, j = i+1, j-1 {
+					reversed[i], reversed[j] = reversed[j], reversed[i]
+				}
+				l.SetText(string(reversed))
+			}
+		}
+		e.MarkDirty(p)
+	}, gwu.ETYPE_CLICK)
+	p.Add(b)
+
 	return p
 }
 
