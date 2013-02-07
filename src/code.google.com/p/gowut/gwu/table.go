@@ -68,6 +68,18 @@ type Table interface {
 	// nil is returned.
 	CellFmt(row, col int) CellFmt
 
+	// CellSpacing returns the cell spacing.
+	CellSpacing() int
+
+	// SetCellSpacing sets the cell spacing.
+	SetCellSpacing(spacing int)
+
+	// CellPadding returns the cell spacing.
+	CellPadding() int
+
+	// SetCellPadding sets the cell padding.
+	SetCellPadding(padding int)
+
 	// Add adds a component to the table.
 	// Return value indicates if the component was added successfully.
 	// Returns false if row or col is negative.
@@ -113,6 +125,8 @@ type tableImpl struct {
 func NewTable() Table {
 	c := &tableImpl{compImpl: newCompImpl(""), hasHVAlignImpl: newHasHVAlignImpl(HA_DEFAULT, VA_DEFAULT)}
 	c.Style().AddClass("gwu-Table")
+	c.SetCellSpacing(0)
+	c.SetCellPadding(0)
 	return c
 }
 
@@ -270,6 +284,28 @@ func (c *tableImpl) CellFmt(row, col int) CellFmt {
 	}
 
 	return cf
+}
+
+func (c *tableImpl) CellSpacing() int {
+	if cs, err := strconv.Atoi(c.Attr("cellspacing")); err == nil {
+		return cs
+	}
+	return -1
+}
+
+func (c *tableImpl) SetCellSpacing(spacing int) {
+	c.SetAttr("cellspacing", strconv.Itoa(spacing))
+}
+
+func (c *tableImpl) CellPadding() int {
+	if cp, err := strconv.Atoi(c.Attr("cellpadding")); err == nil {
+		return cp
+	}
+	return -1
+}
+
+func (c *tableImpl) SetCellPadding(padding int) {
+	c.SetAttr("cellpadding", strconv.Itoa(padding))
 }
 
 func (c *tableImpl) Add(c2 Comp, row, col int) bool {

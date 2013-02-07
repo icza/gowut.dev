@@ -17,6 +17,10 @@
 
 package gwu
 
+import (
+	"strconv"
+)
+
 // Layout strategy type.
 type Layout int
 
@@ -57,6 +61,20 @@ type PanelView interface {
 	// CompIdx returns the index of the specified component in the panel.
 	// -1 is returned if the component is not added to the panel.
 	CompIdx(c Comp) int
+
+	// CellSpacing returns the cell spacing.
+	CellSpacing() int
+
+	// SetCellSpacing sets the cell spacing.
+	// Has no effect if layout is LAYOUT_NATURAL.
+	SetCellSpacing(spacing int)
+
+	// CellPadding returns the cell spacing.
+	CellPadding() int
+
+	// SetCellPadding sets the cell padding.
+	// Has no effect if layout is LAYOUT_NATURAL.
+	SetCellPadding(padding int)
 
 	// CellFmt returns the cell formatter of the specified child component.
 	// If the specified component is not a child, nil is returned.
@@ -118,6 +136,8 @@ type panelImpl struct {
 func NewPanel() Panel {
 	c := newPanelImpl()
 	c.Style().AddClass("gwu-Panel")
+	c.SetCellSpacing(0)
+	c.SetCellPadding(0)
 	return &c
 }
 
@@ -236,6 +256,28 @@ func (c *panelImpl) CompIdx(c2 Comp) int {
 	return -1
 }
 
+func (c *panelImpl) CellSpacing() int {
+	if cs, err := strconv.Atoi(c.Attr("cellspacing")); err == nil {
+		return cs
+	}
+	return -1
+}
+
+func (c *panelImpl) SetCellSpacing(spacing int) {
+	c.SetAttr("cellspacing", strconv.Itoa(spacing))
+}
+
+func (c *panelImpl) CellPadding() int {
+	if cp, err := strconv.Atoi(c.Attr("cellpadding")); err == nil {
+		return cp
+	}
+	return -1
+}
+
+func (c *panelImpl) SetCellPadding(padding int) {
+	c.SetAttr("cellpadding", strconv.Itoa(padding))
+}
+
 func (c *panelImpl) CellFmt(c2 Comp) CellFmt {
 	if c.CompIdx(c2) < 0 {
 		return nil
@@ -278,15 +320,15 @@ func (c *panelImpl) Insert(c2 Comp, idx int) bool {
 
 func (c *panelImpl) AddHSpace(width int) Comp {
 	l := NewLabel("")
+	l.Style().SetDisplay(DISPLAY_BLOCK).SetWidthPx(width)
 	c.Add(l)
-	c.CellFmt(l).Style().SetWidthPx(width)
 	return l
 }
 
 func (c *panelImpl) AddVSpace(height int) Comp {
 	l := NewLabel("")
+	l.Style().SetDisplay(DISPLAY_BLOCK).SetHeightPx(height)
 	c.Add(l)
-	c.CellFmt(l).Style().SetHeightPx(height)
 	return l
 }
 

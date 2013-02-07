@@ -72,7 +72,7 @@ type SwitchButton interface {
 	// On returns the text displayed for the ON side.
 	On() string
 
-	// Off returns the text displayed for the ON side.
+	// Off returns the text displayed for the OFF side.
 	Off() string
 
 	// SetOnOff sets the texts of the ON and OFF sides.
