@@ -257,6 +257,7 @@ func buildTableShow() gwu.Comp {
 
 	p.AddVSpace(20)
 	p.Add(gwu.NewLabel("A simple form aligned with a table:"))
+	p.AddVSpace(10)
 	t := gwu.NewTable()
 	t.SetCellPadding(2)
 	t.EnsureSize(2, 2)
@@ -277,6 +278,7 @@ func buildTableShow() gwu.Comp {
 
 	p.AddVSpace(30)
 	p.Add(gwu.NewLabel("Advanced table structure with modified alignment, row and col spans:"))
+	p.AddVSpace(10)
 	t = gwu.NewTable()
 	t.Style().SetBorder2(1, gwu.BRD_STYLE_SOLID, gwu.CLR_GREY)
 	t.SetAlign(gwu.HA_RIGHT, gwu.VA_TOP)
@@ -305,13 +307,71 @@ func buildTableShow() gwu.Comp {
 
 func buildTabPanelShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	t := gwu.NewTabPanel()
+	t.Style().SetSizePx(500, 300)
+
+	config := gwu.NewHorizontalPanel()
+	config.Add(gwu.NewLabel("Change tab bar placement:"))
+	lb := gwu.NewListBox([]string{"Top", "Bottom", "Left", "Right"})
+	placements := []gwu.TabBarPlacement{gwu.TB_PLACEMENT_TOP, gwu.TB_PLACEMENT_BOTTOM, gwu.TB_PLACEMENT_LEFT, gwu.TB_PLACEMENT_RIGHT}
+	lb.AddEHandlerFunc(func(e gwu.Event) {
+		t.SetTabBarPlacement(placements[lb.SelectedIndices()[0]])
+		e.MarkDirty(t)
+	}, gwu.ETYPE_CHANGE)
+	config.Add(lb)
+	config.AddHSpace(10)
+	fix := gwu.NewCheckBox("Fixed size")
+	fix.SetState(true)
+	fix.AddEHandlerFunc(func(e gwu.Event) {
+		if fix.State() {
+			t.Style().SetSizePx(500, 300)
+		} else {
+			t.Style().SetSize("", "")
+		}
+		e.MarkDirty(t)
+	}, gwu.ETYPE_CLICK)
+	config.Add(fix)
+	p.Add(config)
+
+	p.AddVSpace(15)
+	c := gwu.NewPanel()
+	c.Add(gwu.NewLabel("This is a TabPanel."))
+	c.Add(gwu.NewLabel("Click on other tabs to see their content."))
+	c.AddVSpace(15)
+	c.Add(gwu.NewLabel("Or click here to see what's in the Hollow:"))
+	b := gwu.NewButton("Take me to the Hollow!")
+	b.AddEHandlerFunc(func(e gwu.Event) {
+		t.SetSelected(3)
+		e.MarkDirty(t)
+	}, gwu.ETYPE_CLICK)
+	c.Add(b)
+	t.AddString("Home", c)
+	c = gwu.NewPanel()
+	c.Add(gwu.NewLabel("You have no new messages."))
+	t.AddString("Inbox", c)
+	c = gwu.NewPanel()
+	c.Add(gwu.NewLabel("You have no sent messages."))
+	t.AddString("Sent", c)
+	c = gwu.NewPanel()
+	c.Add(gwu.NewLabel("There is nothing in the hollow."))
+	t.AddString("Hollow", c)
+	c = gwu.NewPanel()
+	ta := gwu.NewTextBox("Click to edit this comment.")
+	ta.SetRows(10)
+	ta.SetCols(40)
+	c.Add(ta)
+	t.AddString("Comment", c)
+	p.Add(t)
+
 	return p
 }
 
 func buildWindowShow() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	p.Add(gwu.NewLabel("The Window represents the whole window, the page inside the browser."))
+
 	return p
 }
 
