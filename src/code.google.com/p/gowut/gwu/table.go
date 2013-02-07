@@ -68,6 +68,12 @@ type Table interface {
 	// nil is returned.
 	CellFmt(row, col int) CellFmt
 
+	// Border returns the border width of the table.
+	Border() int
+
+	// SetBorder sets the border width of the table.
+	SetBorder(width int)
+
 	// CellSpacing returns the cell spacing.
 	CellSpacing() int
 
@@ -284,6 +290,17 @@ func (c *tableImpl) CellFmt(row, col int) CellFmt {
 	}
 
 	return cf
+}
+
+func (c *tableImpl) Border() int {
+	if cp, err := strconv.Atoi(c.Attr("border")); err == nil {
+		return cp
+	}
+	return -1
+}
+
+func (c *tableImpl) SetBorder(width int) {
+	c.SetAttr("border", strconv.Itoa(width))
 }
 
 func (c *tableImpl) CellSpacing() int {

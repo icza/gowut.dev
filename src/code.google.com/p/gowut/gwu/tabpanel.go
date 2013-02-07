@@ -263,7 +263,7 @@ func (c *tabPanelImpl) Add(tab, content Comp) {
 	c.tabBarImpl.Add(tab)
 	c.panelImpl.Add(content)
 	tab.Style().AddClass("gwu-TabBar-NotSelected")
-	c.CellFmt(content).Style().AddClass("gwu-TabPanel-Content")
+	c.CellFmt(content).Style().AddClass("gwu-TabPanel-Content").SetFullSize()
 
 	if c.CompsCount() == 1 {
 		c.SetSelected(0)
