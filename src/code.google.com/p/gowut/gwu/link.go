@@ -48,7 +48,7 @@ type Link interface {
 	SetComp(c Comp)
 }
 
-// Link implementation
+// Link implementation.
 type linkImpl struct {
 	compImpl    // Component implementation
 	hasTextImpl // Has text implementation
@@ -57,7 +57,7 @@ type linkImpl struct {
 	comp Comp // Optional child component
 }
 
-// NewLink creates a new Link component.
+// NewLink creates a new Link.
 // By default links open in a new window (tab)
 // because their target is set to "_blank".
 func NewLink(text, url string) Link {
@@ -99,8 +99,10 @@ func (c *linkImpl) ById(id ID) Comp {
 }
 
 func (c *linkImpl) Clear() {
-	c.comp.setParent(nil)
-	c.comp = nil
+	if c.comp != nil {
+		c.comp.setParent(nil)
+		c.comp = nil
+	}
 }
 
 func (c *linkImpl) Target() string {

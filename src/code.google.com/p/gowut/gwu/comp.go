@@ -114,7 +114,7 @@ type Comp interface {
 	Render(w writer)
 }
 
-// Comp implementation
+// Comp implementation.
 type compImpl struct {
 	id     ID        // The component id
 	parent Container // Parent container

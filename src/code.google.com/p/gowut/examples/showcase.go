@@ -215,6 +215,12 @@ func buildSwitchButtonDemo() gwu.Comp {
 	return p
 }
 
+func buildExpanderDemo() gwu.Comp {
+	p := gwu.NewPanel()
+	p.Add(gwu.NewLabel("TODO"))
+	return p
+}
+
 func buildLinkContainerDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
@@ -515,7 +521,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	win.Style().SetFullSize()
 
 	header := gwu.NewHorizontalPanel()
-	header.Style().SetFullWidth().SetBorderBottom2(2, gwu.BRD_STYLE_SOLID, "#777777").SetWhiteSpace(gwu.WHITE_SPACE_NOWRAP)
+	header.Style().SetFullWidth().SetBorderBottom2(2, gwu.BRD_STYLE_SOLID, "#777777")
 	l := gwu.NewLabel("Gowut - Showcase of Features")
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("120%")
 	header.Add(l)
@@ -535,6 +541,7 @@ func buildShowcaseWin(sess gwu.Session) {
 		e.ReloadWin("show")
 	}, gwu.ETYPE_CLICK)
 	header.Add(reset)
+	setNoWrap(header)
 	win.Add(header)
 
 	content := gwu.NewHorizontalPanel()
@@ -552,7 +559,7 @@ func buildShowcaseWin(sess gwu.Session) {
 
 	links := gwu.NewPanel()
 	links.SetCellPadding(1)
-	links.Style().SetWhiteSpace(gwu.WHITE_SPACE_NOWRAP).SetPaddingRightPx(5)
+	links.Style().SetPaddingRightPx(5)
 
 	demos := make(map[string]pdemo)
 	var selDemo pdemo
@@ -611,6 +618,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	l = gwu.NewLabel("Containers")
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)
 	links.Add(l)
+	createDemo("Expander", buildExpanderDemo)
 	createDemo("Link (as Container)", buildLinkContainerDemo)
 	createDemo("Panel", buildPanelDemo)
 	createDemo("Table", buildTableDemo)
@@ -626,6 +634,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	createDemo("Label", buildLabelDemo)
 	createDemo("Link", buildLinkDemo)
 	links.AddVConsumer()
+	setNoWrap(links)
 	content.Add(links)
 	content.Add(demoWrapper)
 	content.CellFmt(demoWrapper).Style().SetFullWidth()
@@ -634,7 +643,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	win.CellFmt(content).Style().SetFullSize()
 
 	footer := gwu.NewHorizontalPanel()
-	footer.Style().SetFullWidth().SetBorderTop2(2, gwu.BRD_STYLE_SOLID, "#777777").SetWhiteSpace(gwu.WHITE_SPACE_NOWRAP)
+	footer.Style().SetFullWidth().SetBorderTop2(2, gwu.BRD_STYLE_SOLID, "#777777")
 	footer.AddHConsumer()
 	l = gwu.NewLabel("Copyright © 2013 András Belicza. All rights reserved.")
 	l.Style().SetFontStyle(gwu.FONT_STYLE_ITALIC).SetFontSize("95%")
@@ -643,11 +652,21 @@ func buildShowcaseWin(sess gwu.Session) {
 	link := gwu.NewLink("Visit Gowut Home page", "https://sites.google.com/site/gowebuitoolkit/")
 	link.Style().SetFontStyle(gwu.FONT_STYLE_ITALIC).SetFontSize("95%")
 	footer.Add(link)
+	setNoWrap(footer)
 	win.Add(footer)
 
 	sess.AddWin(win)
 }
 
+// setNoWrap sets WHITE_SPACE_NOWRAP to all children of the specified panel.
+func setNoWrap(panel gwu.Panel) {
+	count := panel.CompsCount()
+	for i := count - 1; i >= 0; i-- {
+		panel.CompAt(i).Style().SetWhiteSpace(gwu.WHITE_SPACE_NOWRAP)
+	}
+}
+
+// SessHandler is our session handler to build the showcases window.
 type SessHandler struct{}
 
 func (h SessHandler) Created(s gwu.Session) {
