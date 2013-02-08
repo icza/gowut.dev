@@ -33,7 +33,17 @@ func plural(i int) string {
 	return "s"
 }
 
-func buildCheckBoxShow() gwu.Comp {
+func buildHomeDemo() gwu.Comp {
+	p := gwu.NewPanel()
+
+	p.Add(gwu.NewLabel("This app is written in and showcases Gowut version " + gwu.GOWUT_VERSION + "."))
+	p.AddVSpace(20)
+	p.Add(gwu.NewLabel("Select components on the left side to see them in action."))
+
+	return p
+}
+
+func buildCheckBoxDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	suml := gwu.NewLabel("")
@@ -64,7 +74,7 @@ func buildCheckBoxShow() gwu.Comp {
 	return p
 }
 
-func buildListBoxShow() gwu.Comp {
+func buildListBoxDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	row := gwu.NewHorizontalPanel()
@@ -102,7 +112,7 @@ func buildListBoxShow() gwu.Comp {
 	return p
 }
 
-func buildTextBoxShow() gwu.Comp {
+func buildTextBoxDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("Enter your name (max 15 characters):"))
@@ -141,7 +151,7 @@ func buildTextBoxShow() gwu.Comp {
 	return p
 }
 
-func buildPasswBoxShow() gwu.Comp {
+func buildPasswBoxDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("Enter your password:"))
@@ -150,7 +160,7 @@ func buildPasswBoxShow() gwu.Comp {
 	return p
 }
 
-func buildRadioButtonShow() gwu.Comp {
+func buildRadioButtonDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("Select your favorite programming language:"))
@@ -178,7 +188,7 @@ func buildRadioButtonShow() gwu.Comp {
 	return p
 }
 
-func buildSwitchButtonShow() gwu.Comp {
+func buildSwitchButtonDemo() gwu.Comp {
 	p := gwu.NewPanel()
 	p.SetCellPadding(1)
 
@@ -205,7 +215,7 @@ func buildSwitchButtonShow() gwu.Comp {
 	return p
 }
 
-func buildLinkShow() gwu.Comp {
+func buildLinkContainerDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	link := gwu.NewLink("Obvious link to Google Home", "https://google.com")
@@ -219,7 +229,7 @@ func buildLinkShow() gwu.Comp {
 	return p
 }
 
-func buildPanelShow() gwu.Comp {
+func buildPanelDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("Panel with horizontal layout:"))
@@ -248,7 +258,7 @@ func buildPanelShow() gwu.Comp {
 	return p
 }
 
-func buildTableShow() gwu.Comp {
+func buildTableDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	l := gwu.NewLabel("Tip: Switch to the 'debug' theme (top right) to see cell borders.")
@@ -305,7 +315,7 @@ func buildTableShow() gwu.Comp {
 	return p
 }
 
-func buildTabPanelShow() gwu.Comp {
+func buildTabPanelDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	t := gwu.NewTabPanel()
@@ -367,7 +377,7 @@ func buildTabPanelShow() gwu.Comp {
 	return p
 }
 
-func buildWindowShow() gwu.Comp {
+func buildWindowDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("The Window represents the whole window, the page inside the browser."))
@@ -375,7 +385,7 @@ func buildWindowShow() gwu.Comp {
 	return p
 }
 
-func buildButtonShow() gwu.Comp {
+func buildButtonDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	l := gwu.NewLabel("")
@@ -407,12 +417,12 @@ func buildButtonShow() gwu.Comp {
 	return p
 }
 
-func buildHtmlShow() gwu.Comp {
+func buildHtmlDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	html := "<span onclick=\"alert('Hi from Html!');\">Hi! I'm inserted as HTML. Click on me!</span>"
 
-	p.Add(gwu.NewLabel("The following HTML code is inserted after the text area as an Html component:"))
+	p.Add(gwu.NewLabel("The following HTML code is inserted after the text box as an Html component:"))
 	ta := gwu.NewTextBox(html)
 	ta.SetReadOnly(true)
 	ta.Style().SetWidthPx(500)
@@ -426,7 +436,7 @@ func buildHtmlShow() gwu.Comp {
 	return p
 }
 
-func buildImageShow() gwu.Comp {
+func buildImageDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("Google's logo:"))
@@ -443,7 +453,7 @@ func buildImageShow() gwu.Comp {
 	return p
 }
 
-func buildLabelShow() gwu.Comp {
+func buildLabelDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("This is a Label."))
@@ -470,7 +480,7 @@ func buildLabelShow() gwu.Comp {
 	return p
 }
 
-func buildLinkShow2() gwu.Comp {
+func buildLinkDemo() gwu.Comp {
 	p := gwu.NewPanel()
 	p.SetCellPadding(3)
 
@@ -493,7 +503,14 @@ func buildLinkShow2() gwu.Comp {
 	return p
 }
 
-func buildShowcase(sess gwu.Session) {
+type demo struct {
+	link      gwu.Label
+	buildFunc func() gwu.Comp
+	comp      gwu.Comp // Lazily initialized demo comp
+}
+type pdemo *demo
+
+func buildShowcaseWin(sess gwu.Session) {
 	win := gwu.NewWindow("show", "Showcase of Features - Gowut")
 	win.Style().SetFullSize()
 
@@ -511,13 +528,13 @@ func buildShowcase(sess gwu.Session) {
 	}, gwu.ETYPE_CHANGE)
 	header.Add(themes)
 	header.AddHSpace(10)
-	logout := gwu.NewLink("Logout", "#")
-	logout.SetTarget("")
-	logout.AddEHandlerFunc(func(e gwu.Event) {
+	reset := gwu.NewLink("Reset", "#")
+	reset.SetTarget("")
+	reset.AddEHandlerFunc(func(e gwu.Event) {
 		e.RemoveSess()
-		e.ReloadWin("login")
+		e.ReloadWin("show")
 	}, gwu.ETYPE_CLICK)
-	header.Add(logout)
+	header.Add(reset)
 	win.Add(header)
 
 	content := gwu.NewHorizontalPanel()
@@ -525,76 +542,93 @@ func buildShowcase(sess gwu.Session) {
 	content.SetVAlign(gwu.VA_TOP)
 	content.Style().SetFullSize()
 
-	showWrapper := gwu.NewPanel()
-	showWrapper.Style().SetPaddingLeftPx(5)
-	selectedShow := gwu.NewLabel("")
-	selectedShow.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("110%")
-	showWrapper.Add(selectedShow)
-	showWrapper.AddVSpace(10)
+	demoWrapper := gwu.NewPanel()
+	demoWrapper.Style().SetPaddingLeftPx(5)
+	demoWrapper.AddVSpace(10)
+	demoTitle := gwu.NewLabel("")
+	demoTitle.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("110%")
+	demoWrapper.Add(demoTitle)
+	demoWrapper.AddVSpace(10)
 
 	links := gwu.NewPanel()
 	links.SetCellPadding(1)
 	links.Style().SetWhiteSpace(gwu.WHITE_SPACE_NOWRAP).SetPaddingRightPx(5)
 
-	// Lazily initialized, cached "Show" components
-	showComps := make(map[string]gwu.Comp)
-	var selectedLink gwu.Label
-	addShowLink := func(show string, buildFunc func() gwu.Comp) {
-		link := gwu.NewLabel(show)
-		link.Style().SetFullWidth().SetCursor(gwu.CURSOR_POINTER).SetDisplay(gwu.DISPLAY_BLOCK).SetColor(gwu.CLR_BLUE)
-		link.AddEHandlerFunc(func(e gwu.Event) {
-			if selectedLink != nil {
-				selectedLink.Style().SetBackground("")
-				e.MarkDirty(selectedLink)
-				showWrapper.Remove(showComps[selectedLink.Text()])
+	demos := make(map[string]pdemo)
+	var selDemo pdemo
+
+	selectDemo := func(d pdemo, e gwu.Event) {
+		if selDemo != nil {
+			selDemo.link.Style().SetBackground("")
+			if e != nil {
+				e.MarkDirty(selDemo.link)
 			}
-			selectedLink = link
-			selectedLink.Style().SetBackground("#aaffaa")
-			selectedShow.SetText(show)
-			showComp := showComps[show]
-			if showComp == nil {
-				showComp = buildFunc()
-				showComps[show] = showComp
-			}
-			showWrapper.Add(showComp)
-			e.MarkDirty(selectedLink, showWrapper)
-		}, gwu.ETYPE_CLICK)
-		links.Add(link)
+			demoWrapper.Remove(selDemo.comp)
+		}
+		selDemo = d
+		d.link.Style().SetBackground("#aaffaa")
+		demoTitle.SetText(d.link.Text())
+		if d.comp == nil {
+			d.comp = d.buildFunc()
+		}
+		demoWrapper.Add(d.comp)
+		if e != nil {
+			e.MarkDirty(d.link, demoWrapper)
+		}
 	}
 
-	links.Style().SetFullSize().SetBorderRight2(2, gwu.BRD_STYLE_SOLID, "#777777")
+	createDemo := func(name string, buildFunc func() gwu.Comp) pdemo {
+		link := gwu.NewLabel(name)
+		link.Style().SetFullWidth().SetCursor(gwu.CURSOR_POINTER).SetDisplay(gwu.DISPLAY_BLOCK).SetColor(gwu.CLR_BLUE)
+		demo := &demo{link: link, buildFunc: buildFunc}
+		link.AddEHandlerFunc(func(e gwu.Event) {
+			selectDemo(demo, e)
+		}, gwu.ETYPE_CLICK)
+		links.Add(link)
+		demos[name] = demo
+		return demo
+	}
+
+	links.Style().SetFullHeight().SetBorderRight2(2, gwu.BRD_STYLE_SOLID, "#777777")
+	links.AddVSpace(5)
+	homeDemo := createDemo("Home", buildHomeDemo)
+	selectDemo(homeDemo, nil)
+	links.AddVSpace(5)
 	l = gwu.NewLabel("Component Palette")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("120%").SetDisplay(gwu.DISPLAY_BLOCK).SetPaddingBottomPx(5)
+	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("110%")
 	links.Add(l)
+	links.AddVSpace(5)
 	l = gwu.NewLabel("Input components")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetDisplay(gwu.DISPLAY_BLOCK).SetPaddingTopPx(5)
+	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetDisplay(gwu.DISPLAY_BLOCK)
 	links.Add(l)
-	addShowLink("CheckBox", buildCheckBoxShow)
-	addShowLink("ListBox", buildListBoxShow)
-	addShowLink("TextBox", buildTextBoxShow)
-	addShowLink("PasswBox", buildPasswBoxShow)
-	addShowLink("RadioButton", buildRadioButtonShow)
-	addShowLink("SwitchButton", buildSwitchButtonShow)
+	createDemo("CheckBox", buildCheckBoxDemo)
+	createDemo("ListBox", buildListBoxDemo)
+	createDemo("TextBox", buildTextBoxDemo)
+	createDemo("PasswBox", buildPasswBoxDemo)
+	createDemo("RadioButton", buildRadioButtonDemo)
+	createDemo("SwitchButton", buildSwitchButtonDemo)
+	links.AddVSpace(5)
 	l = gwu.NewLabel("Containers")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetDisplay(gwu.DISPLAY_BLOCK).SetPaddingTopPx(5)
+	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)
 	links.Add(l)
-	addShowLink("Link (as Container)", buildLinkShow)
-	addShowLink("Panel", buildPanelShow)
-	addShowLink("Table", buildTableShow)
-	addShowLink("TabPanel", buildTabPanelShow)
-	addShowLink("Window", buildWindowShow)
+	createDemo("Link (as Container)", buildLinkContainerDemo)
+	createDemo("Panel", buildPanelDemo)
+	createDemo("Table", buildTableDemo)
+	createDemo("TabPanel", buildTabPanelDemo)
+	createDemo("Window", buildWindowDemo)
+	links.AddVSpace(5)
 	l = gwu.NewLabel("Other components")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetDisplay(gwu.DISPLAY_BLOCK).SetPaddingTopPx(5)
+	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)
 	links.Add(l)
-	addShowLink("Button", buildButtonShow)
-	addShowLink("Html", buildHtmlShow)
-	addShowLink("Image", buildImageShow)
-	addShowLink("Label", buildLabelShow)
-	addShowLink("Link", buildLinkShow2)
+	createDemo("Button", buildButtonDemo)
+	createDemo("Html", buildHtmlDemo)
+	createDemo("Image", buildImageDemo)
+	createDemo("Label", buildLabelDemo)
+	createDemo("Link", buildLinkDemo)
 	links.AddVConsumer()
 	content.Add(links)
-	content.Add(showWrapper)
-	content.CellFmt(showWrapper).Style().SetFullWidth()
+	content.Add(demoWrapper)
+	content.CellFmt(demoWrapper).Style().SetFullWidth()
 
 	win.Add(content)
 	win.CellFmt(content).Style().SetFullSize()
@@ -602,63 +636,14 @@ func buildShowcase(sess gwu.Session) {
 	footer := gwu.NewHorizontalPanel()
 	footer.Style().SetFullWidth().SetBorderTop2(2, gwu.BRD_STYLE_SOLID, "#777777").SetWhiteSpace(gwu.WHITE_SPACE_NOWRAP)
 	footer.AddHConsumer()
-	l = gwu.NewLabel("This app is written in and showcases Gowut version " + gwu.GOWUT_VERSION + ".")
-	l.Style().SetFontStyle(gwu.FONT_STYLE_ITALIC)
+	l = gwu.NewLabel("Copyright © 2013 András Belicza. All rights reserved.")
+	l.Style().SetFontStyle(gwu.FONT_STYLE_ITALIC).SetFontSize("95%")
 	footer.Add(l)
 	footer.AddHSpace(10)
 	link := gwu.NewLink("Visit Gowut Home page", "https://sites.google.com/site/gowebuitoolkit/")
+	link.Style().SetFontStyle(gwu.FONT_STYLE_ITALIC).SetFontSize("95%")
 	footer.Add(link)
 	win.Add(footer)
-
-	sess.AddWin(win)
-}
-
-func buildLoginWin(sess gwu.Session) {
-	win := gwu.NewWindow("login", "Login - Showcase of Features - Gowut")
-	win.Style().SetFullWidth()
-	win.SetHAlign(gwu.HA_CENTER)
-
-	l := gwu.NewLabel("Gowut - Showcase of Features")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("150%")
-	win.Add(l)
-	l = gwu.NewLabel("Login")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("130%")
-	win.Add(l)
-	l = gwu.NewLabel("user/pass: admin/a")
-	l.Style().SetFontSize("80%").SetFontStyle(gwu.FONT_STYLE_ITALIC)
-	win.Add(l)
-
-	errL := gwu.NewLabel("")
-	errL.Style().SetColor(gwu.CLR_RED)
-	win.Add(errL)
-
-	table := gwu.NewTable()
-	table.SetCellPadding(2)
-	table.EnsureSize(2, 2)
-	table.Add(gwu.NewLabel("User name:"), 0, 0)
-	tb := gwu.NewTextBox("admin")
-	tb.Style().SetWidthPx(160)
-	table.Add(tb, 0, 1)
-	table.Add(gwu.NewLabel("Password:"), 1, 0)
-	pb := gwu.NewPasswBox("a")
-	pb.Style().SetWidthPx(160)
-	table.Add(pb, 1, 1)
-	win.Add(table)
-	b := gwu.NewButton("OK")
-	b.AddEHandlerFunc(func(e gwu.Event) {
-		if tb.Text() == "admin" && pb.Text() == "a" {
-			e.Session().RemoveWin(win)
-			buildShowcase(e.Session())
-			e.ReloadWin("show")
-		} else {
-			e.SetFocusedComp(tb)
-			errL.SetText("Invalid user name or password!")
-			e.MarkDirty(errL)
-		}
-	}, gwu.ETYPE_CLICK)
-	win.Add(b)
-
-	win.SetFocusedCompId(b.Id())
 
 	sess.AddWin(win)
 }
@@ -666,7 +651,7 @@ func buildLoginWin(sess gwu.Session) {
 type SessHandler struct{}
 
 func (h SessHandler) Created(s gwu.Session) {
-	buildLoginWin(s)
+	buildShowcaseWin(s)
 }
 
 func (h SessHandler) Removed(s gwu.Session) {}
@@ -691,11 +676,11 @@ func main() {
 	server := gwu.NewServer("showcase", "")
 	server.SetText("Gowut - Showcase of Features")
 
-	server.AddSessCreatorName("login", "Login Window")
+	server.AddSessCreatorName("show", "Showcase of Features - Gowut")
 	server.AddSHandler(SessHandler{})
 
 	// Start GUI server
-	if err := server.Start("login"); err != nil {
+	if err := server.Start("show"); err != nil {
 		fmt.Println("Error: Cound not start GUI server:", err)
 		return
 	}

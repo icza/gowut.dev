@@ -106,6 +106,9 @@ type Panel interface {
 	// Useful when layout is LAYOUT_VERTICAL.
 	AddVSpace(height int) Comp
 
+	// AddSpace adds and returns a fixed-size space consumer.
+	AddSpace(width, height int) Comp
+
 	// AddHConsumer adds and returns a horizontal (free) space consumer.
 	// Useful when layout is LAYOUT_HORIZONTAL.
 	// 
@@ -328,6 +331,13 @@ func (c *panelImpl) AddHSpace(width int) Comp {
 func (c *panelImpl) AddVSpace(height int) Comp {
 	l := NewLabel("")
 	l.Style().SetDisplay(DISPLAY_BLOCK).SetHeightPx(height)
+	c.Add(l)
+	return l
+}
+
+func (c *panelImpl) AddSpace(width, height int) Comp {
+	l := NewLabel("")
+	l.Style().SetDisplay(DISPLAY_BLOCK).SetSizePx(width, height)
 	c.Add(l)
 	return l
 }

@@ -12,5 +12,10 @@ The application is written using Gowut (of course) and showcases the component l
 -Panel improvements:
 * Constructors to create panels initialized with a different layout, e.g. NewHorizontalPanel(). 
 * New helper methods to add space consumer components. 
+* Cellspacing and cellpadding control
+
+-Table improvements:
+* Table border control.
+* Cellspacing and cellpadding control
 
 -Other minor changes, improvements and bug fixes.
