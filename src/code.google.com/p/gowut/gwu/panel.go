@@ -78,6 +78,7 @@ type PanelView interface {
 
 	// CellFmt returns the cell formatter of the specified child component.
 	// If the specified component is not a child, nil is returned.
+	// Cell formatting has no effect if layout is LAYOUT_NATURAL.
 	CellFmt(c Comp) CellFmt
 }
 

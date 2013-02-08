@@ -38,7 +38,7 @@ type imageImpl struct {
 	hasUrlImpl  // Has text implementation
 }
 
-// NewImage creates a new Image component.
+// NewImage creates a new Image.
 // The text is used as the alternate text for the image.
 func NewImage(text, url string) Image {
 	c := &imageImpl{newCompImpl(""), newHasTextImpl(text), newHasUrlImpl(url)}

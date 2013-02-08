@@ -38,7 +38,7 @@ type htmlImpl struct {
 	html string // HTML text
 }
 
-// NewHtml creates a new Html component.
+// NewHtml creates a new Html.
 func NewHtml(html string) Html {
 	c := &htmlImpl{newCompImpl(""), html}
 	c.Style().AddClass("gwu-Html")

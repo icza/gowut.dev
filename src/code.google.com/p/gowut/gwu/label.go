@@ -34,7 +34,7 @@ type labelImpl struct {
 	hasTextImpl // Has text implementation
 }
 
-// NewLabel creates a new Label component.
+// NewLabel creates a new Label.
 func NewLabel(text string) Label {
 	c := &labelImpl{newCompImpl(""), newHasTextImpl(text)}
 	c.Style().AddClass("gwu-Label")

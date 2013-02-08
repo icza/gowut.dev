@@ -5,6 +5,9 @@ Changes and new features in 0.7.0:
 -A new example application: "Showcase of Features".
 The application is written using Gowut (of course) and showcases the component library.
 
+-New component: Expander
+Expander shows or hides a content comp when clicking on the header comp.
+
 -CheckBox and RadioButton now have additional style classes for the disabled state.
 
 -Added many new methods and constants to the style builder.
@@ -15,7 +18,7 @@ The application is written using Gowut (of course) and showcases the component l
 * Cellspacing and cellpadding control
 
 -Table improvements:
-* Table border control.
 * Cellspacing and cellpadding control
+* Table border control.
 
 -Other minor changes, improvements and bug fixes.
