@@ -17,10 +17,6 @@
 
 package gwu
 
-import (
-	"strconv"
-)
-
 // Layout strategy type.
 type Layout int
 
@@ -32,18 +28,14 @@ const (
 )
 
 // PanelView interface defines a container which stores child components
-// associated with an index, and lays out its children based on a layout
-// strategy, but does not define the way how child components can be added.
+// sequentially (one dimensional, associated with an index), and lays out
+// its children in a row or column using TableView based on a layout strategy,
+// but does not define the way how child components can be added.
 // 
 // Default style class: "gwu-Panel"
 type PanelView interface {
-	// PanelView is a Container.
-	Container
-
-	// PanelView has horizontal and vertical alignment.
-	// This is the default horizontal and vertical alignment for
-	// all children which can be overridden with the CellFmt method.
-	HasHVAlign
+	// PanelView is a TableView.
+	TableView
 
 	// Layout returns the layout strategy used to lay out components when rendering.
 	Layout() Layout
@@ -61,20 +53,6 @@ type PanelView interface {
 	// CompIdx returns the index of the specified component in the panel.
 	// -1 is returned if the component is not added to the panel.
 	CompIdx(c Comp) int
-
-	// CellSpacing returns the cell spacing.
-	CellSpacing() int
-
-	// SetCellSpacing sets the cell spacing.
-	// Has no effect if layout is LAYOUT_NATURAL.
-	SetCellSpacing(spacing int)
-
-	// CellPadding returns the cell spacing.
-	CellPadding() int
-
-	// SetCellPadding sets the cell padding.
-	// Has no effect if layout is LAYOUT_NATURAL.
-	SetCellPadding(padding int)
 
 	// CellFmt returns the cell formatter of the specified child component.
 	// If the specified component is not a child, nil is returned.
@@ -125,8 +103,7 @@ type Panel interface {
 
 // Panel implementation.
 type panelImpl struct {
-	compImpl       // component implementation
-	hasHVAlignImpl // Has horizontal and vertical alignment implementation 
+	tableViewImpl // TableView implementation
 
 	layout   Layout              // Layout strategy
 	comps    []Comp              // Components added to this panel
@@ -140,8 +117,6 @@ type panelImpl struct {
 func NewPanel() Panel {
 	c := newPanelImpl()
 	c.Style().AddClass("gwu-Panel")
-	c.SetCellSpacing(0)
-	c.SetCellPadding(0)
 	return &c
 }
 
@@ -175,8 +150,7 @@ func NewVerticalPanel() Panel {
 
 // newPanelImpl creates a new panelImpl.
 func newPanelImpl() panelImpl {
-	return panelImpl{compImpl: newCompImpl(""), hasHVAlignImpl: newHasHVAlignImpl(HA_DEFAULT, VA_DEFAULT),
-		layout: LAYOUT_VERTICAL, comps: make([]Comp, 0, 2)}
+	return panelImpl{tableViewImpl: newTableViewImpl(), layout: LAYOUT_VERTICAL, comps: make([]Comp, 0, 2)}
 }
 
 func (c *panelImpl) Remove(c2 Comp) bool {
@@ -258,28 +232,6 @@ func (c *panelImpl) CompIdx(c2 Comp) int {
 		}
 	}
 	return -1
-}
-
-func (c *panelImpl) CellSpacing() int {
-	if cs, err := strconv.Atoi(c.Attr("cellspacing")); err == nil {
-		return cs
-	}
-	return -1
-}
-
-func (c *panelImpl) SetCellSpacing(spacing int) {
-	c.SetAttr("cellspacing", strconv.Itoa(spacing))
-}
-
-func (c *panelImpl) CellPadding() int {
-	if cp, err := strconv.Atoi(c.Attr("cellpadding")); err == nil {
-		return cp
-	}
-	return -1
-}
-
-func (c *panelImpl) SetCellPadding(padding int) {
-	c.SetAttr("cellpadding", strconv.Itoa(padding))
 }
 
 func (c *panelImpl) CellFmt(c2 Comp) CellFmt {

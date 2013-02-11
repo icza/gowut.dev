@@ -23,8 +23,8 @@ package gwu
 // Default style classes: "gwu-Expander", "gwu-Expander-Header",
 // "gwu-Expander-Header-Open", "gwu-Expander-Content"
 type Expander interface {
-	// Expander is a Container.
-	Container
+	// Expander is a TableView.
+	TableView
 
 	// Header returns the header component of the expander.
 	Header() Comp
@@ -48,7 +48,7 @@ type Expander interface {
 // Expander implementation.
 // Implemented
 type expanderImpl struct {
-	compImpl // Component implementation
+	tableViewImpl // TableView implementation
 
 	header   Comp // Header component
 	content  Comp // Content component
@@ -58,21 +58,21 @@ type expanderImpl struct {
 // NewExpander creates a new Expander component.
 // By default expanders are not expanded.
 func NewExpander() Expander {
-	c := &expanderImpl{compImpl: newCompImpl("")}
+	c := &expanderImpl{tableViewImpl: newTableViewImpl()}
 	c.Style().AddClass("gwu-Expander")
 	return c
 }
 
 func (c *expanderImpl) Remove(c2 Comp) bool {
-	if c.header.Equals(c2) {
-		c2.setParent(nil)
-		c.header = nil
-		return true
-	}
-
 	if c.content.Equals(c2) {
 		c2.setParent(nil)
 		c.content = nil
+		return true
+	}
+
+	if c.header.Equals(c2) {
+		c2.setParent(nil)
+		c.header = nil
 		return true
 	}
 
@@ -146,7 +146,7 @@ func (c *expanderImpl) SetExpanded(expanded bool) {
 
 func (c *expanderImpl) Render(w writer) {
 	// TODO
-	w.Writes("<a")
+	w.Write(_STR_TABLE_OP)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
 	w.Write(_STR_GT)
@@ -155,5 +155,5 @@ func (c *expanderImpl) Render(w writer) {
 		c.header.Render(w)
 	}
 
-	w.Writes("</a>")
+	w.Write(_STR_TABLE_CL)
 }

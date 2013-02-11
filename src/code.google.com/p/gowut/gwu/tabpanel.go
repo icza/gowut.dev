@@ -39,8 +39,6 @@ type tabBarImpl struct {
 // newTabBarImpl creates a new tabBarImpl.
 func newTabBarImpl() *tabBarImpl {
 	c := &tabBarImpl{newPanelImpl()}
-	c.SetAttr("cellspacing", "0")
-	c.SetAttr("cellpadding", "0")
 	return c
 }
 
@@ -146,8 +144,6 @@ type tabPanelImpl struct {
 // default vertical alignment is VA_DEFAULT.
 func NewTabPanel() TabPanel {
 	c := &tabPanelImpl{panelImpl: newPanelImpl(), tabBarImpl: newTabBarImpl(), tabBarFmt: newCellFmtImpl(), selected: -1}
-	c.SetAttr("cellspacing", "0")
-	c.SetAttr("cellpadding", "0")
 	c.tabBarImpl.Style().AddClass("gwu-TabBar")
 	c.tabBarImpl.setParent(c)
 	c.SetTabBarPlacement(TB_PLACEMENT_TOP)

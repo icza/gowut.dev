@@ -20,6 +20,10 @@
 
 package gwu
 
+import (
+	"strconv"
+)
+
 // HasText interface defines a modifiable text property.
 type HasText interface {
 	// Text returns the text.
@@ -294,4 +298,87 @@ func (c *cellFmtImpl) renderWithAligns(tag string, halign HAlign, valign VAlign,
 	}
 
 	w.Write(_STR_GT)
+}
+
+// TableView interface defines a component which is rendered into a table.
+type TableView interface {
+	// TableView is a Container.
+	Container
+
+	// Border returns the border width of the table.
+	Border() int
+
+	// SetBorder sets the border width of the table.
+	SetBorder(width int)
+
+	// TableView has horizontal and vertical alignment.
+	// This is the default horizontal and vertical alignment for
+	// all children inside their enclosing cells.
+	HasHVAlign
+
+	// CellSpacing returns the cell spacing.
+	CellSpacing() int
+
+	// SetCellSpacing sets the cell spacing.
+	// Has no effect if layout is LAYOUT_NATURAL.
+	SetCellSpacing(spacing int)
+
+	// CellPadding returns the cell spacing.
+	CellPadding() int
+
+	// SetCellPadding sets the cell padding.
+	// Has no effect if layout is LAYOUT_NATURAL.
+	SetCellPadding(padding int)
+}
+
+// TableView implementation.
+type tableViewImpl struct {
+	compImpl       // component implementation
+	hasHVAlignImpl // Has horizontal and vertical alignment implementation 
+}
+
+// newTableViewImpl creates a new tableViewImpl.
+// Default horizontal alignment is HA_DEFAULT,
+// default vertical alignment is VA_DEFAULT.
+func newTableViewImpl() tableViewImpl {
+	// Initialize hasHVAlignImpl with HA_DEFAULT and VA_DEFAULT
+	// so if aligns are not changed, they will not be rendered =>
+	// they will be inherited (from TR).
+	c := tableViewImpl{compImpl: newCompImpl(""), hasHVAlignImpl: newHasHVAlignImpl(HA_DEFAULT, VA_DEFAULT)}
+	c.SetCellSpacing(0)
+	c.SetCellPadding(0)
+	return c
+}
+
+func (c *tableViewImpl) Border() int {
+	if cp, err := strconv.Atoi(c.Attr("border")); err == nil {
+		return cp
+	}
+	return -1
+}
+
+func (c *tableViewImpl) SetBorder(width int) {
+	c.SetAttr("border", strconv.Itoa(width))
+}
+
+func (c *tableViewImpl) CellSpacing() int {
+	if cs, err := strconv.Atoi(c.Attr("cellspacing")); err == nil {
+		return cs
+	}
+	return -1
+}
+
+func (c *tableViewImpl) SetCellSpacing(spacing int) {
+	c.SetAttr("cellspacing", strconv.Itoa(spacing))
+}
+
+func (c *tableViewImpl) CellPadding() int {
+	if cp, err := strconv.Atoi(c.Attr("cellpadding")); err == nil {
+		return cp
+	}
+	return -1
+}
+
+func (c *tableViewImpl) SetCellPadding(padding int) {
+	c.SetAttr("cellpadding", strconv.Itoa(padding))
 }

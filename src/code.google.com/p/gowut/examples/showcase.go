@@ -200,6 +200,7 @@ func buildSwitchButtonDemo() gwu.Comp {
 	row.Add(sw)
 	p.Add(row)
 
+	p.AddVSpace(10)
 	row = gwu.NewHorizontalPanel()
 	row.Add(gwu.NewLabel("And the other one:"))
 	sw2 := gwu.NewSwitchButton()
@@ -224,7 +225,7 @@ func buildExpanderDemo() gwu.Comp {
 func buildLinkContainerDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
-	link := gwu.NewLink("Obvious link to Google Home", "https://google.com")
+	link := gwu.NewLink("An obvious link, to Google Home", "https://google.com/")
 	inside := gwu.NewPanel()
 	inside.Style().SetBorder2(1, gwu.BRD_STYLE_SOLID, gwu.CLR_GRAY)
 	inside.Add(gwu.NewLabel("Everything inside this box also links to Google!"))
