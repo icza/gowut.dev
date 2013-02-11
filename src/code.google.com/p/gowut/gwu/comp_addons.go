@@ -213,7 +213,7 @@ type CellFmt interface {
 	// SetAttr sets the value of the specified HTML attribute.
 	// Pass an empty string value to delete the attribute.
 	setAttr(name, value string)
-	
+
 	// iAttr returns the explicitly set value of the specified HTML attribute
 	// as an int.
 	// -1 is returned if the value is not set explicitly or is not an int.
@@ -391,4 +391,20 @@ func (c *tableViewImpl) CellPadding() int {
 
 func (c *tableViewImpl) SetCellPadding(padding int) {
 	c.SetIAttr("cellpadding", padding)
+}
+
+// renderTr renders an HTML TR tag with horizontal and vertical
+// alignment info included. 
+func (c *tableViewImpl) renderTr(w writer) {
+	w.Writes("<tr")
+	if c.halign != HA_DEFAULT {
+		w.Write(_STR_ALIGN)
+		w.Writes(string(c.halign))
+		w.Write(_STR_QUOTE)
+	}
+	if c.valign != VA_DEFAULT {
+		w.Writess(" style=\"vertical-align:", string(c.valign))
+		w.Write(_STR_QUOTE)
+	}
+	w.Write(_STR_GT)
 }

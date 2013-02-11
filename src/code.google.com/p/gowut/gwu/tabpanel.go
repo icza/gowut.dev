@@ -258,8 +258,8 @@ func (c *tabPanelImpl) TabBarFmt() CellFmt {
 func (c *tabPanelImpl) Add(tab, content Comp) {
 	c.tabBarImpl.Add(tab)
 	c.panelImpl.Add(content)
-	tab.Style().AddClass("gwu-TabBar-NotSelected")
-	c.CellFmt(content).Style().AddClass("gwu-TabPanel-Content").SetFullSize()
+	c.tabBarImpl.CellFmt(tab).Style().AddClass("gwu-TabBar-NotSelected")
+	c.CellFmt(content).Style().AddClass("gwu-TabPanel-Content")
 
 	if c.CompsCount() == 1 {
 		c.SetSelected(0)
@@ -273,7 +273,9 @@ func (c *tabPanelImpl) Add(tab, content Comp) {
 }
 
 func (c *tabPanelImpl) AddString(tab string, content Comp) {
-	c.Add(NewLabel(tab), content)
+	tabc := NewLabel(tab)
+	tabc.Style().SetDisplay(DISPLAY_BLOCK)
+	c.Add(tabc, content)
 }
 
 func (c *tabPanelImpl) Selected() int {
@@ -287,7 +289,7 @@ func (c *tabPanelImpl) SetSelected(idx int) {
 
 	if c.selected >= 0 {
 		// Deselect current selected
-		style := c.tabBarImpl.CompAt(c.selected).Style()
+		style := c.tabBarImpl.CellFmt(c.tabBarImpl.CompAt(c.selected)).Style()
 		style.RemoveClass("gwu-TabBar-Selected")
 		style.AddClass("gwu-TabBar-NotSelected")
 	}
@@ -296,7 +298,7 @@ func (c *tabPanelImpl) SetSelected(idx int) {
 
 	if c.selected >= 0 {
 		// Select new selected
-		style := c.tabBarImpl.CompAt(idx).Style()
+		style := c.tabBarImpl.CellFmt(c.tabBarImpl.CompAt(c.selected)).Style()
 		style.RemoveClass("gwu-TabBar-NotSelected")
 		style.AddClass("gwu-TabBar-Selected")
 	}
@@ -313,21 +315,21 @@ func (c *tabPanelImpl) Render(w writer) {
 		c.tabBarFmt.render("tr", w)
 		w.Write(_STR_TD)
 		c.tabBarImpl.Render(w)
-		w.Writes(c.trTag())
+		c.renderTr(w)
 		c.renderContent(w)
 	case TB_PLACEMENT_BOTTOM:
-		w.Writes(c.trTag())
+		c.renderTr(w)
 		c.renderContent(w)
 		c.tabBarFmt.render("tr", w)
 		w.Write(_STR_TD)
 		c.tabBarImpl.Render(w)
 	case TB_PLACEMENT_LEFT:
-		w.Writes(c.trTag())
+		c.renderTr(w)
 		c.tabBarFmt.render("td", w)
 		c.tabBarImpl.Render(w)
 		c.renderContent(w)
 	case TB_PLACEMENT_RIGHT:
-		w.Writes(c.trTag())
+		c.renderTr(w)
 		c.renderContent(w)
 		c.tabBarFmt.render("td", w)
 		c.tabBarImpl.Render(w)

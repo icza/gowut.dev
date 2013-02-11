@@ -17,6 +17,10 @@
 
 package gwu
 
+import (
+	"bytes"
+)
+
 // Layout strategy type.
 type Layout int
 
@@ -343,7 +347,8 @@ func (c *panelImpl) layoutHorizontal(w writer) {
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
 	w.Write(_STR_GT)
-	w.Writes(c.trTag())
+
+	c.renderTr(w)
 
 	for _, c2 := range c.comps {
 		c.renderTd(c2, w)
@@ -361,10 +366,13 @@ func (c *panelImpl) layoutVertical(w writer) {
 	c.renderEHandlers(w)
 	w.Write(_STR_GT)
 
-	tr := c.trTag()
+	// There is the same TR tag for each cell:
+	trWriter := bytes.NewBuffer(nil)
+	c.renderTr(NewWriter(trWriter))
+	tr := trWriter.Bytes()
 
 	for _, c2 := range c.comps {
-		w.Writes(tr)
+		w.Write(tr)
 		c.renderTd(c2, w)
 		c2.Render(w)
 	}
@@ -384,17 +392,4 @@ func (c *panelImpl) renderTd(c2 Comp, w writer) {
 	} else {
 		cf.render("td", w)
 	}
-}
-
-// trTag returns an HTML TR tag with horizontal and vertical
-// alignment info included. 
-func (c *panelImpl) trTag() string {
-	tr := "<tr"
-	if c.halign != HA_DEFAULT {
-		tr += " align=\"" + string(c.halign) + "\""
-	}
-	if c.valign != VA_DEFAULT {
-		tr += " style=\"vertical-align:" + string(c.valign) + "\""
-	}
-	return tr + ">"
 }
