@@ -20,6 +20,7 @@ package gwu
 import (
 	"html"
 	"net/http"
+	"strconv"
 )
 
 // Container interface defines a component that can contain other components.
@@ -72,6 +73,14 @@ type Comp interface {
 	// SetAttr sets the value of the specified HTML attribute.
 	// Pass an empty string value to delete the attribute.
 	SetAttr(name, value string)
+
+	// IAttr returns the explicitly set value of the specified HTML attribute
+	// as an int.
+	// -1 is returned if the value is not set explicitly or is not an int.
+	IAttr(name string) int
+
+	// SetAttr sets the value of the specified HTML attribute as an int.
+	SetIAttr(name string, value int)
 
 	// ToolTip returns the tool tip of the component.
 	ToolTip() string
@@ -170,6 +179,17 @@ func (c *compImpl) SetAttr(name, value string) {
 	} else {
 		delete(c.attrs, name)
 	}
+}
+
+func (c *compImpl) IAttr(name string) int {
+	if value, err := strconv.Atoi(c.Attr(name)); err == nil {
+		return value
+	}
+	return -1
+}
+
+func (c *compImpl) SetIAttr(name string, value int) {
+	c.SetAttr(name, strconv.Itoa(value))
 }
 
 func (c *compImpl) ToolTip() string {

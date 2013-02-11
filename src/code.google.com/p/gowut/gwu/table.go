@@ -17,10 +17,6 @@
 
 package gwu
 
-import (
-	"strconv"
-)
-
 // Table interface defines a container which lays out its children
 // using a configurable, flexible table.
 // The size of the table grows dynamically, on demand. However,
@@ -298,10 +294,7 @@ func (c *tableImpl) RowSpan(row, col int) int {
 		return -1
 	}
 
-	if rowSpan, err := strconv.Atoi(cf.attr("rowspan")); err == nil {
-		return rowSpan
-	}
-	return -1
+	return cf.iAttr("rowspan")
 }
 
 func (c *tableImpl) SetRowSpan(row, col, rowSpan int) {
@@ -313,7 +306,7 @@ func (c *tableImpl) SetRowSpan(row, col, rowSpan int) {
 	if rowSpan < 2 {
 		cf.setAttr("rowspan", "") // Delete attribute
 	} else {
-		cf.setAttr("rowspan", strconv.Itoa(rowSpan))
+		cf.setIAttr("rowspan", rowSpan)
 	}
 }
 
@@ -323,10 +316,7 @@ func (c *tableImpl) ColSpan(row, col int) int {
 		return -1
 	}
 
-	if colSpan, err := strconv.Atoi(cf.attr("colspan")); err == nil {
-		return colSpan
-	}
-	return -1
+	return cf.iAttr("colspan")
 }
 
 func (c *tableImpl) SetColSpan(row, col, colSpan int) {
@@ -338,7 +328,7 @@ func (c *tableImpl) SetColSpan(row, col, colSpan int) {
 	if colSpan < 2 {
 		cf.setAttr("colspan", "") // Delete attribute
 	} else {
-		cf.setAttr("colspan", strconv.Itoa(colSpan))
+		cf.setIAttr("colspan", colSpan)
 	}
 }
 
