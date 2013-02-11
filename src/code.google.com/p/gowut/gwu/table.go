@@ -342,7 +342,7 @@ func (c *tableImpl) Render(w writer) {
 	ci := cellIdx{}
 
 	for row, rowComps := range c.comps {
-		c.renderTr(row, w)
+		c.renderRowTr(row, w)
 		for col, c2 := range rowComps {
 			ci.row, ci.col = row, col
 			c.renderTd(ci, w)
@@ -355,8 +355,8 @@ func (c *tableImpl) Render(w writer) {
 	w.Write(_STR_TABLE_CL)
 }
 
-// renderTr renders the formatted HTML TR tag for the specified row.
-func (c *tableImpl) renderTr(row int, w writer) {
+// renderRowTr renders the formatted HTML TR tag for the specified row.
+func (c *tableImpl) renderRowTr(row int, w writer) {
 	var rf *cellFmtImpl
 	if c.rowFmts != nil {
 		rf = c.rowFmts[row]
@@ -366,17 +366,7 @@ func (c *tableImpl) renderTr(row int, w writer) {
 	var defva VAlign = c.valign // default valign of the table
 
 	if rf == nil {
-		w.Writes("<tr")
-		if c.halign != HA_DEFAULT {
-			w.Write(_STR_ALIGN)
-			w.Writes(string(c.halign))
-			w.Write(_STR_QUOTE)
-		}
-		if c.valign != VA_DEFAULT {
-			w.Writess(" style=\"vertical-align:", string(c.valign))
-			w.Write(_STR_QUOTE)
-		}
-		w.Write(_STR_GT)
+		c.renderTr(w)
 	} else {
 		// If rf does not specify alignments, it means alignments must not be overriden,
 		// default alignments of the table must be used!

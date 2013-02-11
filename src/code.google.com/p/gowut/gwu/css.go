@@ -35,6 +35,11 @@ var staticCss map[string][]byte = make(map[string][]byte)
 func init() {
 	staticCss[resNameStaticCss(THEME_DEFAULT)] = []byte("" +
 		`
+.gwuimg-collapsed {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAATUlEQVQ4y83RsQkAMAhEURNc+iZw7KQNgnjGRlv5D0SRMQPgADjVbr3AuzCz1QJYKAUyiAYiqAx4aHe/p9XAn6C/IQ1kb9TfMATYcM5cL5cg3qDaS5UAAAAASUVORK5CYII=)}
+.gwuimg-expanded {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAATElEQVQ4y2NgGGjACGNUVlb+J0Vje3s7IwMDAwMT1VxAiitgtlPfBcS4Atl22rgAnyvQbaedC7C5ApvtVHEBXlBZWfmfUKwwMQx5AADNQhjmAryM3wAAAABJRU5ErkJggg==)}
+
+.gwuimg-collapsed, .gwuimg-expanded {background-position:0px 0px; background-repeat:no-repeat}
+
 body {font-family:Arial}
 
 .gwu-Window {}
@@ -73,22 +78,23 @@ body {font-family:Arial}
 .gwu-SwitchButton-On-Active, .gwu-SwitchButton-Off-Active, .gwu-SwitchButton-On-Inactive, .gwu-SwitchButton-Off-Inactive {margin:0px;border: 0px; width:100%}
 .gwu-SwitchButton-On-Active:disabled, .gwu-SwitchButton-Off-Active:disabled, .gwu-SwitchButton-On-Inactive:disabled, .gwu-SwitchButton-Off-Inactive:disabled {color:black}
 
+.gwu-Expander {}
+.gwu-Expander-Header, .gwu-Expander-Header-Expanded {padding-left:19px; cursor:pointer}
+.gwu-Expander-Content {padding-left:19px}
+
 .gwu-TabBar {}
 .gwu-TabBar-Top {border-bottom:5px solid #8080f8}
 .gwu-TabBar-Bottom {border-top:5px solid #8080f8}
-.gwu-TabBar-Left {border-right:5px solid #8080f8; padding-top:1px}
-.gwu-TabBar-Right {border-left:5px solid #8080f8; padding-top:1px}
-.gwu-TabBar-NotSelected {padding-left:5px; padding-right:5px; border:1px solid white  ; background:#c0c0ff; cursor:default; width:100%}
-.gwu-TabBar-Selected    {padding-left:5px; padding-right:5px; border:1px solid #8080f8; background:#8080f8; cursor:default; width:100%}
+.gwu-TabBar-Left {border-right:5px solid #8080f8}
+.gwu-TabBar-Right {border-left:5px solid #8080f8}
+.gwu-TabBar-NotSelected {padding-left:5px; padding-right:5px; border:1px solid white  ; background:#c0c0ff; cursor:default}
+.gwu-TabBar-Selected    {padding-left:5px; padding-right:5px; border:1px solid #8080f8; background:#8080f8; cursor:default}
 .gwu-TabPanel {}
-.gwu-TabPanel-Content {border:1px solid #8080f8}
+.gwu-TabPanel-Content {border:1px solid #8080f8; width:100%; height:100%}
 `)
 
 	staticCss[resNameStaticCss(THEME_DEBUG)] = []byte(string(staticCss[resNameStaticCss(THEME_DEFAULT)]) +
 		`
-.gwu-Window td {border:1px solid black}
-.gwu-Table td {border:1px solid black}
-.gwu-Panel td {border:1px solid black}
-.gwu-TabPanel td {border:1px solid black}
+.gwu-Window td, .gwu-Table td, .gwu-Panel td, .gwu-TabPanel td {border:1px solid black}
 `)
 }

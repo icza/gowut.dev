@@ -218,7 +218,26 @@ func buildSwitchButtonDemo() gwu.Comp {
 
 func buildExpanderDemo() gwu.Comp {
 	p := gwu.NewPanel()
-	p.Add(gwu.NewLabel("TODO"))
+
+	e := gwu.NewExpander()
+	e.SetHeader(gwu.NewLabel("I'm an Expander. Click on me to expand."))
+	e.SetContent(gwu.NewLabel("I'm the content of the Expander."))
+	p.Add(e)
+
+	p.AddVSpace(20)
+	var ee gwu.Expander
+	for i := 4; i >= 0; i-- {
+		e2 := gwu.NewExpander()
+		e2.SetHeader(gwu.NewLabel("I hide embedded expanders. #" + strconv.Itoa(i)))
+		if i == 4 {
+			e2.SetContent(gwu.NewLabel("No more."))
+		} else {
+			e2.SetContent(ee)
+		}
+		ee = e2
+	}
+	p.Add(ee)
+
 	return p
 }
 

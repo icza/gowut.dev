@@ -19,4 +19,6 @@ Used for: Panel, Table, TabPanel (and TabBar)
 * Constructors to create panels initialized with a different layout, e.g. NewHorizontalPanel(). 
 * New helper methods to add space consumer components. 
 
--Other minor changes, improvements and bug fixes.
+-Changed CSS styles (beautified) of many components.
+
+-Many other minor changes, improvements and bug fixes.

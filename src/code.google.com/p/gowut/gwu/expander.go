@@ -21,7 +21,8 @@ package gwu
 // another component when clicked on the header.
 // 
 // Default style classes: "gwu-Expander", "gwu-Expander-Header",
-// "gwu-Expander-Header-Open", "gwu-Expander-Content"
+// "gwuimg-collapsed", "gwu-Expander-Header-Expanded", "gwuimg-expanded",
+// "gwu-Expander-Content"
 type Expander interface {
 	// Expander is a TableView.
 	TableView
@@ -43,23 +44,35 @@ type Expander interface {
 
 	// SetExpanded sets whether the expander is expanded.
 	SetExpanded(expanded bool)
+
+	// HeaderFmt returns the cell formatter of the header.
+	HeaderFmt() CellFmt
+
+	// ContentFmt returns the cell formatter of the content.
+	ContentFmt() CellFmt
 }
 
 // Expander implementation.
-// Implemented
 type expanderImpl struct {
 	tableViewImpl // TableView implementation
 
 	header   Comp // Header component
 	content  Comp // Content component
 	expanded bool // Tells whether the expander is expanded
+
+	headerFmt  *cellFmtImpl // Header cell formatter
+	contentFmt *cellFmtImpl // Content cell formatter
 }
 
-// NewExpander creates a new Expander component.
-// By default expanders are not expanded.
+// NewExpander creates a new Expander.
+// By default expanders are collapsed.
 func NewExpander() Expander {
-	c := &expanderImpl{tableViewImpl: newTableViewImpl()}
+	c := &expanderImpl{tableViewImpl: newTableViewImpl(), expanded: true, headerFmt: newCellFmtImpl(), contentFmt: newCellFmtImpl()}
+	c.headerFmt.SetAlign(HA_LEFT, VA_MIDDLE)
+	c.contentFmt.SetAlign(HA_LEFT, VA_TOP)
 	c.Style().AddClass("gwu-Expander")
+	// Init styles by changing expanded state, to the default value.
+	c.SetExpanded(false)
 	return c
 }
 
@@ -125,7 +138,15 @@ func (c *expanderImpl) Header() Comp {
 }
 
 func (c *expanderImpl) SetHeader(header Comp) {
+	header.makeOrphan()
 	c.header = header
+	header.setParent(c)
+
+	// TODO would be nice to remove this internal handler func when a header is removed!
+	header.AddEHandlerFunc(func(e Event) {
+		c.SetExpanded(!c.expanded)
+		e.MarkDirty(c)
+	}, ETYPE_CLICK)
 }
 
 func (c *expanderImpl) Content() Comp {
@@ -133,7 +154,11 @@ func (c *expanderImpl) Content() Comp {
 }
 
 func (c *expanderImpl) SetContent(content Comp) {
+	content.makeOrphan()
 	c.content = content
+	content.setParent(c)
+
+	c.contentFmt.Style().AddClass("gwu-Expander-Content").SetFullSize()
 }
 
 func (c *expanderImpl) Expanded() bool {
@@ -141,18 +166,50 @@ func (c *expanderImpl) Expanded() bool {
 }
 
 func (c *expanderImpl) SetExpanded(expanded bool) {
+	if c.expanded == expanded {
+		return
+	}
+
+	style := c.headerFmt.Style()
+	if c.expanded {
+		style.RemoveClass("gwu-Expander-Header-Expanded")
+		style.RemoveClass("gwuimg-expanded")
+		style.AddClass("gwu-Expander-Header")
+		style.AddClass("gwuimg-collapsed")
+	} else {
+		style.RemoveClass("gwu-Expander-Header")
+		style.RemoveClass("gwuimg-collapsed")
+		style.AddClass("gwu-Expander-Header-Expanded")
+		style.AddClass("gwuimg-expanded")
+	}
+
 	c.expanded = expanded
 }
 
+func (c *expanderImpl) HeaderFmt() CellFmt {
+	return c.headerFmt
+}
+
+func (c *expanderImpl) ContentFmt() CellFmt {
+	return c.contentFmt
+}
+
 func (c *expanderImpl) Render(w writer) {
-	// TODO
 	w.Write(_STR_TABLE_OP)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
 	w.Write(_STR_GT)
 
 	if c.header != nil {
+		c.renderTr(w)
+		c.headerFmt.render("td", w)
 		c.header.Render(w)
+	}
+
+	if c.expanded && c.content != nil {
+		c.renderTr(w)
+		c.contentFmt.render("td", w)
+		c.content.Render(w)
 	}
 
 	w.Write(_STR_TABLE_CL)
