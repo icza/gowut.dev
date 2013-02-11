@@ -213,6 +213,14 @@ type CellFmt interface {
 	// SetAttr sets the value of the specified HTML attribute.
 	// Pass an empty string value to delete the attribute.
 	setAttr(name, value string)
+	
+	// iAttr returns the explicitly set value of the specified HTML attribute
+	// as an int.
+	// -1 is returned if the value is not set explicitly or is not an int.
+	iAttr(name string) int
+
+	// setIAttr sets the value of the specified HTML attribute as an int.
+	setIAttr(name string, value int)
 }
 
 // CellFmt implementation
@@ -256,6 +264,17 @@ func (c *cellFmtImpl) setAttr(name, value string) {
 	} else {
 		delete(c.attrs, name)
 	}
+}
+
+func (c *cellFmtImpl) iAttr(name string) int {
+	if value, err := strconv.Atoi(c.attr(name)); err == nil {
+		return value
+	}
+	return -1
+}
+
+func (c *cellFmtImpl) setIAttr(name string, value int) {
+	c.setAttr(name, strconv.Itoa(value))
 }
 
 // render renders the formatted HTML tag for the specified tag name.
@@ -351,34 +370,25 @@ func newTableViewImpl() tableViewImpl {
 }
 
 func (c *tableViewImpl) Border() int {
-	if cp, err := strconv.Atoi(c.Attr("border")); err == nil {
-		return cp
-	}
-	return -1
+	return c.IAttr("border")
 }
 
 func (c *tableViewImpl) SetBorder(width int) {
-	c.SetAttr("border", strconv.Itoa(width))
+	c.SetIAttr("border", width)
 }
 
 func (c *tableViewImpl) CellSpacing() int {
-	if cs, err := strconv.Atoi(c.Attr("cellspacing")); err == nil {
-		return cs
-	}
-	return -1
+	return c.IAttr("cellspacing")
 }
 
 func (c *tableViewImpl) SetCellSpacing(spacing int) {
-	c.SetAttr("cellspacing", strconv.Itoa(spacing))
+	c.SetIAttr("cellspacing", spacing)
 }
 
 func (c *tableViewImpl) CellPadding() int {
-	if cp, err := strconv.Atoi(c.Attr("cellpadding")); err == nil {
-		return cp
-	}
-	return -1
+	return c.IAttr("cellpadding")
 }
 
 func (c *tableViewImpl) SetCellPadding(padding int) {
-	c.SetAttr("cellpadding", strconv.Itoa(padding))
+	c.SetIAttr("cellpadding", padding)
 }
