@@ -30,13 +30,8 @@ import (
 // 
 // Default style class: "gwu-Table"
 type Table interface {
-	// Table is a Container.
-	Container
-
-	// Table has horizontal and vertical alignment.
-	// This is the default horizontal and vertical alignment for
-	// all children which can be overridden with the CellFmt method.
-	HasHVAlign
+	// Table is a TableView.
+	TableView
 
 	// EnsureSize ensures that the table will have at least the specified
 	// rows, and at least the specified columns in rows whose index is < rows.
@@ -67,24 +62,6 @@ type Table interface {
 	// If the table does not have a cell specified by row and col,
 	// nil is returned.
 	CellFmt(row, col int) CellFmt
-
-	// Border returns the border width of the table.
-	Border() int
-
-	// SetBorder sets the border width of the table.
-	SetBorder(width int)
-
-	// CellSpacing returns the cell spacing.
-	CellSpacing() int
-
-	// SetCellSpacing sets the cell spacing.
-	SetCellSpacing(spacing int)
-
-	// CellPadding returns the cell spacing.
-	CellPadding() int
-
-	// SetCellPadding sets the cell padding.
-	SetCellPadding(padding int)
 
 	// Add adds a component to the table.
 	// Return value indicates if the component was added successfully.
@@ -117,8 +94,7 @@ type cellIdx struct {
 
 // Table implementation.
 type tableImpl struct {
-	compImpl       // component implementation
-	hasHVAlignImpl // Has horizontal and vertical alignment implementation 
+	tableViewImpl // TableView implementation
 
 	comps    [][]Comp                 // Components added to the table. Structure: comps[rowIdx][colIdx]
 	rowFmts  map[int]*cellFmtImpl     // Lazily initialized row formatters of the rows
@@ -129,7 +105,7 @@ type tableImpl struct {
 // Default horizontal alignment is HA_DEFAULT,
 // default vertical alignment is VA_DEFAULT.
 func NewTable() Table {
-	c := &tableImpl{compImpl: newCompImpl(""), hasHVAlignImpl: newHasHVAlignImpl(HA_DEFAULT, VA_DEFAULT)}
+	c := &tableImpl{tableViewImpl: newTableViewImpl()}
 	c.Style().AddClass("gwu-Table")
 	c.SetCellSpacing(0)
 	c.SetCellPadding(0)
@@ -290,39 +266,6 @@ func (c *tableImpl) CellFmt(row, col int) CellFmt {
 	}
 
 	return cf
-}
-
-func (c *tableImpl) Border() int {
-	if cp, err := strconv.Atoi(c.Attr("border")); err == nil {
-		return cp
-	}
-	return -1
-}
-
-func (c *tableImpl) SetBorder(width int) {
-	c.SetAttr("border", strconv.Itoa(width))
-}
-
-func (c *tableImpl) CellSpacing() int {
-	if cs, err := strconv.Atoi(c.Attr("cellspacing")); err == nil {
-		return cs
-	}
-	return -1
-}
-
-func (c *tableImpl) SetCellSpacing(spacing int) {
-	c.SetAttr("cellspacing", strconv.Itoa(spacing))
-}
-
-func (c *tableImpl) CellPadding() int {
-	if cp, err := strconv.Atoi(c.Attr("cellpadding")); err == nil {
-		return cp
-	}
-	return -1
-}
-
-func (c *tableImpl) SetCellPadding(padding int) {
-	c.SetAttr("cellpadding", strconv.Itoa(padding))
 }
 
 func (c *tableImpl) Add(c2 Comp, row, col int) bool {
