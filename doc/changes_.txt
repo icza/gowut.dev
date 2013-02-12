@@ -23,6 +23,6 @@ Used for: Panel, Table, TabPanel (and TabBar)
 
 -CheckBox and RadioButton now have additional style classes for the disabled state.
 
--Many code optimization.
+-"Mass" code optimization.
 
--Other minor changes and bug fixes.
+-Other minor changes, improvements and bug fixes.
