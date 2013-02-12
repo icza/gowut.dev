@@ -131,7 +131,7 @@ SessionHandler can be used then to create the window prior to it being served.
 Here's an example how to do it:
 	// A SessionHandler implementation:
 	type MySessHandler struct {}
-	func (h SessHandler) Created(sess gwu.Session) {
+	func (h SessHandler) Created(s gwu.Session) {
 		win := gwu.NewWindow("login", "Login Window")
 		// ...add content to the login window...
 		s.AddWindow(win)
@@ -230,7 +230,7 @@ Full application example
 
 Let a full example follow here which is a complete application.
 It builds a simple window, adds components to it, registers event handlers which
-modifies the content and starts the GUI server.
+modify the content and starts the GUI server.
 Component modifications (including both individual components and component
 structure) will be seen without page reload.
 All written in Go.
