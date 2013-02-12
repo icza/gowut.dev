@@ -17,7 +17,7 @@
 
 package gwu
 
-// Expander interface defines a component which can show or hide
+// Expander interface defines a component which can show and hide
 // another component when clicked on the header.
 // 
 // Default style classes: "gwu-Expander", "gwu-Expander-Header",

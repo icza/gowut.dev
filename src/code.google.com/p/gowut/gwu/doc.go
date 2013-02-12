@@ -203,7 +203,7 @@ Buttons will have red background without having to change their style individual
 Component palette
 
 Containers to group and lay out components:
-	Expander  - shows or hides a content comp when clicking on the header comp
+	Expander  - shows and hides a content comp when clicking on the header comp
 	(Link)    - allows only one optional child
 	Panel     - it has configurable layout
 	Table     - it is dynamic and flexible
