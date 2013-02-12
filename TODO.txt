@@ -6,18 +6,14 @@
 -Add possibility to serve static content, so users can register a folder to
 	server their images, custom css and js. 
 
--Add a style chooser list box to the top of the window.
-
 -Implement Comp.RemoveEHandler() and Comp.RemoveEHandlerFunc() (and use it when removing Tabs...)
 
 -IE: SwitchButton can be changed when disabled...
 Natural layout acts as horizontal (maybe due to 100% window/content size?).
-White-space nowrap is not inherited?
 
 -New components:
 	-new comps for input type (problem: weak support, mostly just by Chrome and Opera): date; color; range (jslider) 
 	-SuggestBox
-	-Disclosure Panel
 	-Absolute Panel
 	-Slider
 	-iframe, in the showcase app it should link/contain the source code of the showcase app! 
@@ -34,9 +30,6 @@ Also display an error icon if an ajax call fails, gather messages and list them 
 -Rewrite window list to use gwu components (be a real Window); also allow replacing it (at Server)
 	-Consider a Home Window (also replacable)
 
-
--Add "AddFiller()" to panel which adds a comp with full size, and its cellformatter also set to full size.
-	Returns it (so it can be referenced/removed later). 
 
 -Ability to "push" from server to client (not just when an event is received).
 	-websocket?
