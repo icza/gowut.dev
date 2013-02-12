@@ -347,16 +347,41 @@ func buildTabPanelDemo() gwu.Comp {
 	t := gwu.NewTabPanel()
 	t.Style().SetSizePx(500, 300)
 
-	config := gwu.NewHorizontalPanel()
-	config.Add(gwu.NewLabel("Change tab bar placement:"))
-	lb := gwu.NewListBox([]string{"Top", "Bottom", "Left", "Right"})
-	placements := []gwu.TabBarPlacement{gwu.TB_PLACEMENT_TOP, gwu.TB_PLACEMENT_BOTTOM, gwu.TB_PLACEMENT_LEFT, gwu.TB_PLACEMENT_RIGHT}
-	lb.AddEHandlerFunc(func(e gwu.Event) {
-		t.SetTabBarPlacement(placements[lb.SelectedIndices()[0]])
+	table := gwu.NewTable()
+	table.SetCellPadding(2)
+	table.EnsureSize(3, 2)
+	table.Add(gwu.NewLabel("Change tab bar placement:"), 0, 0)
+	table.Add(gwu.NewLabel("Tab bar horizontal align:"), 1, 0)
+	table.Add(gwu.NewLabel("Tab bar vertical align:"), 2, 0)
+
+	placemslb := gwu.NewListBox([]string{"Top", "Right", "Bottom", "Left"})
+	placems := []gwu.TabBarPlacement{gwu.TB_PLACEMENT_TOP, gwu.TB_PLACEMENT_RIGHT, gwu.TB_PLACEMENT_BOTTOM, gwu.TB_PLACEMENT_LEFT}
+	halignslb := gwu.NewListBox([]string{"Left", "Center", "Right"})
+	haligns := []gwu.HAlign{gwu.HA_LEFT, gwu.HA_CENTER, gwu.HA_RIGHT}
+	valignslb := gwu.NewListBox([]string{"Top", "Middle", "Bottom"})
+	valigns := []gwu.VAlign{gwu.VA_TOP, gwu.VA_MIDDLE, gwu.VA_BOTTOM}
+	placemslb.Style().SetFullWidth()
+	halignslb.Style().SetFullWidth()
+	valignslb.Style().SetFullWidth()
+	table.Add(placemslb, 0, 1)
+	table.Add(halignslb, 1, 1)
+	table.Add(valignslb, 2, 1)
+
+	placemslb.AddEHandlerFunc(func(e gwu.Event) {
+		t.SetTabBarPlacement(placems[placemslb.SelectedIndices()[0]])
 		e.MarkDirty(t)
 	}, gwu.ETYPE_CHANGE)
-	config.Add(lb)
-	config.AddHSpace(10)
+	halignslb.AddEHandlerFunc(func(e gwu.Event) {
+		t.TabBarFmt().SetHAlign(haligns[halignslb.SelectedIndices()[0]])
+		e.MarkDirty(t)
+	}, gwu.ETYPE_CHANGE)
+	valignslb.AddEHandlerFunc(func(e gwu.Event) {
+		t.TabBarFmt().SetVAlign(valigns[valignslb.SelectedIndices()[0]])
+		e.MarkDirty(t)
+	}, gwu.ETYPE_CHANGE)
+
+	p.Add(table)
+
 	fix := gwu.NewCheckBox("Fixed size")
 	fix.SetState(true)
 	fix.AddEHandlerFunc(func(e gwu.Event) {
@@ -367,8 +392,7 @@ func buildTabPanelDemo() gwu.Comp {
 		}
 		e.MarkDirty(t)
 	}, gwu.ETYPE_CLICK)
-	config.Add(fix)
-	p.Add(config)
+	p.Add(fix)
 
 	p.AddVSpace(15)
 	c := gwu.NewPanel()
@@ -393,10 +417,10 @@ func buildTabPanelDemo() gwu.Comp {
 	c.Add(gwu.NewLabel("There is nothing in the hollow."))
 	t.AddString("Hollow", c)
 	c = gwu.NewPanel()
-	ta := gwu.NewTextBox("Click to edit this comment.")
-	ta.SetRows(10)
-	ta.SetCols(40)
-	c.Add(ta)
+	tb := gwu.NewTextBox("Click to edit this comment.")
+	tb.SetRows(10)
+	tb.SetCols(40)
+	c.Add(tb)
 	t.AddString("Comment", c)
 	p.Add(t)
 
