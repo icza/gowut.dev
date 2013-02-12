@@ -144,7 +144,7 @@ type tabPanelImpl struct {
 // default vertical alignment is VA_DEFAULT.
 func NewTabPanel() TabPanel {
 	c := &tabPanelImpl{panelImpl: newPanelImpl(), tabBarImpl: newTabBarImpl(), tabBarFmt: newCellFmtImpl(), selected: -1}
-	c.tabBarImpl.Style().AddClass("gwu-TabBar")
+	c.tabBarFmt.Style().AddClass("gwu-TabBar")
 	c.tabBarImpl.setParent(c)
 	c.SetTabBarPlacement(TB_PLACEMENT_TOP)
 	c.tabBarFmt.SetAlign(HA_LEFT, VA_TOP)
@@ -215,7 +215,7 @@ func (c *tabPanelImpl) TabBarPlacement() TabBarPlacement {
 }
 
 func (c *tabPanelImpl) SetTabBarPlacement(tabBarPlacement TabBarPlacement) {
-	style := c.tabBarImpl.Style()
+	style := c.tabBarFmt.Style()
 
 	// Remove old style class
 	switch c.tabBarPlacement {
@@ -274,7 +274,7 @@ func (c *tabPanelImpl) Add(tab, content Comp) {
 
 func (c *tabPanelImpl) AddString(tab string, content Comp) {
 	tabc := NewLabel(tab)
-	tabc.Style().SetDisplay(DISPLAY_BLOCK)
+	tabc.Style().SetDisplay(DISPLAY_BLOCK) // Display: block - so the whole cell of the tab is clickable 
 	c.Add(tabc, content)
 }
 
@@ -312,16 +312,16 @@ func (c *tabPanelImpl) Render(w writer) {
 
 	switch c.tabBarPlacement {
 	case TB_PLACEMENT_TOP:
-		c.tabBarFmt.render("tr", w)
-		w.Write(_STR_TD)
+		w.Writes("<tr>")
+		c.tabBarFmt.render("td", w)
 		c.tabBarImpl.Render(w)
 		c.renderTr(w)
 		c.renderContent(w)
 	case TB_PLACEMENT_BOTTOM:
 		c.renderTr(w)
 		c.renderContent(w)
-		c.tabBarFmt.render("tr", w)
-		w.Write(_STR_TD)
+		w.Writes("<tr>")
+		c.tabBarFmt.render("td", w)
 		c.tabBarImpl.Render(w)
 	case TB_PLACEMENT_LEFT:
 		c.renderTr(w)

@@ -235,13 +235,14 @@ Component modifications (including both individual components and component
 structure) will be seen without page reload.
 All written in Go.
 
-Source of this application is available here: TODO
+Source of this application is available here:
+http://code.google.com/p/gowut/source/browse/examples/simple_demo.go
 
 	type MyButtonHandler struct {
 		counter int
 		text    string
 	}
-	
+
 	func (h *MyButtonHandler) HandleEvent(e gwu.Event) {
 		if b, isButton := e.Src().(gwu.Button); isButton {
 			b.SetText(b.Text() + h.text)
@@ -250,13 +251,14 @@ Source of this application is available here: TODO
 			e.MarkDirty(b)
 		}
 	}
-	
+
 	func main() {
 		// Create and build a window
 		win := gwu.NewWindow("main", "Test GUI Window")
 		win.Style().SetFullWidth()
 		win.SetHAlign(gwu.HA_CENTER)
-	
+		win.SetCellPadding(2)
+
 		// Button which changes window content
 		win.Add(gwu.NewLabel("I'm a label! Try clicking on the button=>"))
 		btn := gwu.NewButton("Click me")
@@ -274,10 +276,11 @@ Source of this application is available here: TODO
 			e.MarkDirty(btnsPanel)
 		}, gwu.ETYPE_CLICK)
 		win.Add(btnsPanel)
-	
+
 		// ListBox examples
 		p := gwu.NewHorizontalPanel()
 		p.Style().SetBorder2(1, gwu.BRD_STYLE_SOLID, gwu.CLR_BLACK)
+		p.SetCellPadding(2)
 		p.Add(gwu.NewLabel("A drop-down list being"))
 		widelb := gwu.NewListBox([]string{"50", "100", "150", "200", "250"})
 		widelb.Style().SetWidth("50")
@@ -298,7 +301,7 @@ Source of this application is available here: TODO
 		}, gwu.ETYPE_CHANGE)
 		p.Add(countLabel)
 		win.Add(p)
-	
+
 		// Self-color changer check box
 		greencb := gwu.NewCheckBox("I'm a check box. When checked, I'm green!")
 		greencb.AddEHandlerFunc(func(e gwu.Event) {
@@ -310,7 +313,7 @@ Source of this application is available here: TODO
 			e.MarkDirty(greencb)
 		}, gwu.ETYPE_CLICK)
 		win.Add(greencb)
-	
+
 		// TextBox with echo
 		p = gwu.NewHorizontalPanel()
 		p.Add(gwu.NewLabel("Enter your name:"))
@@ -326,7 +329,7 @@ Source of this application is available here: TODO
 		}, gwu.ETYPE_CHANGE, gwu.ETYPE_KEY_UP)
 		p.Add(nameLabel)
 		win.Add(p)
-	
+
 		// Create and start a GUI server (omitting error check)
 		server := gwu.NewServer("guitest", "localhost:8081")
 		server.SetText("Test GUI App")
@@ -386,6 +389,6 @@ package gwu
 // Gowut version information.
 const (
 	GOWUT_VERSION         = "0.7.0"          // Gowut version (major.minor.maintenance)
-	GOWUT_RELEASE_DATE    = "2013-02-04 CET" // Gowut release date
+	GOWUT_RELEASE_DATE    = "2013-02-12 CET" // Gowut release date
 	GOWUT_REL_DATE_LAYOUT = "2006-01-02 MST" // Gowut release date layout (for time.Parse())
 )

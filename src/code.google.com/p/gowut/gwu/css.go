@@ -83,10 +83,10 @@ body {font-family:Arial}
 .gwu-Expander-Content {padding-left:19px}
 
 .gwu-TabBar {}
-.gwu-TabBar-Top {border-bottom:5px solid #8080f8}
-.gwu-TabBar-Bottom {border-top:5px solid #8080f8}
-.gwu-TabBar-Left {border-right:5px solid #8080f8}
-.gwu-TabBar-Right {border-left:5px solid #8080f8}
+.gwu-TabBar-Top {padding:0px 5px 0px 5px; border-bottom:5px solid #8080f8}
+.gwu-TabBar-Bottom {padding:0px 5px 0px 5px; border-top:5px solid #8080f8}
+.gwu-TabBar-Left {padding:5px 0px 5px 0px; border-right:5px solid #8080f8}
+.gwu-TabBar-Right {padding:5px 0px 5px 0px; border-left:5px solid #8080f8}
 .gwu-TabBar-NotSelected {padding-left:5px; padding-right:5px; border:1px solid white  ; background:#c0c0ff; cursor:default}
 .gwu-TabBar-Selected    {padding-left:5px; padding-right:5px; border:1px solid #8080f8; background:#8080f8; cursor:default}
 .gwu-TabPanel {}

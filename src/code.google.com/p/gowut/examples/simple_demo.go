@@ -41,6 +41,7 @@ func main() {
 	win := gwu.NewWindow("main", "Test GUI Window")
 	win.Style().SetFullWidth()
 	win.SetHAlign(gwu.HA_CENTER)
+	win.SetCellPadding(2)
 
 	// Button which changes window content
 	win.Add(gwu.NewLabel("I'm a label! Try clicking on the button=>"))
@@ -63,6 +64,7 @@ func main() {
 	// ListBox examples
 	p := gwu.NewHorizontalPanel()
 	p.Style().SetBorder2(1, gwu.BRD_STYLE_SOLID, gwu.CLR_BLACK)
+	p.SetCellPadding(2)
 	p.Add(gwu.NewLabel("A drop-down list being"))
 	widelb := gwu.NewListBox([]string{"50", "100", "150", "200", "250"})
 	widelb.Style().SetWidth("50")

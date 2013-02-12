@@ -70,9 +70,11 @@ func buildPrivateWins(s gwu.Session) {
 	// Create and build a window
 	win := gwu.NewWindow("main", "Main Window")
 	win.Style().SetFullWidth()
+	win.SetCellPadding(2)
 
 	p := gwu.NewPanel()
 	p.SetLayout(gwu.LAYOUT_HORIZONTAL)
+	p.SetCellPadding(2)
 	p.Add(gwu.NewLabel("I'm a label! Try clicking on the button=>"))
 	p.Add(gwu.NewLink("Google Home", "https://google.com"))
 	img := gwu.NewImage("", "https://www.google.com/images/srpr/logo3w.png")
@@ -97,6 +99,7 @@ func buildPrivateWins(s gwu.Session) {
 
 	p = gwu.NewPanel()
 	p.SetLayout(gwu.LAYOUT_HORIZONTAL)
+	p.SetCellPadding(2)
 	p.Style().SetBorder2(1, gwu.BRD_STYLE_SOLID, gwu.CLR_BLACK)
 	p.Add(gwu.NewLabel("A drop-down list being"))
 	wideListBox := gwu.NewListBox([]string{"50", "100", "150", "200", "250"})
@@ -235,6 +238,7 @@ func buildLoginWin(s gwu.Session) {
 
 	p := gwu.NewPanel()
 	p.SetHAlign(gwu.HA_CENTER)
+	p.SetCellPadding(2)
 
 	l := gwu.NewLabel("Test GUI Login Window")
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("150%")
@@ -252,6 +256,7 @@ func buildLoginWin(s gwu.Session) {
 	p.Add(errL)
 
 	table := gwu.NewTable()
+	table.SetCellPadding(2)
 	table.EnsureSize(2, 2)
 	table.Add(gwu.NewLabel("User name:"), 0, 0)
 	tb := gwu.NewTextBox("")
@@ -284,6 +289,7 @@ func buildLoginWin(s gwu.Session) {
 
 	p = gwu.NewPanel()
 	p.SetLayout(gwu.LAYOUT_HORIZONTAL)
+	p.SetCellPadding(2)
 	p.Add(gwu.NewLabel("Here's an ON/OFF switch which enables/disables the other one:"))
 	sw := gwu.NewSwitchButton()
 	sw.SetOnOff("ENB", "DISB")
