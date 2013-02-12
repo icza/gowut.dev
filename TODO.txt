@@ -8,9 +8,6 @@
 
 -Implement Comp.RemoveEHandler() and Comp.RemoveEHandlerFunc() (and use it when removing Tabs...)
 
--IE: SwitchButton can be changed when disabled...
-Natural layout acts as horizontal (maybe due to 100% window/content size?).
-
 -New components:
 	-new comps for input type (problem: weak support, mostly just by Chrome and Opera): date; color; range (jslider) 
 	-SuggestBox

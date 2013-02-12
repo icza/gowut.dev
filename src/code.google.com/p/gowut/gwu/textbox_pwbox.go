@@ -194,28 +194,46 @@ func (c *textBoxImpl) Render(w writer) {
 	}
 }
 
+var (
+	_STR_INPUT_OP = []byte("<input type=\"") // "<input type=\""
+	_STR_PASSWORD = []byte("password")       // "password"
+	_STR_TEXT     = []byte("text")           // "text"
+	_STR_SIZE     = []byte("\" size=\"")     // "\" size=\""
+	_STR_VALUE    = []byte(" value=\"")      // " value=\""
+	_STR_INPUT_CL = []byte("\"/>")           // "\"/>"
+)
+
 // renderInput renders the component as an input HTML tag.
 func (c *textBoxImpl) renderInput(w writer) {
-	w.Writes("<input type=\"")
+	w.Write(_STR_INPUT_OP)
 	if c.isPassw {
-		w.Writes("password")
+		w.Write(_STR_PASSWORD)
 	} else {
-		w.Writes("text")
+		w.Write(_STR_TEXT)
 	}
-	w.Writevs("\" size=\"", c.cols)
+	w.Write(_STR_SIZE)
+	w.Writev(c.cols)
 	w.Write(_STR_QUOTE)
 	c.renderAttrsAndStyle(w)
 	c.renderEnabled(w)
 	c.renderEHandlers(w)
 
-	w.Writes(" value=\"")
+	w.Write(_STR_VALUE)
 	c.renderText(w)
-	w.Writes("\"/>")
+	w.Write(_STR_INPUT_CL)
 }
+
+var (
+	_STR_TEXTAREA_OP    = []byte("<textarea")   // "<textarea"
+	_STR_ROWS           = []byte(" rows=\"")    // " rows=\""
+	_STR_COLS           = []byte("\" cols=\"")  // "\" cols=\""
+	_STR_TEXTAREA_OP_CL = []byte("\">\n")       // "\">\n"
+	_STR_TEXTAREA_CL    = []byte("</textarea>") // "</textarea>"
+)
 
 // renderTextArea renders the component as an textarea HTML tag.
 func (c *textBoxImpl) renderTextArea(w writer) {
-	w.Writes("<textarea")
+	w.Write(_STR_TEXTAREA_OP)
 	c.renderAttrsAndStyle(w)
 	c.renderEnabled(w)
 	c.renderEHandlers(w)
@@ -223,8 +241,12 @@ func (c *textBoxImpl) renderTextArea(w writer) {
 	// New line char after the <textarea> tag is ignored.
 	// So we must render a newline after textarea, else if text value
 	// starts with a new line, it will be ommitted!
-	w.Writevs(" rows=\"", c.rows, "\" cols=\"", c.cols, "\">\n")
+	w.Write(_STR_ROWS)
+	w.Writev(c.rows)
+	w.Write(_STR_COLS)
+	w.Writev(c.cols)
+	w.Write(_STR_TEXTAREA_OP_CL)
 
 	c.renderText(w)
-	w.Writes("</textarea>")
+	w.Write(_STR_TEXTAREA_CL)
 }

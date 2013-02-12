@@ -342,7 +342,6 @@ func main() {
 
 	server.AddWin(win)
 
-	//server.SetTheme("debug")
 	server.SetLogger(log.New(os.Stdout, "", log.LstdFlags))
 
 	// Start GUI server

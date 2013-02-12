@@ -64,7 +64,8 @@ function createXmlHttp() {
 		return xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 }
 
-function sendEvent(event, etype, compId, compValue) {
+// Send event
+function se(event, etype, compId, compValue) {
 	var xmlhttp = createXmlHttp();
 	
 	xmlhttp.onreadystatechange=function() {
@@ -167,7 +168,8 @@ function rerenderComp(compId) {
 	xmlhttp.send(_pCompId + "=" + compId);
 }
 
-function getSelectedIndices(select) {
+// Get selected indices (of an HTML select)
+function selIdxs(select) {
 	var selected = "";
 	
 	for (var i = 0; i < select.options.length; i++)
@@ -177,7 +179,8 @@ function getSelectedIndices(select) {
 	return selected;
 }
 
-function getAndUpdateSwitchBtnValue(event, onBtnId, offBtnId) {
+// Get and update switch button value
+function sbtnVal(event, onBtnId, offBtnId) {
 	var onBtn = document.getElementById(onBtnId);
 	var offBtn = document.getElementById(offBtnId);
 	

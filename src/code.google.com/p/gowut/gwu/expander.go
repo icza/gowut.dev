@@ -202,13 +202,13 @@ func (c *expanderImpl) Render(w writer) {
 
 	if c.header != nil {
 		c.renderTr(w)
-		c.headerFmt.render("td", w)
+		c.headerFmt.render(_STR_TD_OP, w)
 		c.header.Render(w)
 	}
 
 	if c.expanded && c.content != nil {
 		c.renderTr(w)
-		c.contentFmt.render("td", w)
+		c.contentFmt.render(_STR_TD_OP, w)
 		c.content.Render(w)
 	}
 

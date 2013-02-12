@@ -378,7 +378,7 @@ func (c *tableImpl) renderRowTr(row int, w writer) {
 			va = defva
 		}
 
-		rf.renderWithAligns("tr", ha, va, w)
+		rf.renderWithAligns(_STR_TR_OP, ha, va, w)
 	}
 }
 
@@ -392,6 +392,6 @@ func (c *tableImpl) renderTd(ci cellIdx, w writer) {
 	if cf == nil {
 		w.Write(_STR_TD)
 	} else {
-		cf.render("td", w)
+		cf.render(_STR_TD_OP, w)
 	}
 }

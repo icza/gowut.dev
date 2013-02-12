@@ -368,15 +368,15 @@ func buildTabPanelDemo() gwu.Comp {
 	table.Add(valignslb, 2, 1)
 
 	placemslb.AddEHandlerFunc(func(e gwu.Event) {
-		t.SetTabBarPlacement(placems[placemslb.SelectedIndices()[0]])
+		t.SetTabBarPlacement(placems[placemslb.SelectedIdx()])
 		e.MarkDirty(t)
 	}, gwu.ETYPE_CHANGE)
 	halignslb.AddEHandlerFunc(func(e gwu.Event) {
-		t.TabBarFmt().SetHAlign(haligns[halignslb.SelectedIndices()[0]])
+		t.TabBarFmt().SetHAlign(haligns[halignslb.SelectedIdx()])
 		e.MarkDirty(t)
 	}, gwu.ETYPE_CHANGE)
 	valignslb.AddEHandlerFunc(func(e gwu.Event) {
-		t.TabBarFmt().SetVAlign(valigns[valignslb.SelectedIndices()[0]])
+		t.TabBarFmt().SetVAlign(valigns[valignslb.SelectedIdx()])
 		e.MarkDirty(t)
 	}, gwu.ETYPE_CHANGE)
 

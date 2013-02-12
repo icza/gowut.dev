@@ -390,6 +390,6 @@ func (c *panelImpl) renderTd(c2 Comp, w writer) {
 	if cf == nil {
 		w.Write(_STR_TD)
 	} else {
-		cf.render("td", w)
+		cf.render(_STR_TD_OP, w)
 	}
 }
