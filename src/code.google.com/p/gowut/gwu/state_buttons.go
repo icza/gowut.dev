@@ -374,6 +374,12 @@ func (c *switchButtonImpl) Render(w writer) {
 	w.Write(_STR_TABLE_OP)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
+	// For Internet Explorer only:
+	// Since state synchronization is done on ETYPE_CLICK, which will add a click handler
+	// to the wrapper tag and not to the on/off buttons, the wrapper tag itself must be
+	// disabled (must have a 'disabled' attribute) if the switch button is disabled in order
+	// for clicks really be disabled.
+	c.onButton.renderEnabled(w)
 	w.Writes("><tr>")
 
 	w.Writes("<td width=\"50%\">")

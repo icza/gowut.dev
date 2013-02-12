@@ -96,8 +96,8 @@ type Panel interface {
 	// Useful when layout is LAYOUT_HORIZONTAL.
 	// 
 	// Tip: When adding a horizontal space consumer, you may set the
-	// white space style attribute of the panel to WHITE_SPACE_NOWRAP
-	// to avoid texts getting wrapped to multiple lines.
+	// white space style attribute of other components in the the panel
+	// to WHITE_SPACE_NOWRAP to avoid texts getting wrapped to multiple lines.
 	AddHConsumer() Comp
 
 	// AddVConsumer adds and returns a vertical (free) space consumer.
