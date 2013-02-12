@@ -312,26 +312,26 @@ func (c *tabPanelImpl) Render(w writer) {
 
 	switch c.tabBarPlacement {
 	case TB_PLACEMENT_TOP:
-		w.Writes("<tr>")
-		c.tabBarFmt.render("td", w)
+		w.Write(_STR_TR)
+		c.tabBarFmt.render(_STR_TD_OP, w)
 		c.tabBarImpl.Render(w)
 		c.renderTr(w)
 		c.renderContent(w)
 	case TB_PLACEMENT_BOTTOM:
 		c.renderTr(w)
 		c.renderContent(w)
-		w.Writes("<tr>")
-		c.tabBarFmt.render("td", w)
+		w.Write(_STR_TR)
+		c.tabBarFmt.render(_STR_TD_OP, w)
 		c.tabBarImpl.Render(w)
 	case TB_PLACEMENT_LEFT:
 		c.renderTr(w)
-		c.tabBarFmt.render("td", w)
+		c.tabBarFmt.render(_STR_TD_OP, w)
 		c.tabBarImpl.Render(w)
 		c.renderContent(w)
 	case TB_PLACEMENT_RIGHT:
 		c.renderTr(w)
 		c.renderContent(w)
-		c.tabBarFmt.render("td", w)
+		c.tabBarFmt.render(_STR_TD_OP, w)
 		c.tabBarImpl.Render(w)
 	}
 

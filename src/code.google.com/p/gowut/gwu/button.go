@@ -52,8 +52,13 @@ func newButtonImpl(valueProviderJs string, text string) buttonImpl {
 	return buttonImpl{newCompImpl(valueProviderJs), newHasTextImpl(text), newHasEnabledImpl()}
 }
 
+var (
+	_STR_BUTTON_OP = []byte("<button type=\"button\"") // "<button type=\"button\""
+	_STR_BUTTON_CL = []byte("</button>")               // "</button>"
+)
+
 func (c *buttonImpl) Render(w writer) {
-	w.Writes("<button type=\"button\"")
+	w.Write(_STR_BUTTON_OP)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
 	c.renderEnabled(w)
@@ -61,5 +66,5 @@ func (c *buttonImpl) Render(w writer) {
 
 	c.renderText(w)
 
-	w.Writes("</button>")
+	w.Write(_STR_BUTTON_CL)
 }

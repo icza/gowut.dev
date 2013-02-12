@@ -46,6 +46,9 @@ var (
 	_STR_TABLE_OP = []byte("<table")   // "<table"
 	_STR_TABLE_CL = []byte("</table>") // "</table>"
 	_STR_TD       = []byte("<td>")     // "<td>"
+	_STR_TR       = []byte("<tr>")     // "<tr>"
+	_STR_TD_OP    = []byte("<td")      // "<td"
+	_STR_TR_OP    = []byte("<tr")      // "<tr"
 
 	_STR_STYLE = []byte(" style=\"") // " style=\""
 	_STR_CLASS = []byte(" class=\"") // " class=\""
@@ -94,15 +97,15 @@ func (w writer) Writev(v interface{}) (n int, err error) {
 
 // Writevs writes values.
 func (w writer) Writevs(v ...interface{}) (n int, err error) {
-	var sum int
 	for _, v2 := range v {
-		m, e := w.Writev(v2)
-		sum += m
-		if e != nil {
-			return sum, e
+		var m int
+		m, err = w.Writev(v2)
+		n += m
+		if err != nil {
+			return
 		}
 	}
-	return sum, nil
+	return
 }
 
 // Writes writes a string.
@@ -112,15 +115,15 @@ func (w writer) Writes(s string) (n int, err error) {
 
 // Writess writes strings.
 func (w writer) Writess(ss ...string) (n int, err error) {
-	var sum int
 	for _, s := range ss {
-		m, e := w.Write([]byte(s))
-		sum += m
-		if e != nil {
-			return sum, e
+		var m int
+		m, err = w.Write([]byte(s))
+		n += m
+		if err != nil {
+			return
 		}
 	}
-	return sum, nil
+	return
 }
 
 // Writees writes a string after html-escaping it.
@@ -129,7 +132,40 @@ func (w writer) Writees(s string) (n int, err error) {
 }
 
 // WriteAttr writes an attribute in the form of:
-// ' name="value"'
+// " name=\"value\""
 func (w writer) WriteAttr(name, value string) (n int, err error) {
-	return w.Writevs(_STR_SPACE, name, _STR_EQ_QUOTE, value, _STR_QUOTE)
+	// Easiest implementation would be:
+	// return w.Writevs(_STR_SPACE, name, _STR_EQ_QUOTE, value, _STR_QUOTE)
+
+	// ...but since this is called very frequently, I allow some extra lines of code
+	// for the sake of efficiency (also avoiding array allocation for the varargs...) 
+
+	n, err = w.Write(_STR_SPACE)
+	if err != nil {
+		return
+	}
+
+	var m int
+	m, err = w.Write([]byte(name))
+	n += m
+	if err != nil {
+		return
+	}
+
+	m, err = w.Write(_STR_EQ_QUOTE)
+	n += m
+	if err != nil {
+		return
+	}
+
+	m, err = w.Write([]byte(value))
+	n += m
+	if err != nil {
+		return
+	}
+
+	m, err = w.Write(_STR_QUOTE)
+	n += m
+
+	return
 }

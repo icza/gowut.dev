@@ -61,6 +61,10 @@ type ListBox interface {
 	// Selected tells if the value at index i is selected.
 	Selected(i int) bool
 
+	// SelectedIdx returns the first selected index.
+	// Returns -1 if nothing is selected.
+	SelectedIdx() int
+
 	// SelectedIndices returns a slice of the indices of the selected values.
 	SelectedIndices() []int
 
@@ -88,7 +92,7 @@ type listBoxImpl struct {
 
 // NewListBox creates a new ListBox.
 func NewListBox(values []string) ListBox {
-	c := &listBoxImpl{newCompImpl("getSelectedIndices(this)"), newHasEnabledImpl(), values, false, make([]bool, len(values)), 1}
+	c := &listBoxImpl{newCompImpl("selIdxs(this)"), newHasEnabledImpl(), values, false, make([]bool, len(values)), 1}
 	c.AddSyncOnETypes(ETYPE_CHANGE)
 	c.Style().AddClass("gwu-ListBox")
 	return c
@@ -111,10 +115,8 @@ func (c *listBoxImpl) SetRows(rows int) {
 }
 
 func (c *listBoxImpl) SelectedValue() string {
-	for i, s := range c.selected {
-		if s {
-			return c.values[i]
-		}
+	if i := c.SelectedIdx(); i >= 0 {
+		return c.values[i]
 	}
 
 	return ""
@@ -131,6 +133,15 @@ func (c *listBoxImpl) SelectedValues() (sv []string) {
 
 func (c *listBoxImpl) Selected(i int) bool {
 	return c.selected[i]
+}
+
+func (c *listBoxImpl) SelectedIdx() int {
+	for i, s := range c.selected {
+		if s {
+			return i
+		}
+	}
+	return -1
 }
 
 func (c *listBoxImpl) SelectedIndices() (si []int) {
@@ -179,10 +190,19 @@ func (c *listBoxImpl) preprocessEvent(event Event, r *http.Request) {
 	}
 }
 
+var (
+	_STR_SELECT_OP     = []byte("<select")                        // "<select"
+	_STR_MULTIPLE      = []byte(" multiple=\"multiple\"")         // " multiple=\"multiple\""
+	_STR_OPTION_OP_SEL = []byte("<option selected=\"selected\">") // "<option selected=\"selected\">"
+	_STR_OPTION_OP     = []byte("<option>")                       // "<option>"
+	_STR_OPTION_CL     = []byte("</option>")                      // "</option>"
+	_STR_SELECT_CL     = []byte("</select>")                      // "</select>"
+)
+
 func (c *listBoxImpl) Render(w writer) {
-	w.Writes("<select")
+	w.Write(_STR_SELECT_OP)
 	if c.multi {
-		w.Writes(" multiple=\"multiple\"")
+		w.Write(_STR_MULTIPLE)
 	}
 	w.WriteAttr("size", strconv.Itoa(c.rows))
 	c.renderAttrsAndStyle(w)
@@ -192,13 +212,13 @@ func (c *listBoxImpl) Render(w writer) {
 
 	for i, value := range c.values {
 		if c.selected[i] {
-			w.Writes("<option selected=\"selected\">")
+			w.Write(_STR_OPTION_OP_SEL)
 		} else {
-			w.Writes("<option>")
+			w.Write(_STR_OPTION_OP)
 		}
 		w.Writees(value)
-		w.Writes("</option>")
+		w.Write(_STR_OPTION_CL)
 	}
 
-	w.Writes("</select>")
+	w.Write(_STR_SELECT_CL)
 }

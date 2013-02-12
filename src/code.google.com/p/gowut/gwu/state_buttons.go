@@ -13,7 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// CheckBox and RadioButton component interfaces and implementations.
+// State button interfaces and implementations
+// (CheckBox, RadioButton, SwitchButton).
 
 package gwu
 
@@ -167,7 +168,7 @@ func NewSwitchButton() SwitchButton {
 	// We only want to switch the state if the opposite button is pressed
 	// (e.g. OFF is pressed when switch is ON and vice versa;
 	// if ON is pressed when switch is ON, do not switch to OFF):
-	valueProviderJs := "getAndUpdateSwitchBtnValue(event,'" + onButton.Id().String() + "','" + offButton.Id().String() + "')"
+	valueProviderJs := "sbtnVal(event,'" + onButton.Id().String() + "','" + offButton.Id().String() + "')"
 
 	c := &switchButtonImpl{newCompImpl(valueProviderJs), &onButton, &offButton, true} // Note the "true" state, so the following SetState(false) will be executed (different states)!
 	c.AddSyncOnETypes(ETYPE_CLICK)

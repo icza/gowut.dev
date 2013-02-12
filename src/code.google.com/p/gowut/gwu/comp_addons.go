@@ -83,10 +83,12 @@ func (c *hasEnabledImpl) SetEnabled(enabled bool) {
 	c.enabled = enabled
 }
 
+var _STR_DISABLED = []byte(" disabled=\"disabled\"") // " disabled=\"disabled\""
+
 // renderEnabled renders the enabled attribute.
 func (c *hasEnabledImpl) renderEnabled(w writer) {
 	if !c.enabled {
-		w.Writes(" disabled=\"disabled\"")
+		w.Write(_STR_DISABLED)
 	}
 }
 
@@ -278,15 +280,18 @@ func (c *cellFmtImpl) setIAttr(name string, value int) {
 }
 
 // render renders the formatted HTML tag for the specified tag name.
-func (c *cellFmtImpl) render(tag string, w writer) {
+// tag must start with a less than sign, e.g. "<td".
+func (c *cellFmtImpl) render(tag []byte, w writer) {
 	c.renderWithAligns(tag, c.halign, c.valign, w)
 }
 
+var _STR_VALIGN = []byte("vertical-align:") // "vertical-align:"
+
 // render renders the formatted HTML tag for the specified tag name
 // using the specified alignments instead of ours.
-func (c *cellFmtImpl) renderWithAligns(tag string, halign HAlign, valign VAlign, w writer) {
-	w.Write(_STR_LT)
-	w.Writes(tag)
+// tag must start with a less than sign, e.g. "<td".
+func (c *cellFmtImpl) renderWithAligns(tag []byte, halign HAlign, valign VAlign, w writer) {
+	w.Write(tag)
 
 	if c.attrs != nil {
 		for name, value := range c.attrs {
@@ -307,7 +312,8 @@ func (c *cellFmtImpl) renderWithAligns(tag string, halign HAlign, valign VAlign,
 	if valign != VA_DEFAULT || c.styleImpl != nil {
 		w.Write(_STR_STYLE)
 		if valign != VA_DEFAULT {
-			w.Writess("vertical-align:", string(valign))
+			w.Write(_STR_VALIGN)
+			w.Writes(string(valign))
 			w.Write(_STR_SEMICOL)
 		}
 		if c.styleImpl != nil {
@@ -393,17 +399,20 @@ func (c *tableViewImpl) SetCellPadding(padding int) {
 	c.SetIAttr("cellpadding", padding)
 }
 
+var _STR_ST_VALIGN = []byte(" style=\"vertical-align:") // " style=\"vertical-align:"
+
 // renderTr renders an HTML TR tag with horizontal and vertical
 // alignment info included. 
 func (c *tableViewImpl) renderTr(w writer) {
-	w.Writes("<tr")
+	w.Write(_STR_TR_OP)
 	if c.halign != HA_DEFAULT {
 		w.Write(_STR_ALIGN)
 		w.Writes(string(c.halign))
 		w.Write(_STR_QUOTE)
 	}
 	if c.valign != VA_DEFAULT {
-		w.Writess(" style=\"vertical-align:", string(c.valign))
+		w.Write(_STR_ST_VALIGN)
+		w.Writes(string(c.valign))
 		w.Write(_STR_QUOTE)
 	}
 	w.Write(_STR_GT)

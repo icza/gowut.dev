@@ -14,6 +14,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /*
-Package examples contains example applications using Gowut.
+Package examples contains example applications using/showcasing Gowut.
 */
 package examples
