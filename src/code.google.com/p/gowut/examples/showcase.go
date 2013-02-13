@@ -43,179 +43,6 @@ func buildHomeDemo() gwu.Comp {
 	return p
 }
 
-func buildCheckBoxDemo() gwu.Comp {
-	p := gwu.NewPanel()
-
-	suml := gwu.NewLabel("")
-
-	p.Add(gwu.NewLabel("Check the days you want to work on:"))
-
-	cbs := []gwu.CheckBox{gwu.NewCheckBox("Monday"), gwu.NewCheckBox("Tuesday"), gwu.NewCheckBox("Wednesday"),
-		gwu.NewCheckBox("Thursday"), gwu.NewCheckBox("Friday"), gwu.NewCheckBox("Saturday"), gwu.NewCheckBox("Sunday")}
-	cbs[5].SetEnabled(false)
-	cbs[6].SetEnabled(false)
-
-	for _, cb := range cbs {
-		p.Add(cb)
-		cb.AddEHandlerFunc(func(e gwu.Event) {
-			sum := 0
-			for _, cb2 := range cbs {
-				if cb2.State() {
-					sum++
-				}
-			}
-			suml.SetText(fmt.Sprintf("%d day%s is a total of %d hours a week.", sum, plural(sum), sum*8))
-			e.MarkDirty(suml)
-		}, gwu.ETYPE_CLICK)
-	}
-
-	p.Add(suml)
-
-	return p
-}
-
-func buildListBoxDemo() gwu.Comp {
-	p := gwu.NewPanel()
-
-	row := gwu.NewHorizontalPanel()
-	l := gwu.NewLabel("Select a background color:")
-	row.Add(l)
-	lb := gwu.NewListBox([]string{"", "Black", "Red", "Green", "Blue", "White"})
-	lb.AddEHandlerFunc(func(e gwu.Event) {
-		l.Style().SetBackground(lb.SelectedValue())
-		e.MarkDirty(l)
-	}, gwu.ETYPE_CHANGE)
-	row.Add(lb)
-	p.Add(row)
-
-	p.AddVSpace(10)
-	p.Add(gwu.NewLabel("Select numbers that add up to 89:"))
-	sumLabel := gwu.NewLabel("")
-	lb2 := gwu.NewListBox([]string{"1", "2", "4", "8", "16", "32", "64", "128"})
-	lb2.SetMulti(true)
-	lb2.SetRows(10)
-	lb2.AddEHandlerFunc(func(e gwu.Event) {
-		sum := 0
-		for _, idx := range lb2.SelectedIndices() {
-			sum += 1 << uint(idx)
-		}
-		if sum == 89 {
-			sumLabel.SetText("Hooray! You did it!")
-		} else {
-			sumLabel.SetText(fmt.Sprintf("Now quite there... (sum = %d)", sum))
-		}
-		e.MarkDirty(sumLabel)
-	}, gwu.ETYPE_CHANGE)
-	p.Add(lb2)
-	p.Add(sumLabel)
-
-	return p
-}
-
-func buildTextBoxDemo() gwu.Comp {
-	p := gwu.NewPanel()
-
-	p.Add(gwu.NewLabel("Enter your name (max 15 characters):"))
-	row := gwu.NewHorizontalPanel()
-	tb := gwu.NewTextBox("")
-	tb.SetMaxLength(15)
-	tb.AddSyncOnETypes(gwu.ETYPE_KEY_UP)
-	length := gwu.NewLabel("")
-	length.Style().SetFontSize("80%").SetFontStyle(gwu.FONT_STYLE_ITALIC)
-	tb.AddEHandlerFunc(func(e gwu.Event) {
-		rem := 15 - len(tb.Text())
-		length.SetText(fmt.Sprintf("(%d character%s left...)", rem, plural(rem)))
-		e.MarkDirty(length)
-	}, gwu.ETYPE_CHANGE, gwu.ETYPE_KEY_UP)
-	row.Add(tb)
-	row.Add(length)
-	p.Add(row)
-
-	p.AddVSpace(10)
-	p.Add(gwu.NewLabel("Short biography:"))
-	bio := gwu.NewTextBox("")
-	bio.SetRows(5)
-	bio.SetCols(40)
-	p.Add(bio)
-
-	p.AddVSpace(10)
-	rtb := gwu.NewTextBox("This is just a read-only text box...")
-	rtb.SetReadOnly(true)
-	p.Add(rtb)
-
-	p.AddVSpace(10)
-	dtb := gwu.NewTextBox("...and a disabled one.")
-	dtb.SetEnabled(false)
-	p.Add(dtb)
-
-	return p
-}
-
-func buildPasswBoxDemo() gwu.Comp {
-	p := gwu.NewPanel()
-
-	p.Add(gwu.NewLabel("Enter your password:"))
-	p.Add(gwu.NewPasswBox(""))
-
-	return p
-}
-
-func buildRadioButtonDemo() gwu.Comp {
-	p := gwu.NewPanel()
-
-	p.Add(gwu.NewLabel("Select your favorite programming language:"))
-
-	group := gwu.NewRadioGroup("lang")
-	rbs := []gwu.RadioButton{gwu.NewRadioButton("Go", group), gwu.NewRadioButton("Java", group), gwu.NewRadioButton("C / C++", group),
-		gwu.NewRadioButton("Python", group), gwu.NewRadioButton("QBasic (nah this can't be your favorite)", group)}
-	rbs[4].SetEnabled(false)
-
-	for _, rb := range rbs {
-		p.Add(rb)
-	}
-
-	p.AddVSpace(20)
-	p.Add(gwu.NewLabel("Select your favorite computer game:"))
-
-	group = gwu.NewRadioGroup("game")
-	rbs = []gwu.RadioButton{gwu.NewRadioButton("StarCraft II", group), gwu.NewRadioButton("Minecraft", group),
-		gwu.NewRadioButton("Other", group)}
-
-	for _, rb := range rbs {
-		p.Add(rb)
-	}
-
-	return p
-}
-
-func buildSwitchButtonDemo() gwu.Comp {
-	p := gwu.NewPanel()
-	p.SetCellPadding(1)
-
-	row := gwu.NewHorizontalPanel()
-	row.Add(gwu.NewLabel("Here's an ON/OFF switch which enables/disables the other one:"))
-	sw := gwu.NewSwitchButton()
-	sw.SetOnOff("ENB", "DISB")
-	sw.SetState(true)
-	row.Add(sw)
-	p.Add(row)
-
-	p.AddVSpace(10)
-	row = gwu.NewHorizontalPanel()
-	row.Add(gwu.NewLabel("And the other one:"))
-	sw2 := gwu.NewSwitchButton()
-	sw2.SetEnabled(true)
-	sw2.Style().SetWidthPx(100)
-	row.Add(sw2)
-	sw.AddEHandlerFunc(func(e gwu.Event) {
-		sw2.SetEnabled(sw.State())
-		e.MarkDirty(sw2)
-	}, gwu.ETYPE_CLICK)
-	p.Add(row)
-
-	return p
-}
-
 func buildExpanderDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
@@ -431,6 +258,181 @@ func buildWindowDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("The Window represents the whole window, the page inside the browser."))
+	p.AddVSpace(5)
+	p.Add(gwu.NewLabel("The Window is the top of the component hierarchy. It is an extension of the Panel."))
+
+	return p
+}
+
+func buildCheckBoxDemo() gwu.Comp {
+	p := gwu.NewPanel()
+
+	suml := gwu.NewLabel("")
+
+	p.Add(gwu.NewLabel("Check the days you want to work on:"))
+
+	cbs := []gwu.CheckBox{gwu.NewCheckBox("Monday"), gwu.NewCheckBox("Tuesday"), gwu.NewCheckBox("Wednesday"),
+		gwu.NewCheckBox("Thursday"), gwu.NewCheckBox("Friday"), gwu.NewCheckBox("Saturday"), gwu.NewCheckBox("Sunday")}
+	cbs[5].SetEnabled(false)
+	cbs[6].SetEnabled(false)
+
+	for _, cb := range cbs {
+		p.Add(cb)
+		cb.AddEHandlerFunc(func(e gwu.Event) {
+			sum := 0
+			for _, cb2 := range cbs {
+				if cb2.State() {
+					sum++
+				}
+			}
+			suml.SetText(fmt.Sprintf("%d day%s is a total of %d hours a week.", sum, plural(sum), sum*8))
+			e.MarkDirty(suml)
+		}, gwu.ETYPE_CLICK)
+	}
+
+	p.Add(suml)
+
+	return p
+}
+
+func buildListBoxDemo() gwu.Comp {
+	p := gwu.NewPanel()
+
+	row := gwu.NewHorizontalPanel()
+	l := gwu.NewLabel("Select a background color:")
+	row.Add(l)
+	lb := gwu.NewListBox([]string{"", "Black", "Red", "Green", "Blue", "White"})
+	lb.AddEHandlerFunc(func(e gwu.Event) {
+		l.Style().SetBackground(lb.SelectedValue())
+		e.MarkDirty(l)
+	}, gwu.ETYPE_CHANGE)
+	row.Add(lb)
+	p.Add(row)
+
+	p.AddVSpace(10)
+	p.Add(gwu.NewLabel("Select numbers that add up to 89:"))
+	sumLabel := gwu.NewLabel("")
+	lb2 := gwu.NewListBox([]string{"1", "2", "4", "8", "16", "32", "64", "128"})
+	lb2.SetMulti(true)
+	lb2.SetRows(10)
+	lb2.AddEHandlerFunc(func(e gwu.Event) {
+		sum := 0
+		for _, idx := range lb2.SelectedIndices() {
+			sum += 1 << uint(idx)
+		}
+		if sum == 89 {
+			sumLabel.SetText("Hooray! You did it!")
+		} else {
+			sumLabel.SetText(fmt.Sprintf("Now quite there... (sum = %d)", sum))
+		}
+		e.MarkDirty(sumLabel)
+	}, gwu.ETYPE_CHANGE)
+	p.Add(lb2)
+	p.Add(sumLabel)
+
+	return p
+}
+
+func buildTextBoxDemo() gwu.Comp {
+	p := gwu.NewPanel()
+
+	p.Add(gwu.NewLabel("Enter your name (max 15 characters):"))
+	row := gwu.NewHorizontalPanel()
+	tb := gwu.NewTextBox("")
+	tb.SetMaxLength(15)
+	tb.AddSyncOnETypes(gwu.ETYPE_KEY_UP)
+	length := gwu.NewLabel("")
+	length.Style().SetFontSize("80%").SetFontStyle(gwu.FONT_STYLE_ITALIC)
+	tb.AddEHandlerFunc(func(e gwu.Event) {
+		rem := 15 - len(tb.Text())
+		length.SetText(fmt.Sprintf("(%d character%s left...)", rem, plural(rem)))
+		e.MarkDirty(length)
+	}, gwu.ETYPE_CHANGE, gwu.ETYPE_KEY_UP)
+	row.Add(tb)
+	row.Add(length)
+	p.Add(row)
+
+	p.AddVSpace(10)
+	p.Add(gwu.NewLabel("Short biography:"))
+	bio := gwu.NewTextBox("")
+	bio.SetRows(5)
+	bio.SetCols(40)
+	p.Add(bio)
+
+	p.AddVSpace(10)
+	rtb := gwu.NewTextBox("This is just a read-only text box...")
+	rtb.SetReadOnly(true)
+	p.Add(rtb)
+
+	p.AddVSpace(10)
+	dtb := gwu.NewTextBox("...and a disabled one.")
+	dtb.SetEnabled(false)
+	p.Add(dtb)
+
+	return p
+}
+
+func buildPasswBoxDemo() gwu.Comp {
+	p := gwu.NewPanel()
+
+	p.Add(gwu.NewLabel("Enter your password:"))
+	p.Add(gwu.NewPasswBox(""))
+
+	return p
+}
+
+func buildRadioButtonDemo() gwu.Comp {
+	p := gwu.NewPanel()
+
+	p.Add(gwu.NewLabel("Select your favorite programming language:"))
+
+	group := gwu.NewRadioGroup("lang")
+	rbs := []gwu.RadioButton{gwu.NewRadioButton("Go", group), gwu.NewRadioButton("Java", group), gwu.NewRadioButton("C / C++", group),
+		gwu.NewRadioButton("Python", group), gwu.NewRadioButton("QBasic (nah this can't be your favorite)", group)}
+	rbs[4].SetEnabled(false)
+
+	for _, rb := range rbs {
+		p.Add(rb)
+	}
+
+	p.AddVSpace(20)
+	p.Add(gwu.NewLabel("Select your favorite computer game:"))
+
+	group = gwu.NewRadioGroup("game")
+	rbs = []gwu.RadioButton{gwu.NewRadioButton("StarCraft II", group), gwu.NewRadioButton("Minecraft", group),
+		gwu.NewRadioButton("Other", group)}
+
+	for _, rb := range rbs {
+		p.Add(rb)
+	}
+
+	return p
+}
+
+func buildSwitchButtonDemo() gwu.Comp {
+	p := gwu.NewPanel()
+	p.SetCellPadding(1)
+
+	row := gwu.NewHorizontalPanel()
+	row.Add(gwu.NewLabel("Here's an ON/OFF switch which enables/disables the other one:"))
+	sw := gwu.NewSwitchButton()
+	sw.SetOnOff("ENB", "DISB")
+	sw.SetState(true)
+	row.Add(sw)
+	p.Add(row)
+
+	p.AddVSpace(10)
+	row = gwu.NewHorizontalPanel()
+	row.Add(gwu.NewLabel("And the other one:"))
+	sw2 := gwu.NewSwitchButton()
+	sw2.SetEnabled(true)
+	sw2.Style().SetWidthPx(100)
+	row.Add(sw2)
+	sw.AddEHandlerFunc(func(e gwu.Event) {
+		sw2.SetEnabled(sw.State())
+		e.MarkDirty(sw2)
+	}, gwu.ETYPE_CLICK)
+	p.Add(row)
 
 	return p
 }
@@ -649,16 +651,6 @@ func buildShowcaseWin(sess gwu.Session) {
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("110%")
 	links.Add(l)
 	links.AddVSpace(5)
-	l = gwu.NewLabel("Input components")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetDisplay(gwu.DISPLAY_BLOCK)
-	links.Add(l)
-	createDemo("CheckBox", buildCheckBoxDemo)
-	createDemo("ListBox", buildListBoxDemo)
-	createDemo("TextBox", buildTextBoxDemo)
-	createDemo("PasswBox", buildPasswBoxDemo)
-	createDemo("RadioButton", buildRadioButtonDemo)
-	createDemo("SwitchButton", buildSwitchButtonDemo)
-	links.AddVSpace(5)
 	l = gwu.NewLabel("Containers")
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)
 	links.Add(l)
@@ -668,6 +660,16 @@ func buildShowcaseWin(sess gwu.Session) {
 	createDemo("Table", buildTableDemo)
 	createDemo("TabPanel", buildTabPanelDemo)
 	createDemo("Window", buildWindowDemo)
+	links.AddVSpace(5)
+	l = gwu.NewLabel("Input components")
+	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetDisplay(gwu.DISPLAY_BLOCK)
+	links.Add(l)
+	createDemo("CheckBox", buildCheckBoxDemo)
+	createDemo("ListBox", buildListBoxDemo)
+	createDemo("TextBox", buildTextBoxDemo)
+	createDemo("PasswBox", buildPasswBoxDemo)
+	createDemo("RadioButton", buildRadioButtonDemo)
+	createDemo("SwitchButton", buildSwitchButtonDemo)
 	links.AddVSpace(5)
 	l = gwu.NewLabel("Other components")
 	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)

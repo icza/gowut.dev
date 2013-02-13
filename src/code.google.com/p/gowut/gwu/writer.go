@@ -32,14 +32,14 @@ const _CACHED_INTS = 32
 // Render methods use these to avoid array allocations
 // when converting strings to byte slices in order to write them.
 var (
-	_STR_SPACE    = []byte(" ")   // Space string
-	_STR_QUOTE    = []byte("\"")  // Quotation mark
-	_STR_EQ_QUOTE = []byte("=\"") // Equal sign and a quotation mark
-	_STR_COMMA    = []byte(",")   // Comma string
-	_STR_COLON    = []byte(":")   // Colon string
-	_STR_SEMICOL  = []byte(";")   // Semicolon string
-	_STR_LT       = []byte("<")   // Less than string
-	_STR_GT       = []byte(">")   // Greater than string
+	_STR_SPACE    = []byte(" ")   // " " (space string)
+	_STR_QUOTE    = []byte("\"")  // "\"" (quotation mark)
+	_STR_EQ_QUOTE = []byte("=\"") // "=\"" (equal sign and a quotation mark)
+	_STR_COMMA    = []byte(",")   // "," (comma string)
+	_STR_COLON    = []byte(":")   // ":" (colon string)
+	_STR_SEMICOL  = []byte(";")   // ";" (semicolon string)
+	_STR_LT       = []byte("<")   // "<" (less than string)
+	_STR_GT       = []byte(">")   // ">" (greater than string)
 
 	_STR_SPAN_OP  = []byte("<span")    // "<span"
 	_STR_SPAN_CL  = []byte("</span>")  // "</span>"

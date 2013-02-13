@@ -132,7 +132,7 @@ type compImpl struct {
 	styleImpl *styleImpl        // Style builder.
 
 	handlers        map[EventType][]EventHandler // Event handlers mapped from even type. Lazily initialized.
-	valueProviderJs string                       // If the HTML representation of the component has a value, this JavaScript code code must provide it. It will be automatically sent as the PARAM_COMP_ID parameter.
+	valueProviderJs []byte                       // If the HTML representation of the component has a value, this JavaScript code code must provide it. It will be automatically sent as the PARAM_COMP_ID parameter.
 	syncOnETypes    map[EventType]bool           // Tells on which event types should comp value sync happen.
 }
 
@@ -140,7 +140,7 @@ type compImpl struct {
 // If the component has a value, the valueProviderJs must be a
 // JavaScript code which when evaluated provides the component's
 // value. Pass an empty string if the component does not have a value.
-func newCompImpl(valueProviderJs string) compImpl {
+func newCompImpl(valueProviderJs []byte) compImpl {
 	id := nextCompId()
 	return compImpl{id: id, attrs: map[string]string{"id": id.String()}, styleImpl: newStyleImpl(), valueProviderJs: valueProviderJs}
 }
@@ -289,7 +289,7 @@ func (c *compImpl) renderEHandlers(w writer) {
 		w.Writev(int(c.id))
 		if len(c.valueProviderJs) > 0 && c.syncOnETypes != nil && c.syncOnETypes[etype] {
 			w.Write(_STR_COMMA)
-			w.Writes(c.valueProviderJs)
+			w.Write(c.valueProviderJs)
 		}
 		w.Write(_STR_SE_SUFFIX)
 	}

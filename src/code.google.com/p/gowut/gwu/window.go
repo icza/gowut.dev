@@ -118,7 +118,7 @@ func (s *windowImpl) SetTheme(theme string) {
 }
 
 func (win *windowImpl) RenderWin(w writer, s Server) {
-	// We could optimize (store byte slices of static strings) this
+	// We could optimize this (store byte slices of static strings)
 	// but windows are rendered "so rarely"...
 	w.Writes("<html><head><meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"><title>")
 	w.Writees(win.text)

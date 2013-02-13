@@ -1,4 +1,6 @@
 
+-Ability (event) to detect browser close or navigate away? Same for window load.
+
 -Refactor: TabBarPlacement => SidePlacement (same constants: TOP, BOTTOM, LEFT, RIGHT)?
 
 -ImageButton or SetImage() method for Button

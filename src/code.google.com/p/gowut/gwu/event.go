@@ -154,8 +154,8 @@ type EventHandler interface {
 	// (so the client will see up-to-date state).
 	// 
 	// If the component tree is modified (new component added
-	// or removed for example), then the Panel whose structure was modified
-	// has to be marked dirty.
+	// or removed for example), then the Container whose structure
+	// was modified has to be marked dirty.
 	HandleEvent(e Event)
 }
 
