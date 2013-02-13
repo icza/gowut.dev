@@ -86,28 +86,31 @@ function se(event, etype, compId, compValue) {
 		data += "&" + _pCompValue + "=" + compValue;
 	if (document.activeElement.id != null)
 		data += "&" + _pFocCompId + "=" + document.activeElement.id;
-	if (event.clientX != null) {
-		// Mouse data
-		var x = event.clientX, y = event.clientY;
-		data += "&" + _pMouseWX + "=" + x;
-		data += "&" + _pMouseWY + "=" + y;
-		var parent = document.getElementById(compId);
-		do {
-			x -= parent.offsetLeft;
-			y -= parent.offsetTop;
-		} while (parent = parent.offsetParent);
-		data += "&" + _pMouseX + "=" + x;
-		data += "&" + _pMouseY + "=" + y;
-		data += "&" + _pMouseBtn + "=" + (event.button < 4 ? event.button : 1); // IE8 and below use 4 for middle btn
-	}
 	
-	var modKeys;
-	modKeys += event.altKey ? _modKeyAlt : 0;
-	modKeys += event.ctlrKey ? _modKeyCtlr : 0;
-	modKeys += event.metaKey ? _modKeyMeta : 0;
-	modKeys += event.shiftKey ? _modKeyShift : 0;
-	data += "&" + _pModKeys + "=" + modKeys;
-	data += "&" + _pKeyCode + "=" + (event.which ? event.which : event.keyCode);
+	if (event != null) {
+		if (event.clientX != null) {
+			// Mouse data
+			var x = event.clientX, y = event.clientY;
+			data += "&" + _pMouseWX + "=" + x;
+			data += "&" + _pMouseWY + "=" + y;
+			var parent = document.getElementById(compId);
+			do {
+				x -= parent.offsetLeft;
+				y -= parent.offsetTop;
+			} while (parent = parent.offsetParent);
+			data += "&" + _pMouseX + "=" + x;
+			data += "&" + _pMouseY + "=" + y;
+			data += "&" + _pMouseBtn + "=" + (event.button < 4 ? event.button : 1); // IE8 and below uses 4 for middle btn
+		}
+		
+		var modKeys;
+		modKeys += event.altKey ? _modKeyAlt : 0;
+		modKeys += event.ctlrKey ? _modKeyCtlr : 0;
+		modKeys += event.metaKey ? _modKeyMeta : 0;
+		modKeys += event.shiftKey ? _modKeyShift : 0;
+		data += "&" + _pModKeys + "=" + modKeys;
+		data += "&" + _pKeyCode + "=" + (event.which ? event.which : event.keyCode);
+	}
 	
 	xmlhttp.send(data);
 }
@@ -207,8 +210,36 @@ function focusComp(compId) {
 	}
 }
 
-window.onload = function() {
-	focusComp(_focCompId);
+function addonload(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() {
+			if (oldonload)
+				oldonload();
+			func();
+		}
+	}
 }
+
+function addonbeforeunload(func) {
+	var oldonbeforeunload = window.onbeforeunload;
+	if (typeof window.onbeforeunload != 'function') {
+		window.onbeforeunload = func;
+	} else {
+		window.onbeforeunload = function() {
+			if (oldonbeforeunload)
+				oldonbeforeunload();
+			func();
+		}
+	}
+}
+
+// INITIALIZATION
+
+addonload(function() {
+	focusComp(_focCompId);
+});
 `)
 }

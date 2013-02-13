@@ -131,7 +131,7 @@ type compImpl struct {
 	attrs     map[string]string // Explicitly set HTML attributes for the component's wrapper tag.
 	styleImpl *styleImpl        // Style builder.
 
-	handlers        map[EventType][]EventHandler // Event handlers mapped from even type. Lazily initialized.
+	handlers        map[EventType][]EventHandler // Event handlers mapped from event type. Lazily initialized.
 	valueProviderJs []byte                       // If the HTML representation of the component has a value, this JavaScript code code must provide it. It will be automatically sent as the PARAM_COMP_ID parameter.
 	syncOnETypes    map[EventType]bool           // Tells on which event types should comp value sync happen.
 }
@@ -279,8 +279,12 @@ var (
 // rendrenderEventHandlers renders the event handlers as attributes.
 func (c *compImpl) renderEHandlers(w writer) {
 	for etype, _ := range c.handlers {
-		// To render         : se(event,etype,compId,value)
-		// Example (checkbox): se(event,0,14,this.checked)
+		if etype.Win() {
+			continue
+		}
+		
+		// To render                 : " <etypeAttrs>=\"se(event,etype,compId,value)\""
+		// Example (checkbox onclick): " onclick=\"se(event,0,4327,this.checked)\""
 		w.Write(_STR_SPACE)
 		w.Write(etypeAttrs[etype])
 		w.Write(_STR_SE_PREFIX)
