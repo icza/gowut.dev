@@ -1,5 +1,5 @@
 
--Additional events:
+-Additional "internal" events:
 	-tab changed (selected)
 	-expander changed (expanded, collapsed)
 	-link activated (maybe this is already covered with ETYPE_ONCLICK? check it!)
