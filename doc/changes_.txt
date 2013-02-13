@@ -2,3 +2,4 @@
 Changes and new features in 0.8.0:
 ----------------------------------
 
+-More optimization.

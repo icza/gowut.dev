@@ -369,7 +369,7 @@ func newTableViewImpl() tableViewImpl {
 	// Initialize hasHVAlignImpl with HA_DEFAULT and VA_DEFAULT
 	// so if aligns are not changed, they will not be rendered =>
 	// they will be inherited (from TR).
-	c := tableViewImpl{compImpl: newCompImpl(""), hasHVAlignImpl: newHasHVAlignImpl(HA_DEFAULT, VA_DEFAULT)}
+	c := tableViewImpl{compImpl: newCompImpl(nil), hasHVAlignImpl: newHasHVAlignImpl(HA_DEFAULT, VA_DEFAULT)}
 	c.SetCellSpacing(0)
 	c.SetCellPadding(0)
 	return c
