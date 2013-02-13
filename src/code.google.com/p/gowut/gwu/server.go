@@ -299,7 +299,9 @@ func (s *serverImpl) removeSess2(sess Session) {
 func (s *serverImpl) addSessCookie(sess Session, w http.ResponseWriter) {
 	// HttpOnly: do not allow non-HTTP access to it (like javascript) to prevent stealing it...
 	// Secure: only send it over HTTPS
-	c := http.Cookie{Name: _GWU_SESSID_COOKIE, Value: sess.Id(), Path: s.appPath, HttpOnly: true, Secure: s.secure}
+	// MaxAge: to specify the max age of the cookie in seconds, else it's a session cookie and gets deleted after the browser is closed.
+	c := http.Cookie{Name: _GWU_SESSID_COOKIE, Value: sess.Id(), Path: s.appPath, HttpOnly: true, Secure: s.secure,
+		MaxAge: 72 * 60 * 60} // 72 hours max age
 	http.SetCookie(w, &c)
 
 	sess.clearNew()
