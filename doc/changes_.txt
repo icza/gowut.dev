@@ -2,4 +2,7 @@
 Changes and new features in 0.8.0:
 ----------------------------------
 
+-2 new event types: ETYPE_WIN_LOAD and ETYPE_WIN_UNLOAD.
+These can be used to detect the window load and unload events. They can be used for windows only.
+
 -More optimization.
