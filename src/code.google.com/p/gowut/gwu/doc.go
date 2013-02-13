@@ -160,7 +160,7 @@ When a component generates an event, the page in the browser will make an
 AJAX call sending the event to the server. The event will be passed to all the
 appropriate event handlers. Event handlers can mark components dirty,
 specifying that they may have changed and they must be re-rendered.
-When all the even handlers are done, the ids of the dirty components are sent
+When all the event handlers are done, the ids of the dirty components are sent
 back, and the browser will request only to render the dirty components,
 with AJAX calls, and the results will replace the old component nodes in the
 HTML DOM.

@@ -31,6 +31,7 @@ func (etype EventType) String() string {
 
 // Event types.
 const (
+	// General events for all components
 	ETYPE_CLICK      EventType = iota // Mouse click event
 	ETYPE_DBL_CLICK                   // Mouse double click event
 	ETYPE_MOUSE_DOWN                  // Mouse down event
@@ -44,7 +45,17 @@ const (
 	ETYPE_BLUR                        // Blur event (component loses focus)
 	ETYPE_CHANGE                      // Change event
 	ETYPE_FOCUS                       // Focus event (component gains focus)
+
+	// Window events (for windows only)
+	ETYPE_WIN_LOAD   // Window load event
+	ETYPE_WIN_UNLOAD // Window unload event
 )
+
+// Win tells if the event type is a window event type
+// (can only be used for windows only).
+func (etype EventType) Win() bool {
+	return etype == ETYPE_WIN_LOAD || etype == ETYPE_WIN_UNLOAD
+}
 
 // Attribute names for the event types.
 var etypeAttrs map[EventType][]byte = map[EventType][]byte{
@@ -60,7 +71,10 @@ var etypeAttrs map[EventType][]byte = map[EventType][]byte{
 	ETYPE_KEY_UP:     []byte("onkeyup"),
 	ETYPE_BLUR:       []byte("onblur"),
 	ETYPE_CHANGE:     []byte("onchange"),
-	ETYPE_FOCUS:      []byte("onfocus")}
+	ETYPE_FOCUS:      []byte("onfocus"),
+
+	ETYPE_WIN_LOAD:   []byte("onload"),
+	ETYPE_WIN_UNLOAD: []byte("onbeforeunload")} // Bind it to onbeforeunload (instead of onunload) for several reasons (onunload might cause trouble for AJAX; onunload is not called in IE if page is just refreshed...)
 
 // Mouse button type.
 type MouseBtn int
