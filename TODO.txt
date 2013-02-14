@@ -2,8 +2,6 @@
 -Make Showcase app available live (on AppEngine)
 
 -Additional "internal" events:
-	-tab changed (selected) use ETYPE_CHANGE
-	-expander changed (expanded, collapsed) ETYPE_CHANGE
 	-link activated (maybe this is already covered with ETYPE_ONCLICK? check it!)
 	-image loaded/failed
 
@@ -14,7 +12,7 @@
 -Add possibility to serve static content, so users can register a folder to
 	server their images, custom css and js. 
 
--Implement Comp.RemoveEHandler() and Comp.RemoveEHandlerFunc() (and use it when removing Tabs...)
+-Implement Comp.RemoveEHandler() and Comp.RemoveEHandlerFunc() (and use it when removing tabs or expander headers...)
 
 -New components:
 	-new comps for input type (problem: weak support, mostly just by Chrome and Opera): date; color; range (jslider) 
