@@ -239,9 +239,6 @@ func (c *compImpl) AddEHandlerFunc(hf func(e Event), etypes ...EventType) {
 }
 
 func (c *compImpl) HandlersCount(etype EventType) int {
-	if c.handlers == nil {
-		return 0
-	}
 	return len(c.handlers[etype])
 }
 
@@ -279,14 +276,15 @@ var (
 // rendrenderEventHandlers renders the event handlers as attributes.
 func (c *compImpl) renderEHandlers(w writer) {
 	for etype, _ := range c.handlers {
-		if etype.Win() {
+		etypeAttr := etypeAttrs[etype]
+		if len(etypeAttr) == 0 { // Only general events are added to the etypeAttrs map
 			continue
 		}
-		
-		// To render                 : " <etypeAttrs>=\"se(event,etype,compId,value)\""
+
+		// To render                 : " <etypeAttr>=\"se(event,etype,compId,value)\""
 		// Example (checkbox onclick): " onclick=\"se(event,0,4327,this.checked)\""
 		w.Write(_STR_SPACE)
-		w.Write(etypeAttrs[etype])
+		w.Write(etypeAttr)
 		w.Write(_STR_SE_PREFIX)
 		w.Writev(int(etype))
 		w.Write(_STR_COMMA)
@@ -305,9 +303,6 @@ func (b *compImpl) preprocessEvent(event Event, r *http.Request) {
 }
 
 func (c *compImpl) dispatchEvent(e Event) {
-	if c.handlers == nil {
-		return
-	}
 	for _, handler := range c.handlers[e.Type()] {
 		handler.HandleEvent(e)
 	}

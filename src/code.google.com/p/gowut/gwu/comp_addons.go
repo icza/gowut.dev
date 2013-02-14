@@ -251,9 +251,6 @@ func (c *cellFmtImpl) Style() Style {
 }
 
 func (c *cellFmtImpl) attr(name string) string {
-	if c.attrs == nil {
-		return ""
-	}
 	return c.attrs[name]
 }
 
@@ -293,10 +290,8 @@ var _STR_VALIGN = []byte("vertical-align:") // "vertical-align:"
 func (c *cellFmtImpl) renderWithAligns(tag []byte, halign HAlign, valign VAlign, w writer) {
 	w.Write(tag)
 
-	if c.attrs != nil {
-		for name, value := range c.attrs {
-			w.WriteAttr(name, value)
-		}
+	for name, value := range c.attrs {
+		w.WriteAttr(name, value)
 	}
 
 	if halign != HA_DEFAULT {

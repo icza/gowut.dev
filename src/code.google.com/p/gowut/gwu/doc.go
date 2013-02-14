@@ -116,10 +116,11 @@ position in case of a mouse event etc.). 2) The Event is an accessor to the
 Session associated with the client the event is originating from. Through
 the event an event handler may access the current Session, create a new
 Session or may remove it (invalidate it). 3) The event is also used
-to define actions to be executed (automatically by Gowut) after the  event
-handling. For example if the event handler changes a component, the handler
-has to mark it dirty causing it to be re-rendered in the client browser,
-or an event handler can change the focused component, or reload another window.
+to define actions to be executed (automatically by Gowut) after the event
+handling (post-event actions). For example if the event handler changes
+a component, the handler has to mark it dirty causing it to be re-rendered
+in the client browser, or an event handler can change the focused component,
+or reload another window.
 
 Creating a session from an event handler during event dispatching requires
 a public window and an event source component (e.g. a Button).
