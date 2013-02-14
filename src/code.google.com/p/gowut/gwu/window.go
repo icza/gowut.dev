@@ -119,14 +119,14 @@ func (s *windowImpl) SetTheme(theme string) {
 
 func (c *windowImpl) Render(w writer) {
 	// Attaching window events is outside of the HTML tag denoted by the window's id.
-	// This means if the window is re-rendered (reloaded), changed window event handlers
+	// This means if the window is re-rendered (not reloaded), changed window event handlers
 	// will not be reflected.
 	// This also avoids the effect of registering the event sender functions multiple times.
 
 	// First render window event handlers as window functions.
 	found := false
 	for etype, _ := range c.handlers {
-		if !etype.Win() {
+		if etype.Category() != ECAT_WINDOW {
 			continue
 		}
 		
@@ -134,9 +134,9 @@ func (c *windowImpl) Render(w writer) {
 			found = true
 			w.Writes("<script>")
 		}
-		// To render       : add<etypeAttr>(function(){se(null,etype,id);});
+		// To render       : add<etypeFunc>(function(){se(null,etype,id);});
 		// Example (onload): addonload(function(){se(null,13,4327);});
-		w.Writevs("add", etypeAttrs[etype], "(function(){se(null,", int(etype), ",", int(c.id), ");});")
+		w.Writevs("add", etypeFuncs[etype], "(function(){se(null,", int(etype), ",", int(c.id), ");});")
 	}
 	if found {
 		w.Writes("</script>")

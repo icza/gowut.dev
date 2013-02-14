@@ -50,6 +50,18 @@ func buildExpanderDemo() gwu.Comp {
 	e.SetHeader(gwu.NewLabel("I'm an Expander. Click on me to expand."))
 	e.SetContent(gwu.NewLabel("I'm the content of the Expander."))
 	p.Add(e)
+	p.AddVSpace(10)
+	l := gwu.NewLabel("")
+	l.Style().SetColor(gwu.CLR_GREEN)
+	p.Add(l)
+	e.AddEHandlerFunc(func(ev gwu.Event) {
+		if e.Expanded() {
+			l.SetText("You expanded it.")
+		} else {
+			l.SetText("You collapsed it.")
+		}
+		ev.MarkDirty(l)
+	}, gwu.ETYPE_STATE_CHANGE)
 
 	p.AddVSpace(20)
 	var ee gwu.Expander
@@ -221,7 +233,15 @@ func buildTabPanelDemo() gwu.Comp {
 	}, gwu.ETYPE_CLICK)
 	p.Add(fix)
 
-	p.AddVSpace(15)
+	p.AddVSpace(10)
+	l := gwu.NewLabel("")
+	l.Style().SetColor(gwu.CLR_GREEN)
+	p.Add(l)
+	t.AddEHandlerFunc(func(e gwu.Event) {
+		l.SetText("Clicked on tab: " + strconv.Itoa(t.Selected()))
+		e.MarkDirty(l)
+	}, gwu.ETYPE_STATE_CHANGE)
+	p.AddVSpace(10)
 	c := gwu.NewPanel()
 	c.Add(gwu.NewLabel("This is a TabPanel."))
 	c.Add(gwu.NewLabel("Click on other tabs to see their content."))
@@ -565,6 +585,14 @@ type pdemo *demo
 func buildShowcaseWin(sess gwu.Session) {
 	win := gwu.NewWindow("show", "Showcase of Features - Gowut")
 	win.Style().SetFullSize()
+	win.AddEHandlerFunc(func(e gwu.Event) {
+		switch e.Type() {
+		case gwu.ETYPE_WIN_LOAD:
+			fmt.Println("LOADING window:", e.Src().Id())
+		case gwu.ETYPE_WIN_UNLOAD:
+			fmt.Println("UNLOADING window:", e.Src().Id())
+		}
+	}, gwu.ETYPE_WIN_LOAD, gwu.ETYPE_WIN_UNLOAD)
 
 	header := gwu.NewHorizontalPanel()
 	header.Style().SetFullWidth().SetBorderBottom2(2, gwu.BRD_STYLE_SOLID, "#777777")

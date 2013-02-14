@@ -1,7 +1,9 @@
 
+-Make Showcase app available live (on AppEngine)
+
 -Additional "internal" events:
-	-tab changed (selected)
-	-expander changed (expanded, collapsed)
+	-tab changed (selected) use ETYPE_CHANGE
+	-expander changed (expanded, collapsed) ETYPE_CHANGE
 	-link activated (maybe this is already covered with ETYPE_ONCLICK? check it!)
 	-image loaded/failed
 

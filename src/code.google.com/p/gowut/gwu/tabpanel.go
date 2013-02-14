@@ -88,6 +88,11 @@ const (
 // alignments for individual tab components using TabBar().CellFmt(). You can also set
 // other cell formatting applied to the tab bar using TabBarFmt() method.
 // 
+// You can register ETYPE_STATE_CHANGE event handlers which will be called when the user
+// changes tab selection by clicking on a tab. The event source will be the tab panel.
+// The event will have a parent event whose source will be the clicked tab and will
+// contain the mouse coordinates.
+// 
 // Default style classes: "gwu-TabPanel", "gwu-TabPanel-Content"
 type TabPanel interface {
 	// TabPanel is a Container.
@@ -265,10 +270,13 @@ func (c *tabPanelImpl) Add(tab, content Comp) {
 		c.SetSelected(0)
 	}
 
-	// TODO would be nice to remove this internal handler func when a tab is removed!
+	// TODO would be nice to remove this internal handler func when the tab is removed!
 	tab.AddEHandlerFunc(func(e Event) {
 		c.SetSelected(c.CompIdx(content))
 		e.MarkDirty(c)
+		if c.handlers[ETYPE_STATE_CHANGE] != nil {
+			c.dispatchEvent(e.forkEvent(ETYPE_STATE_CHANGE, c))
+		}
 	}, ETYPE_CLICK)
 }
 
