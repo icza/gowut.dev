@@ -65,6 +65,11 @@ AJAX technology is used also to refresh some parts (components) that
 change (during event handling) without having to reload the whole page
 to see the changes.
 
+To quickly test it and see it in action, run the "Showcase of Features"
+application by typing: (assuming you're in the root of your GOPATH)
+
+	go run src/code.google.com/p/gowut/examples/showcase.go
+
 
 Features of Gowut
 

@@ -46,14 +46,14 @@ func buildHomeDemo() gwu.Comp {
 func buildExpanderDemo() gwu.Comp {
 	p := gwu.NewPanel()
 
-	e := gwu.NewExpander()
-	e.SetHeader(gwu.NewLabel("I'm an Expander. Click on me to expand."))
-	e.SetContent(gwu.NewLabel("I'm the content of the Expander."))
-	p.Add(e)
-	p.AddVSpace(10)
-	l := gwu.NewLabel("")
+	l := gwu.NewLabel("Click on the Expander's header.")
 	l.Style().SetColor(gwu.CLR_GREEN)
 	p.Add(l)
+	p.AddVSpace(5)
+	e := gwu.NewExpander()
+	e.SetHeader(gwu.NewLabel("I'm an Expander."))
+	e.SetContent(gwu.NewLabel("I'm the content of the Expander."))
+	p.Add(e)
 	e.AddEHandlerFunc(func(ev gwu.Event) {
 		if e.Expanded() {
 			l.SetText("You expanded it.")
