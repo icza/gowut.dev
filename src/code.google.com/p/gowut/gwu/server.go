@@ -516,13 +516,24 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 		path = parts[1]
 	}
 
+	rwMutex := sess.rwMutex()
+
 	switch path {
 	case _PATH_EVENT:
+		rwMutex.Lock()
+		defer rwMutex.Unlock()
+
 		s.handleEvent(sess, win, w, r)
 	case _PATH_RENDER_COMP:
+		rwMutex.RLock()
+		defer rwMutex.RUnlock()
+
 		// Render just a component
 		s.renderComp(win, w, r)
 	default:
+		rwMutex.RLock()
+		defer rwMutex.RUnlock()
+
 		// Render the whole window
 		win.RenderWin(NewWriter(w), s)
 	}

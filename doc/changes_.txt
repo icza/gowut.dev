@@ -8,6 +8,9 @@ Changes and new features in 0.8.0:
 * A new event type in the ECAT_INTERNAL category: ETYPE_STATE_CHANGE. This is an internal event type which is related to state changes in component internals such as changing selected tab (TabPanel) or expanding/collapsing an Expander. 
   These internal events usually have a parent event designating the source sub-component (such as a tab or the header of an expander) and the mouse coordinates for example.
 
+-Event sending from clients are now asynchronous (instead of synchronous). The GUI Server implements proper RW locking.
+Component re-rendering is still synchronous (to avoid browser specific DOM rendering errors).
+
 -Set a max age for the gwu session id cookie.
 
 -More optimization.

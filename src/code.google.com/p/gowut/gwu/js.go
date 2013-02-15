@@ -68,12 +68,12 @@ function createXmlHttp() {
 function se(event, etype, compId, compValue) {
 	var xmlhttp = createXmlHttp();
 	
-	xmlhttp.onreadystatechange=function() {
+	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
 			procEresp(xmlhttp);
 	}
 	
-	xmlhttp.open("POST", _pathEvent, false); // synch call
+	xmlhttp.open("POST", _pathEvent, true); // asynch call
 	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	
 	var data="";
@@ -154,9 +154,9 @@ function rerenderComp(compId) {
 	if (!e) // Component removed or not visible (e.g. on inactive tab of TabPanel)
 		return;
 	
-	var xmlhttp=createXmlHttp();
+	var xmlhttp = createXmlHttp();
 	
-	xmlhttp.onreadystatechange=function() {
+	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			// Remember focused comp which might be replaced here:
 			var focusedCompId = document.activeElement.id;
@@ -165,7 +165,7 @@ function rerenderComp(compId) {
 		}
 	}
 	
-	xmlhttp.open("POST", _pathRenderComp, false); // synch call
+	xmlhttp.open("POST", _pathRenderComp, false); // synch call (if async, browser specific DOM rendering errors may arise)
 	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	
 	xmlhttp.send(_pCompId + "=" + compId);
