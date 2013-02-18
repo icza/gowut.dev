@@ -9,9 +9,6 @@
 
 -ImageButton or SetImage() method for Button
 
--Add possibility to serve static content, so users can register a folder to
-	server their images, custom css and js. 
-
 -Implement Comp.RemoveEHandler() and Comp.RemoveEHandlerFunc() (and use it when removing tabs or expander headers...)
 
 -New components:

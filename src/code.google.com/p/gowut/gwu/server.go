@@ -19,6 +19,7 @@
 package gwu
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -121,12 +122,23 @@ type Server interface {
 	//		func (h MySessHanlder) Created(s gwu.Session) {
 	//			win := gwu.NewWindow("login", "Login Window")
 	//			// ...add content to the login window...
-	// 			session.AddWindow(win)
+	// 			s.AddWindow(win)
 	// 		}
 	AddSessCreatorName(name, text string)
 
 	// AddSHandler adds a new session handler.
 	AddSHandler(handler SessionHandler)
+
+	// AddStaticDir registers a directory whose content (files) recursively
+	// will be served by the server when requested.
+	// path is an app-path relative path to address a file, dir is the root directory
+	// to search in.
+	// 
+	// Example:
+	//     AddStaticDir("img", "/tmp/myimg")
+	// And then the request "/appname/img/faces/happy.gif" will serve "/tmp/myimg/faces/happy.gif".
+	// Note that the app name must be included in the request path!
+	AddStaticDir(path, dir string) error
 
 	// Theme returns the default CSS theme of the server.
 	Theme() string
@@ -144,6 +156,8 @@ type Server interface {
 	// Sessionless window names may be specified as optional parameters
 	// that will be opened in the default browser.
 	// Tip: Pass an empty string to open the window list.
+	// Tip: Not passing any window names will start the server silently
+	// without opening any windows.
 	Start(openWins ...string) error
 }
 
@@ -324,6 +338,30 @@ func (s *serverImpl) sessCleaner() {
 
 		time.Sleep(sleep)
 	}
+}
+
+func (s *serverImpl) AddStaticDir(path, dir string) error {
+	if strings.HasPrefix(path, "/") {
+		path = path[1:]
+	}
+
+	if len(path) == 0 {
+		return errors.New("path cannot be empty string!")
+	}
+
+	if !strings.HasSuffix(path, "/") {
+		path += "/"
+	}
+
+	path = s.appPath + path
+
+	if path == s.appPath+_PATH_STATIC {
+		return errors.New("path cannot be '" + _PATH_STATIC + "' (reserved)!")
+	}
+
+	http.Handle(path, http.StripPrefix(path, http.FileServer(http.Dir(dir))))
+
+	return nil
 }
 
 func (s *serverImpl) Theme() string {

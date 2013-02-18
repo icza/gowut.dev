@@ -129,7 +129,7 @@ func (c *windowImpl) Render(w writer) {
 		if etype.Category() != ECAT_WINDOW {
 			continue
 		}
-		
+
 		if !found {
 			found = true
 			w.Writes("<script>")
