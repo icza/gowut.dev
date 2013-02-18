@@ -1,4 +1,10 @@
 
+-Finish the Timer page of the showcase app.
+
+-Create FAQ, questions:
+	-How can I add/include my (external) custom CSS file?
+	-How can I periodically refresh a component?
+
 -Make Showcase app available live (on AppEngine)
 
 -Additional "internal" events:
@@ -15,6 +21,7 @@
 	-new comps for input type (problem: weak support, mostly just by Chrome and Opera): date; color; range (jslider) 
 	-SuggestBox
 	-Absolute Panel
+	-Dialogs/Popups
 	-Slider
 	-iframe, in the showcase app it should link/contain the source code of the showcase app! 
 	-ProgressBar
@@ -33,7 +40,6 @@ Also display an error icon if an ajax call fails, gather messages and list them 
 
 -Ability to "push" from server to client (not just when an event is received).
 	-websocket?
-	-Timer component which periodically sends an event?
 
 -Somehow save window state and reload. (serialization)
 

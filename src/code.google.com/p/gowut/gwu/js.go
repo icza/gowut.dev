@@ -162,6 +162,13 @@ function rerenderComp(compId) {
 			var focusedCompId = document.activeElement.id;
 			e.outerHTML = xmlhttp.responseText;
 			focusComp(focusedCompId);
+			
+			// Inserted JS code is not executed automatically, do it manually:
+			// Have to "re-get" element by compId!
+			var scripts = document.getElementById(compId).getElementsByTagName("script");
+			for (var i = 0; i < scripts.length; i++) {
+				eval(scripts[i].innerText);
+			}
 		}
 	}
 	
@@ -234,6 +241,40 @@ function addonbeforeunload(func) {
 			func();
 		}
 	}
+}
+
+var timers = new Object();
+
+function setupTimer(compId, etype, timeout, repeat, active, reset) {
+	var timer = timers[compId];
+	
+	if (timer != null) {
+		var changed = timer.timeout != timeout || timer.repeat != repeat || timer.reset != reset;
+		if (!active || changed) {
+			if (timer.repeat)
+				clearInterval(timer.id);
+			else
+				clearTimeout(timer.id);
+			timers[compId] = null;
+		}
+		if (!changed)
+			return;
+	}
+	if (!active)
+		return;
+	
+	// Create new timer
+	timers[compId] = timer = new Object();
+	timer.timeout = timeout;
+	timer.repeat = repeat;
+	timer.reset = reset;
+	
+	// Start the timer
+	var js = "se(null," + etype + "," + compId + ");";
+	if (timer.repeat)
+		timer.id = setInterval(js, timeout);
+	else
+		timer.id = setTimeout(js, timeout);
 }
 
 // INITIALIZATION

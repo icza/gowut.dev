@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 )
 
 // plural returns an empty string if i is equal to 1,
@@ -575,6 +576,76 @@ func buildLinkDemo() gwu.Comp {
 	return p
 }
 
+func buildTimerDemo() gwu.Comp {
+	p := gwu.NewPanel()
+	p.SetCellPadding(3)
+
+	p.Add(gwu.NewLabel("A Timer is used to detonate a bomb after 3 seconds."))
+	p.AddVSpace(10)
+	defText := "You can defuse the bomb with the button below. Tick... Tack..."
+	l := gwu.NewLabel(defText)
+	p.Add(l)
+	t := gwu.NewTimer(3 * time.Second)
+	b := gwu.NewButton("Defuse!")
+	t.AddEHandlerFunc(func(e gwu.Event) {
+		l.SetText("BOOOOM! You were too slow!")
+		l.Style().SetColor(gwu.CLR_RED)
+		b.SetEnabled(false)
+		e.MarkDirty(l, b)
+	}, gwu.ETYPE_STATE_CHANGE)
+	p.Add(t)
+	row := gwu.NewHorizontalPanel()
+	b.AddEHandlerFunc(func(e gwu.Event) {
+		t.SetActive(false)
+		l.SetText("Bomb defused! Phew! Good Job!")
+		l.Style().SetColor(gwu.CLR_GREEN)
+		b.SetEnabled(false)
+		e.MarkDirty(t, l, b)
+	}, gwu.ETYPE_CLICK)
+	row.Add(b)
+	b2 := gwu.NewButton("Plant a new Bomb!")
+	b2.AddEHandlerFunc(func(e gwu.Event) {
+		t.SetActive(true)
+		t.Reset()
+		l.SetText(defText)
+		l.Style().SetColor("")
+		b.SetEnabled(true)
+		e.MarkDirty(t, l, b)
+	}, gwu.ETYPE_CLICK)
+	row.Add(b2)
+	p.Add(row)
+
+	p.AddVSpace(20)
+	p.Add(gwu.NewLabel("A Timer is used to refresh the time below repeatedly in every second for 20 seconds."))
+	tl := gwu.NewLabel("")
+	p.Add(tl)
+	t2 := gwu.NewTimer(time.Second)
+	t2.SetRepeat(true)
+	counter := 20
+	t2.AddEHandlerFunc(func(e gwu.Event) {
+		counter--
+		tl.SetText(time.Now().Format("15:04:05") + " (" + strconv.Itoa(counter) + " remaining)")
+		e.MarkDirty(tl)
+		if counter == 0 {
+			t2.SetActive(false)
+			e.MarkDirty(t2)
+		}
+	}, gwu.ETYPE_STATE_CHANGE)
+	// TODO if another menu item is clicked, all future timeouts will result in an error
+	// (component not found, since it is removed => coutner will not get decreased =>
+	// never "expires"). Add timer to higher level, like to the win?
+	p.Add(t2)
+	b3 := gwu.NewButton("Restart")
+	b3.AddEHandlerFunc(func(e gwu.Event) {
+		counter = 20
+		t2.SetActive(true)
+		e.MarkDirty(t2)
+	}, gwu.ETYPE_CLICK)
+	p.Add(b3)
+
+	return p
+}
+
 type demo struct {
 	link      gwu.Label
 	buildFunc func() gwu.Comp
@@ -707,6 +778,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	createDemo("Image", buildImageDemo)
 	createDemo("Label", buildLabelDemo)
 	createDemo("Link", buildLinkDemo)
+	createDemo("Timer", buildTimerDemo)
 	links.AddVConsumer()
 	setNoWrap(links)
 	content.Add(links)
