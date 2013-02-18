@@ -54,7 +54,8 @@ var (
 	_STR_CLASS = []byte(" class=\"") // " class=\""
 	_STR_ALIGN = []byte(" align=\"") // " align=\""
 
-	_STR_INTS [_CACHED_INTS][]byte // Numbers
+	_STR_INTS  [_CACHED_INTS][]byte                                            // Numbers
+	_STR_BOOLS = map[bool][]byte{false: []byte("false"), true: []byte("true")} // Bools
 )
 
 // init initializes the cached ints.
@@ -89,6 +90,8 @@ func (w writer) Writev(v interface{}) (n int, err error) {
 		return w.Write(v2)
 	case fmt.Stringer:
 		return w.Write([]byte(v2.String()))
+	case bool:
+		return w.Write(_STR_BOOLS[v2])
 	}
 
 	fmt.Printf("Not supported type: %T\n", v)
