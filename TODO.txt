@@ -1,4 +1,6 @@
 
+-Include ohlow widgets in the Html demo of the showcase app? https://www.ohloh.net/p/gowut/widgets
+
 -New param when sending/receiving actions: start cycle to detect if server was restarted.
 
 -Make Showcase app available live (on AppEngine)
