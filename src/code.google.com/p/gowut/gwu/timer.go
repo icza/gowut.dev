@@ -29,10 +29,10 @@ import (
 // 
 // Note that receiving an event from a Timer (like from any other components)
 // updates the last accessed property of the associated session, causing
-// a session never to expire if there is are active timers on repeat at the
+// a session never to expire if there are active timers on repeat at the
 // client side.
 // 
-// Also note that the Timer component operates on the client side meaning
+// Also note that the Timer component operates at the client side meaning
 // if the client is closed (or navigates away), events will not be generated.
 // (This can also be used to detect if a Window is still open.)
 type Timer interface {
@@ -55,6 +55,8 @@ type Timer interface {
 	Repeat() bool
 
 	// SetRepeat sets if the timer is on repeat.
+	// If timer is on repeat, events will be generated periodically after
+	// each timeout.
 	SetRepeat(repeat bool)
 
 	// Active tells if the timer is active.

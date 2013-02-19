@@ -580,7 +580,7 @@ func buildTimerDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 	p.SetCellPadding(3)
 
-	// Add timers to the hidden (but always attached) panel instead of our panel
+	// Add timers to a panel which is always attached instead of our panel
 	// because the user can switch to another component demo causing this panel to be removed
 	// and that way timer events would address components that are not part of the window (returning error).
 	hiddenPan := event.Session().Attr("hiddenPan").(gwu.Panel)
