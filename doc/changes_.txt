@@ -15,8 +15,11 @@ Component re-rendering is still synchronous (to avoid browser specific DOM rende
 For example you can place your images, custom CSS files and any other static content in a folder, tell the Server about this folder with the AddStaticDir() method,
 and you can reference these files in your components.  
 
--A new component: Timer. You can use this to generate a timed event or timed events periodically. You can use this to refresh other components periodically for example.
+-A new component: Timer. You can use this to generate a timed event or a series of timed events periodically.
+Practical uses include refreshing a component periodically, or checking if a Window is still open.
 
 -Set a max age for the gwu session id cookie (to preserve session id after browser restart).
 
--More optimization.
+-The 'Showcase of Features' example app has been updated to demonstrate the new features.
+
+-Other minor changes, improvements and more optimization.

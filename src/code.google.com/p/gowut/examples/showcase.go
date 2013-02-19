@@ -34,7 +34,7 @@ func plural(i int) string {
 	return "s"
 }
 
-func buildHomeDemo() gwu.Comp {
+func buildHomeDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("This app is written in and showcases Gowut version " + gwu.GOWUT_VERSION + "."))
@@ -44,7 +44,7 @@ func buildHomeDemo() gwu.Comp {
 	return p
 }
 
-func buildExpanderDemo() gwu.Comp {
+func buildExpanderDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	l := gwu.NewLabel("Click on the Expander's header.")
@@ -81,7 +81,7 @@ func buildExpanderDemo() gwu.Comp {
 	return p
 }
 
-func buildLinkContainerDemo() gwu.Comp {
+func buildLinkContainerDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	link := gwu.NewLink("An obvious link, to Google Home", "https://google.com/")
@@ -95,7 +95,7 @@ func buildLinkContainerDemo() gwu.Comp {
 	return p
 }
 
-func buildPanelDemo() gwu.Comp {
+func buildPanelDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("Panel with horizontal layout:"))
@@ -124,7 +124,7 @@ func buildPanelDemo() gwu.Comp {
 	return p
 }
 
-func buildTableDemo() gwu.Comp {
+func buildTableDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	l := gwu.NewLabel("Tip: Switch to the 'debug' theme (top right) to see cell borders.")
@@ -181,7 +181,7 @@ func buildTableDemo() gwu.Comp {
 	return p
 }
 
-func buildTabPanelDemo() gwu.Comp {
+func buildTabPanelDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	t := gwu.NewTabPanel()
@@ -235,7 +235,7 @@ func buildTabPanelDemo() gwu.Comp {
 	p.Add(fix)
 
 	p.AddVSpace(10)
-	l := gwu.NewLabel("")
+	l := gwu.NewLabel("Click on tabs...")
 	l.Style().SetColor(gwu.CLR_GREEN)
 	p.Add(l)
 	t.AddEHandlerFunc(func(e gwu.Event) {
@@ -275,7 +275,7 @@ func buildTabPanelDemo() gwu.Comp {
 	return p
 }
 
-func buildWindowDemo() gwu.Comp {
+func buildWindowDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("The Window represents the whole window, the page inside the browser."))
@@ -285,7 +285,7 @@ func buildWindowDemo() gwu.Comp {
 	return p
 }
 
-func buildCheckBoxDemo() gwu.Comp {
+func buildCheckBoxDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	suml := gwu.NewLabel("")
@@ -316,7 +316,7 @@ func buildCheckBoxDemo() gwu.Comp {
 	return p
 }
 
-func buildListBoxDemo() gwu.Comp {
+func buildListBoxDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	row := gwu.NewHorizontalPanel()
@@ -354,7 +354,7 @@ func buildListBoxDemo() gwu.Comp {
 	return p
 }
 
-func buildTextBoxDemo() gwu.Comp {
+func buildTextBoxDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("Enter your name (max 15 characters):"))
@@ -393,7 +393,7 @@ func buildTextBoxDemo() gwu.Comp {
 	return p
 }
 
-func buildPasswBoxDemo() gwu.Comp {
+func buildPasswBoxDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("Enter your password:"))
@@ -402,7 +402,7 @@ func buildPasswBoxDemo() gwu.Comp {
 	return p
 }
 
-func buildRadioButtonDemo() gwu.Comp {
+func buildRadioButtonDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("Select your favorite programming language:"))
@@ -430,7 +430,7 @@ func buildRadioButtonDemo() gwu.Comp {
 	return p
 }
 
-func buildSwitchButtonDemo() gwu.Comp {
+func buildSwitchButtonDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 	p.SetCellPadding(1)
 
@@ -458,7 +458,7 @@ func buildSwitchButtonDemo() gwu.Comp {
 	return p
 }
 
-func buildButtonDemo() gwu.Comp {
+func buildButtonDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	l := gwu.NewLabel("")
@@ -490,7 +490,7 @@ func buildButtonDemo() gwu.Comp {
 	return p
 }
 
-func buildHtmlDemo() gwu.Comp {
+func buildHtmlDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	html := "<span onclick=\"alert('Hi from Html!');\">Hi! I'm inserted as HTML. Click on me!</span>"
@@ -509,7 +509,7 @@ func buildHtmlDemo() gwu.Comp {
 	return p
 }
 
-func buildImageDemo() gwu.Comp {
+func buildImageDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("Google's logo:"))
@@ -526,7 +526,7 @@ func buildImageDemo() gwu.Comp {
 	return p
 }
 
-func buildLabelDemo() gwu.Comp {
+func buildLabelDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("This is a Label."))
@@ -553,7 +553,7 @@ func buildLabelDemo() gwu.Comp {
 	return p
 }
 
-func buildLinkDemo() gwu.Comp {
+func buildLinkDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 	p.SetCellPadding(3)
 
@@ -576,9 +576,14 @@ func buildLinkDemo() gwu.Comp {
 	return p
 }
 
-func buildTimerDemo() gwu.Comp {
+func buildTimerDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 	p.SetCellPadding(3)
+
+	// Add timers to the hidden (but always attached) panel instead of our panel
+	// because the user can switch to another component demo causing this panel to be removed
+	// and that way timer events would address components that are not part of the window (returning error).
+	hiddenPan := event.Session().Attr("hiddenPan").(gwu.Panel)
 
 	p.Add(gwu.NewLabel("A Timer is used to detonate a bomb after 3 seconds."))
 	p.AddVSpace(10)
@@ -593,7 +598,7 @@ func buildTimerDemo() gwu.Comp {
 		b.SetEnabled(false)
 		e.MarkDirty(l, b)
 	}, gwu.ETYPE_STATE_CHANGE)
-	p.Add(t)
+	hiddenPan.Add(t)
 	row := gwu.NewHorizontalPanel()
 	b.AddEHandlerFunc(func(e gwu.Event) {
 		t.SetActive(false)
@@ -616,39 +621,38 @@ func buildTimerDemo() gwu.Comp {
 	p.Add(row)
 
 	p.AddVSpace(20)
-	p.Add(gwu.NewLabel("A Timer is used to refresh the time below repeatedly in every second for 20 seconds."))
+	p.Add(gwu.NewLabel("A Timer is used to refresh the time below repeatedly in every second for half a minute."))
 	tl := gwu.NewLabel("")
 	p.Add(tl)
 	t2 := gwu.NewTimer(time.Second)
 	t2.SetRepeat(true)
-	counter := 20
+	counter := 30
 	t2.AddEHandlerFunc(func(e gwu.Event) {
 		counter--
-		tl.SetText(time.Now().Format("15:04:05") + " (" + strconv.Itoa(counter) + " remaining)")
+		tl.SetText(fmt.Sprintf("%s (%d remaining)", time.Now().Format("2006-01-02 15:04:05"), counter))
 		e.MarkDirty(tl)
-		if counter == 0 {
+		if counter <= 0 {
 			t2.SetActive(false)
 			e.MarkDirty(t2)
 		}
 	}, gwu.ETYPE_STATE_CHANGE)
-	// TODO if another menu item is clicked, all future timeouts will result in an error
-	// (component not found, since it is removed => coutner will not get decreased =>
-	// never "expires"). Add timer to higher level, like to the win?
-	p.Add(t2)
+	hiddenPan.Add(t2)
 	b3 := gwu.NewButton("Restart")
 	b3.AddEHandlerFunc(func(e gwu.Event) {
-		counter = 20
+		counter = 30
 		t2.SetActive(true)
 		e.MarkDirty(t2)
 	}, gwu.ETYPE_CLICK)
 	p.Add(b3)
+
+	event.MarkDirty(hiddenPan)
 
 	return p
 }
 
 type demo struct {
 	link      gwu.Label
-	buildFunc func() gwu.Comp
+	buildFunc func(gwu.Event) gwu.Comp
 	comp      gwu.Comp // Lazily initialized demo comp
 }
 type pdemo *demo
@@ -664,6 +668,9 @@ func buildShowcaseWin(sess gwu.Session) {
 			fmt.Println("UNLOADING window:", e.Src().Id())
 		}
 	}, gwu.ETYPE_WIN_LOAD, gwu.ETYPE_WIN_UNLOAD)
+
+	hiddenPan := gwu.NewNaturalPanel()
+	sess.SetAttr("hiddenPan", hiddenPan)
 
 	header := gwu.NewHorizontalPanel()
 	header.Style().SetFullWidth().SetBorderBottom2(2, gwu.BRD_STYLE_SOLID, "#777777")
@@ -718,10 +725,10 @@ func buildShowcaseWin(sess gwu.Session) {
 			demoWrapper.Remove(selDemo.comp)
 		}
 		selDemo = d
-		d.link.Style().SetBackground("#aaffaa")
+		d.link.Style().SetBackground("#88ff88")
 		demoTitle.SetText(d.link.Text())
 		if d.comp == nil {
-			d.comp = d.buildFunc()
+			d.comp = d.buildFunc(e)
 		}
 		demoWrapper.Add(d.comp)
 		if e != nil {
@@ -729,7 +736,7 @@ func buildShowcaseWin(sess gwu.Session) {
 		}
 	}
 
-	createDemo := func(name string, buildFunc func() gwu.Comp) pdemo {
+	createDemo := func(name string, buildFunc func(gwu.Event) gwu.Comp) pdemo {
 		link := gwu.NewLabel(name)
 		link.Style().SetFullWidth().SetCursor(gwu.CURSOR_POINTER).SetDisplay(gwu.DISPLAY_BLOCK).SetColor(gwu.CLR_BLUE)
 		demo := &demo{link: link, buildFunc: buildFunc}
@@ -790,6 +797,7 @@ func buildShowcaseWin(sess gwu.Session) {
 
 	footer := gwu.NewHorizontalPanel()
 	footer.Style().SetFullWidth().SetBorderTop2(2, gwu.BRD_STYLE_SOLID, "#777777")
+	footer.Add(hiddenPan)
 	footer.AddHConsumer()
 	l = gwu.NewLabel("Copyright © 2013 András Belicza. All rights reserved.")
 	l.Style().SetFontStyle(gwu.FONT_STYLE_ITALIC).SetFontSize("95%")
@@ -822,7 +830,7 @@ func (h SessHandler) Created(s gwu.Session) {
 func (h SessHandler) Removed(s gwu.Session) {}
 
 func main() {
-	// Allow app control from command line:
+	// Allow app control from command line (in co-operation with the starter script):
 	fmt.Println("Type 'r' to restart, 'e' to exit.")
 	go func() {
 		var cmd string
