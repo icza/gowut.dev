@@ -1,5 +1,5 @@
 
--Finish the Timer page of the showcase app.
+-New param when sending/receiving actions: start cycle to detect if server was restarted.
 
 -Create FAQ, questions:
 	-How can I add/include my (external) custom CSS file?

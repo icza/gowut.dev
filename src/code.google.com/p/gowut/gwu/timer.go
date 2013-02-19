@@ -22,10 +22,19 @@ import (
 )
 
 // Timer interface defines a component which can generate a timed event
-// or timed events periodically.
+// or a series of timed events periodically.
 // 
 // Timers don't have a visual part, they are used only to generate events.
 // The generated events are of type ETYPE_STATE_CHANGE.
+// 
+// Note that receiving an event from a Timer (like from any other components)
+// updates the last accessed property of the associated session, causing
+// a session never to expire if there is are active timers on repeat at the
+// client side.
+// 
+// Also note that the Timer component operates on the client side meaning
+// if the client is closed (or navigates away), events will not be generated.
+// (This can also be used to detect if a Window is still open.)
 type Timer interface {
 	// Timer is a component.
 	Comp
@@ -35,7 +44,7 @@ type Timer interface {
 
 	// SetTimeout sets the timeout of the timer.
 	// Event will be generated after the timeout period. If timer is on repeat,
-	// events wil be generated periodically after each timeout.
+	// events will be generated periodically after each timeout.
 	// 
 	// Note: while this method allows you to pass an arbitrary time.Duration,
 	// implementation might be using less precision (most likely millisecond).
@@ -52,6 +61,8 @@ type Timer interface {
 	Active() bool
 
 	// SetActive sets if the timer is active.
+	// If the timer is not active, events will not be generated.
+	// If a timer is deactivated and activated again, its countdown is reset.
 	SetActive(active bool)
 
 	// Reset will cause the timer to restart/reschedule.
