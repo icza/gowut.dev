@@ -1,10 +1,6 @@
 
 -New param when sending/receiving actions: start cycle to detect if server was restarted.
 
--Create FAQ, questions:
-	-How can I add/include my (external) custom CSS file?
-	-How can I periodically refresh a component?
-
 -Make Showcase app available live (on AppEngine)
 
 -Additional "internal" events:
