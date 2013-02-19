@@ -493,7 +493,7 @@ func buildButtonDemo(event gwu.Event) gwu.Comp {
 func buildHtmlDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
-	html := "<span onclick=\"alert('Hi from Html!');\">Hi! I'm inserted as HTML. Click on me!</span>"
+	html := `<span onclick="alert('Hi from Html!');">Hi! I'm inserted as HTML. Click on me!</span>`
 
 	p.Add(gwu.NewLabel("The following HTML code is inserted after the text box as an Html component:"))
 	ta := gwu.NewTextBox(html)
