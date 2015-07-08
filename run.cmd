@@ -3,7 +3,7 @@ call setgopath.cmd
 
 :cycle
 
-go run src/code.google.com/p/gowut/examples/showcase.go
+go run src/github.com/icza/gowut/examples/showcase/showcase.go
 
 rem ERRORLEVEL tests greater than or equal condition (not equal)
 

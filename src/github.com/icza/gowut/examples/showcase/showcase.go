@@ -18,7 +18,7 @@
 package main
 
 import (
-	"code.google.com/p/gowut/gwu"
+	"github.com/icza/gowut/gwu"
 	"fmt"
 	"os"
 	"strconv"
@@ -558,7 +558,7 @@ func buildLinkDemo(event gwu.Event) gwu.Comp {
 	p.SetCellPadding(3)
 
 	p.Add(gwu.NewLink("Visit Gowut Home page", "https://sites.google.com/site/gowebuitoolkit/"))
-	p.Add(gwu.NewLink("Visit Gowut Project page", "http://code.google.com/p/gowut/"))
+	p.Add(gwu.NewLink("Visit Gowut Project page", "https://github.com/icza/gowut"))
 
 	row := gwu.NewHorizontalPanel()
 	row.SetCellPadding(3)

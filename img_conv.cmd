@@ -1,2 +1,2 @@
 call setgopath.cmd
-go run src/code.google.com/p/gowut/tool/img_to_css.go
+go run src/github.com/icza/gowut/tool/img_to_css.go

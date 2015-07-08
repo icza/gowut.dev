@@ -1,4 +1,4 @@
 call setgopath.cmd
 cd src
-godoc -html=true code.google.com/p/gowut/gwu >../doc.html
+godoc -html=true github.com/icza/gowut/gwu >../doc.html
 cd ..
