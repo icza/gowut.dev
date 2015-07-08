@@ -799,7 +799,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	footer.Style().SetFullWidth().SetBorderTop2(2, gwu.BRD_STYLE_SOLID, "#777777")
 	footer.Add(hiddenPan)
 	footer.AddHConsumer()
-	l = gwu.NewLabel("Copyright © 2013 András Belicza. All rights reserved.")
+	l = gwu.NewLabel("Copyright © 2013-2015 András Belicza. All rights reserved.")
 	l.Style().SetFontStyle(gwu.FONT_STYLE_ITALIC).SetFontSize("95%")
 	footer.Add(l)
 	footer.AddHSpace(10)

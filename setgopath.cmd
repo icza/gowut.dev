@@ -1,1 +1,1 @@
-set GOPATH=v:\workspace\Gowut
+set GOPATH=v:\workspace\gowut.dev
