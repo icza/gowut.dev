@@ -44,7 +44,7 @@ func AtoID(s string) (ID, error) {
 // A channel used to generate unique ids
 var idChan chan ID = make(chan ID)
 
-// init stats a new go routine to generate unique ids
+// init stats a new goroutine to generate unique ids
 func init() {
 	go func() {
 		for i := 0; ; i++ {

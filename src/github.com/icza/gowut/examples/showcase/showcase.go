@@ -161,7 +161,7 @@ func buildTableDemo(event gwu.Event) gwu.Comp {
 	t.EnsureSize(5, 5)
 	for row := 0; row < 5; row++ {
 		for col := 0; col < 5; col++ {
-			t.Add(gwu.NewButton("Button "+strconv.Itoa(row)+strconv.Itoa(col)), row, col)
+			t.Add(gwu.NewButton(fmt.Sprintf("Button %d%d", row, col)), row, col)
 		}
 	}
 	t.SetColSpan(2, 1, 2)

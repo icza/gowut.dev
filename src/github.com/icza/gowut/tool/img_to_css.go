@@ -28,11 +28,11 @@ import (
 
 var out *os.File
 
-const FOLDER = "resources/images/"
+const folder = "resources/images/"
 
 func main() {
 	// List of images
-	images, err := ioutil.ReadDir(FOLDER)
+	images, err := ioutil.ReadDir(folder)
 	handleErr(err)
 
 	// Output file
@@ -59,7 +59,7 @@ func main() {
 		out.WriteString(iconName)
 		out.WriteString(" {background-image:url(data:image/png;base64,")
 
-		imgin, err := os.Open(FOLDER + img.Name())
+		imgin, err := os.Open(folder + img.Name())
 		handleErr(err)
 		defer imgin.Close()
 
