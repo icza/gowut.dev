@@ -19,6 +19,7 @@ package gwu
 
 import (
 	"strconv"
+	"sync/atomic"
 )
 
 // The type of the ids of the components.
@@ -41,19 +42,10 @@ func AtoID(s string) (ID, error) {
 
 // Component id generation and provider
 
-// A channel used to generate unique ids
-var idChan chan ID = make(chan ID)
-
-// init stats a new goroutine to generate unique ids
-func init() {
-	go func() {
-		for i := 0; ; i++ {
-			idChan <- ID(i)
-		}
-	}()
-}
+// Last used value for ID
+var lastId = new(int64)
 
 // nextCompId returns a unique component id
 func nextCompId() ID {
-	return <-idChan
+	return ID(atomic.AddInt64(lastId, 1))
 }
