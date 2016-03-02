@@ -81,6 +81,16 @@ type Table interface {
 	// If the table does not have a cell specified by row and col,
 	// this is a no-op.
 	SetColSpan(row, col, colSpan int)
+
+	// Trim trims all the rows: removes trailing cells that has nil component
+	// by making the rows shorter.
+	// This comes handy for example if the table contains cells where colspan > 1 is set;
+	// by calling this method we can ensure no empty cells will be rendered at the end of such rows.
+	Trim()
+
+	// TrimRow trims the specified row: removes trailing cells that has nil value
+	// by making the row shorter.
+	TrimRow(row int)
 }
 
 // cellIdx type specifies a cell by its row and col indices.
@@ -271,8 +281,11 @@ func (c *tableImpl) Add(c2 Comp, row, col int) bool {
 	if row < 0 || col < 0 {
 		return false
 	}
-	if row >= len(c.comps) || col >= len(c.comps[row]) {
-		c.EnsureSize(row+1, col+1)
+	if row >= len(c.comps) {
+		c.ensureRows(row + 1)
+	}
+	if col >= len(c.comps[row]) {
+		c.EnsureCols(row, col+1)
 	}
 
 	rowComps := c.comps[row]
@@ -330,6 +343,28 @@ func (c *tableImpl) SetColSpan(row, col, colSpan int) {
 	} else {
 		cf.setIAttr("colspan", colSpan)
 	}
+}
+
+func (c *tableImpl) Trim() {
+	for row := range c.comps {
+		c.TrimRow(row)
+	}
+}
+
+func (c *tableImpl) TrimRow(row int) {
+	if row < 0 || row >= len(c.comps) {
+		return
+	}
+
+	rowComps := c.comps[row]
+	ci := cellIdx{row: row, col: len(rowComps) - 1} // Create a reusable cell index
+	for ; ci.col >= 0 && rowComps[ci.col] == nil; ci.col-- {
+		// Cell is about to "disappear", remove its formatter (if any)
+		delete(c.cellFmts, ci)
+	}
+
+	// ci.col now points to a non-nil component (or is -1)
+	c.comps[row] = rowComps[:ci.col+1]
 }
 
 func (c *tableImpl) Render(w writer) {
