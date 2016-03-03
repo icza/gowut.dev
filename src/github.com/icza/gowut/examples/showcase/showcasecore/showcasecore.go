@@ -37,9 +37,20 @@ func plural(i int) string {
 func buildHomeDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
-	p.Add(gwu.NewLabel("This app is written in and showcases Gowut version " + gwu.GOWUT_VERSION + "."))
-	p.AddVSpace(20)
-	p.Add(gwu.NewLabel("Select components on the left side to see them in action."))
+	content := []string{
+		"This app is written in and showcases Gowut " + gwu.GOWUT_VERSION + ".",
+		"Everything you see here is modeled and represented in Go (server side). Everything you see here is created with Go code only (no HTML).",
+		"When you make modifications to components (e.g. enter text into a TextBox), that is automatically trasmitted to the server side via AJAX calls.",
+		"If you close the window and reopen the URL, you will see everything as you left it.",
+		"What you see and do here is also bound to You (using a Session), others don't see it and they can't interfere with it.",
+		"You may notice a small delay between your actions and the result (e.g. clicking on components on the left). This is due to the network latency: your action needs to be transmitted and changed (dirty) components needs to be refreshed (re-rendered). Gowut apps run locally do not have such delays.",
+		"Select components on the left side to see them in action.",
+	}
+
+	for _, s := range content {
+		p.Add(gwu.NewLabel(s))
+		p.AddVSpace(20)
+	}
 
 	return p
 }
@@ -66,10 +77,10 @@ func buildExpanderDemo(event gwu.Event) gwu.Comp {
 
 	p.AddVSpace(20)
 	var ee gwu.Expander
-	for i := 4; i >= 0; i-- {
+	for i := 5; i >= 0; i-- {
 		e2 := gwu.NewExpander()
 		e2.SetHeader(gwu.NewLabel("I hide embedded expanders. #" + strconv.Itoa(i)))
-		if i == 4 {
+		if i == 5 {
 			e2.SetContent(gwu.NewLabel("No more."))
 		} else {
 			e2.SetContent(ee)
@@ -331,7 +342,7 @@ func buildListBoxDemo(event gwu.Event) gwu.Comp {
 	p.Add(row)
 
 	p.AddVSpace(10)
-	p.Add(gwu.NewLabel("Select numbers that add up to 89:"))
+	p.Add(gwu.NewLabel("Select numbers that add up to 89: (hold down the CTRL while selecting)"))
 	sumLabel := gwu.NewLabel("")
 	lb2 := gwu.NewListBox([]string{"1", "2", "4", "8", "16", "32", "64", "128"})
 	lb2.SetMulti(true)
