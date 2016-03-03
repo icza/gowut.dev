@@ -15,11 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// Contains the main function of the Gowut "Showcase of Features" demo.
-// Separated because main() can't be defined on AppEngine.
+// Contains a package init function which starts the server of the Gowut "Showcase of Features" demo.
 
-package main
+package showcasecore
 
 func init() {
-	startServer()
+	StartServer()
 }

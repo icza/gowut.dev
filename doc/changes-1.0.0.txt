@@ -3,7 +3,7 @@ Changes and new features in 1.0.0:
 ----------------------------------
 
 -Made changes to make Google App Engine (GAE) compatible.
-Gowut and the showcase demo apps can not be run on GAE.
+Gowut and the showcase demo apps can now be run on GAE.
 
 -Table.Add() now only ensures the table has enough rows, and enough cells in the row.
 Previously it called Table.EnsureSize() if the cell was nonexistent. 

@@ -265,6 +265,7 @@ func (s *serverImpl) newSession(e *eventImpl) Session {
 	// Store new session
 	s.sessions[sess.Id()] = sess
 
+	log.Println("SESSION created:", sess.Id())
 	if s.logger != nil {
 		s.logger.Println("SESSION created:", sess.Id())
 	}
