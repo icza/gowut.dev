@@ -657,8 +657,14 @@ type demo struct {
 }
 type pdemo *demo
 
+var extraHeadHtmls []string
+
 func buildShowcaseWin(sess gwu.Session) {
 	win := gwu.NewWindow("show", "Showcase of Features - Gowut")
+	for _, headHtml := range extraHeadHtmls {
+		win.AddHeadHtml(headHtml)
+	}
+
 	win.Style().SetFullSize()
 	win.AddEHandlerFunc(func(e gwu.Event) {
 		switch e.Type() {
@@ -830,9 +836,9 @@ func (h SessHandler) Created(s gwu.Session) {
 func (h SessHandler) Removed(s gwu.Session) {}
 
 // StartServer creates and starts the Gowut GUI server.
-func StartServer() {
+func StartServer(appName string) {
 	// Create GUI server
-	server := gwu.NewServer("showcase", "")
+	server := gwu.NewServer(appName, "")
 	server.SetText("Gowut - Showcase of Features")
 
 	server.AddSessCreatorName("show", "Showcase of Features - Gowut")

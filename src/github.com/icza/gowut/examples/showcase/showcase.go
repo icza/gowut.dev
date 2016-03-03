@@ -43,5 +43,5 @@ func main() {
 		}
 	}()
 
-	showcasecore.StartServer()
+	showcasecore.StartServer("showcase")
 }

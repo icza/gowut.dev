@@ -294,6 +294,7 @@ func (s *serverImpl) removeSess(e *eventImpl) {
 // the public session is a no-op.
 func (s *serverImpl) removeSess2(sess Session) {
 	if sess.Private() {
+		log.Println("SESSION removed:", sess.Id())
 		if s.logger != nil {
 			s.logger.Println("SESSION removed:", sess.Id())
 		}
