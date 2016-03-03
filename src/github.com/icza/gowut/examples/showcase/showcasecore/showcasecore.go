@@ -519,7 +519,7 @@ func buildImageDemo(event gwu.Event) gwu.Comp {
 
 	p.AddVSpace(20)
 	p.Add(gwu.NewLabel("Go's Gopher:"))
-	img = gwu.NewImage("Go's Gopher", "http://golang.org/doc/gopher/frontpage.png")
+	img = gwu.NewImage("Go's Gopher", "https://golang.org/doc/gopher/frontpage.png")
 	img.Style().SetSizePx(250, 340)
 	p.Add(img)
 
