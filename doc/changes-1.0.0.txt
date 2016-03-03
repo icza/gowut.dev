@@ -3,7 +3,7 @@ Changes and new features in 1.0.0:
 ----------------------------------
 
 -Made changes to make Google App Engine (GAE) compatible.
-Gowut and the showcase demo apps can now be run on GAE.
+Gowut and the Gowut "Showcase of Features" demo app can now be run on GAE.
 
 -Table.Add() now only ensures the table has enough rows, and enough cells in the row.
 Previously it called Table.EnsureSize() if the cell was nonexistent. 
@@ -12,5 +12,11 @@ Previously it called Table.EnsureSize() if the cell was nonexistent.
 This comes handy for example if the table contains cells where colspan > 1 is set;
 by calling this method we can ensure no empty cells will be rendered at the end of such rows.
 For follow-up see issue #11: https://github.com/icza/gowut/issues/11
+
+-TODO Incompatible change: renamed all constants to conform to the Go naming conventions
+(from UPPER_CASE to UpperCamelCase).
+
+-TODO The Gowut UI Server (gwu.Server) now supports adding custom headers which will be set in all server responses.
+https://github.com/icza/gowut/issues/10
 
 -Other minor changes, improvements and optimization.
