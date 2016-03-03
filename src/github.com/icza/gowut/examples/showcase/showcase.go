@@ -20,7 +20,7 @@ package main
 import (
 	"fmt"
 	"github.com/icza/gowut/gwu"
-	"os"
+	"log"
 	"strconv"
 	"time"
 )
@@ -663,9 +663,9 @@ func buildShowcaseWin(sess gwu.Session) {
 	win.AddEHandlerFunc(func(e gwu.Event) {
 		switch e.Type() {
 		case gwu.ETYPE_WIN_LOAD:
-			fmt.Println("LOADING window:", e.Src().Id())
+			log.Println("LOADING window:", e.Src().Id())
 		case gwu.ETYPE_WIN_UNLOAD:
-			fmt.Println("UNLOADING window:", e.Src().Id())
+			log.Println("UNLOADING window:", e.Src().Id())
 		}
 	}, gwu.ETYPE_WIN_LOAD, gwu.ETYPE_WIN_UNLOAD)
 
@@ -829,22 +829,8 @@ func (h SessHandler) Created(s gwu.Session) {
 
 func (h SessHandler) Removed(s gwu.Session) {}
 
-func main() {
-	// Allow app control from command line (in co-operation with the starter script):
-	fmt.Println("Type 'r' to restart, 'e' to exit.")
-	go func() {
-		var cmd string
-		for {
-			fmt.Scanf("%s", &cmd)
-			switch cmd {
-			case "r": // restart
-				os.Exit(1)
-			case "e": // exit
-				os.Exit(0)
-			}
-		}
-	}()
-
+// startServer creates and starts the Gowut GUI server.
+func startServer() {
 	// Create GUI server
 	server := gwu.NewServer("showcase", "")
 	server.SetText("Gowut - Showcase of Features")
@@ -854,7 +840,7 @@ func main() {
 
 	// Start GUI server
 	if err := server.Start("show"); err != nil {
-		fmt.Println("Error: Cound not start GUI server:", err)
+		log.Println("Error: Cound not start GUI server:", err)
 		return
 	}
 }

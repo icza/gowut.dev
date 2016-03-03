@@ -23,8 +23,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os/exec"
-	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -201,20 +199,20 @@ func NewServerTLS(appName, addr, certFile, keyFile string) Server {
 
 // newServerImpl creates a new serverImpl.
 func newServerImpl(appName, addr, certFile, keyFile string) *serverImpl {
-	if len(addr) == 0 {
+	if addr == "" {
 		addr = "localhost:3434"
 	}
 
 	s := &serverImpl{sessionImpl: newSessionImpl(false), appName: appName, addr: addr, sessions: make(map[string]Session),
 		sessCreatorNames: make(map[string]string), theme: THEME_DEFAULT}
 
-	if len(s.appName) == 0 {
+	if s.appName == "" {
 		s.appPath = "/"
 	} else {
 		s.appPath = "/" + s.appName + "/"
 	}
 
-	if len(certFile) == 0 || len(keyFile) == 0 {
+	if certFile == "" || keyFile == "" {
 		s.secure = false
 		s.appUrl = "http://" + addr + s.appPath
 	} else {
@@ -374,57 +372,6 @@ func (s *serverImpl) SetTheme(theme string) {
 
 func (s *serverImpl) SetLogger(logger *log.Logger) {
 	s.logger = logger
-}
-
-// open opens the specified URL in the default browser of the user.
-func open(url string) error {
-	var cmd string
-	var args []string
-
-	switch runtime.GOOS {
-	case "windows":
-		cmd = "cmd"
-		args = []string{"/c", "start"}
-	case "darwin":
-		cmd = "open"
-	default: // "linux", "freebsd", "openbsd", "netbsd"
-		cmd = "xgd-open"
-	}
-	args = append(args, url)
-	return exec.Command(cmd, args...).Start()
-}
-
-func (s *serverImpl) Start(openWins ...string) error {
-	http.HandleFunc(s.appPath, func(w http.ResponseWriter, r *http.Request) {
-		s.serveHTTP(w, r)
-	})
-
-	http.HandleFunc(s.appPath+_PATH_STATIC, func(w http.ResponseWriter, r *http.Request) {
-		s.serveStatic(w, r)
-	})
-
-	fmt.Println("Starting GUI server on:", s.appUrl)
-	if s.logger != nil {
-		s.logger.Println("Starting GUI server on:", s.appUrl)
-	}
-
-	for _, winName := range openWins {
-		open(s.appUrl + winName)
-	}
-
-	go s.sessCleaner()
-
-	var err error
-	if s.secure {
-		err = http.ListenAndServeTLS(s.addr, s.certFile, s.keyFile, nil)
-	} else {
-		err = http.ListenAndServe(s.addr, nil)
-	}
-
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 // serveStatic handles the static contents of GWU.

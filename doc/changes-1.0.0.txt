@@ -2,12 +2,15 @@
 Changes and new features in 1.0.0:
 ----------------------------------
 
+-Made changes to make Google App Engine (GAE) compatible.
+Gowut and the showcase demo apps can not be run on GAE.
+
 -Table.Add() now only ensures the table has enough rows, and enough cells in the row.
 Previously it called Table.EnsureSize() if the cell was nonexistent. 
 
 -New methods for Table: Trim() and TrimRow().
 This comes handy for example if the table contains cells where colspan > 1 is set;
 by calling this method we can ensure no empty cells will be rendered at the end of such rows.
-For followup see issue #11: https://github.com/icza/gowut/issues/11
+For follow-up see issue #11: https://github.com/icza/gowut/issues/11
 
 -Other minor changes, improvements and optimization.
