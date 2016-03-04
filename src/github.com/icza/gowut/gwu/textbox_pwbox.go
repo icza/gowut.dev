@@ -105,19 +105,19 @@ type textBoxImpl struct {
 }
 
 var (
-	_STR_ENC_URI_THIS_V = []byte("encodeURIComponent(this.value)") // "encodeURIComponent(this.value)"
+	strEncURIThisV = []byte("encodeURIComponent(this.value)") // "encodeURIComponent(this.value)"
 )
 
 // NewTextBox creates a new TextBox.
 func NewTextBox(text string) TextBox {
-	c := newTextBoxImpl(_STR_ENC_URI_THIS_V, text, false)
+	c := newTextBoxImpl(strEncURIThisV, text, false)
 	c.Style().AddClass("gwu-TextBox")
 	return &c
 }
 
 // NewPasswBox creates a new PasswBox.
 func NewPasswBox(text string) TextBox {
-	c := newTextBoxImpl(_STR_ENC_URI_THIS_V, text, true)
+	c := newTextBoxImpl(strEncURIThisV, text, true)
 	c.Style().AddClass("gwu-PasswBox")
 	return &c
 }
@@ -199,45 +199,45 @@ func (c *textBoxImpl) Render(w writer) {
 }
 
 var (
-	_STR_INPUT_OP = []byte(`<input type="`) // `<input type="`
-	_STR_PASSWORD = []byte("password")      // "password"
-	_STR_TEXT     = []byte("text")          // "text"
-	_STR_SIZE     = []byte(`" size="`)      // `" size="`
-	_STR_VALUE    = []byte(` value="`)      // ` value="`
-	_STR_INPUT_CL = []byte(`"/>`)           // `"/>`
+	strInputOp  = []byte(`<input type="`) // `<input type="`
+	strPassword = []byte("password")      // "password"
+	strText     = []byte("text")          // "text"
+	strSize     = []byte(`" size="`)      // `" size="`
+	strValue    = []byte(` value="`)      // ` value="`
+	strInputCl  = []byte(`"/>`)           // `"/>`
 )
 
 // renderInput renders the component as an input HTML tag.
 func (c *textBoxImpl) renderInput(w writer) {
-	w.Write(_STR_INPUT_OP)
+	w.Write(strInputOp)
 	if c.isPassw {
-		w.Write(_STR_PASSWORD)
+		w.Write(strPassword)
 	} else {
-		w.Write(_STR_TEXT)
+		w.Write(strText)
 	}
-	w.Write(_STR_SIZE)
+	w.Write(strSize)
 	w.Writev(c.cols)
-	w.Write(_STR_QUOTE)
+	w.Write(strQuote)
 	c.renderAttrsAndStyle(w)
 	c.renderEnabled(w)
 	c.renderEHandlers(w)
 
-	w.Write(_STR_VALUE)
+	w.Write(strValue)
 	c.renderText(w)
-	w.Write(_STR_INPUT_CL)
+	w.Write(strInputCl)
 }
 
 var (
-	_STR_TEXTAREA_OP    = []byte("<textarea")   // "<textarea"
-	_STR_ROWS           = []byte(` rows="`)     // ` rows="`
-	_STR_COLS           = []byte(`" cols="`)    // `" cols="`
-	_STR_TEXTAREA_OP_CL = []byte("\">\n")       // "\">\n"
-	_STR_TEXTAREA_CL    = []byte("</textarea>") // "</textarea>"
+	strTextareaOp   = []byte("<textarea")   // "<textarea"
+	strRows         = []byte(` rows="`)     // ` rows="`
+	strCols         = []byte(`" cols="`)    // `" cols="`
+	strTextAreaOpCl = []byte("\">\n")       // "\">\n"
+	strTextAreaCl   = []byte("</textarea>") // "</textarea>"
 )
 
 // renderTextArea renders the component as an textarea HTML tag.
 func (c *textBoxImpl) renderTextArea(w writer) {
-	w.Write(_STR_TEXTAREA_OP)
+	w.Write(strTextareaOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEnabled(w)
 	c.renderEHandlers(w)
@@ -245,12 +245,12 @@ func (c *textBoxImpl) renderTextArea(w writer) {
 	// New line char after the <textarea> tag is ignored.
 	// So we must render a newline after textarea, else if text value
 	// starts with a new line, it will be ommitted!
-	w.Write(_STR_ROWS)
+	w.Write(strRows)
 	w.Writev(c.rows)
-	w.Write(_STR_COLS)
+	w.Write(strCols)
 	w.Writev(c.cols)
-	w.Write(_STR_TEXTAREA_OP_CL)
+	w.Write(strTextAreaOpCl)
 
 	c.renderText(w)
-	w.Write(_STR_TEXTAREA_CL)
+	w.Write(strTextAreaCl)
 }

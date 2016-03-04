@@ -136,7 +136,7 @@ func (c *linkImpl) Render(w writer) {
 	c.renderUrl("href", w)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 
 	c.renderText(w)
 

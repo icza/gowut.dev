@@ -124,29 +124,29 @@ func (c *timerImpl) Reset() {
 }
 
 var (
-	_STR_SCRIPT_OP = []byte("<script>setupTimer(") // "<script>setupTimer("
-	_STR_SCRIPT_CL = []byte(");</script>")         // ");</script>"
+	strScriptOp = []byte("<script>setupTimer(") // "<script>setupTimer("
+	strScriptCl = []byte(");</script>")         // ");</script>"
 )
 
 func (c *timerImpl) Render(w writer) {
-	w.Write(_STR_SPAN_OP)
+	w.Write(strSpanOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 
-	w.Write(_STR_SCRIPT_OP)
+	w.Write(strScriptOp)
 	w.Writev(int(c.id))
-	w.Write(_STR_COMMA)
+	w.Write(strComma)
 	w.Writev(int(ETYPE_STATE_CHANGE))
-	w.Write(_STR_COMMA)
+	w.Write(strComma)
 	w.Writev(int(c.timeout / time.Millisecond))
-	w.Write(_STR_COMMA)
+	w.Write(strComma)
 	w.Writev(c.repeat)
-	w.Write(_STR_COMMA)
+	w.Write(strComma)
 	w.Writev(c.active)
-	w.Write(_STR_COMMA)
+	w.Write(strComma)
 	w.Writev(c.reset)
-	w.Write(_STR_SCRIPT_CL)
+	w.Write(strScriptCl)
 
-	w.Write(_STR_SPAN_CL)
+	w.Write(strSpanCl)
 }

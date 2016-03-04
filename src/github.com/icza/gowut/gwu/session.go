@@ -119,36 +119,36 @@ func newSessionImpl(private bool) sessionImpl {
 
 // Number of valid id runes.
 // Must be a power of 2!
-const _ID_RUNES_COUNT = 64
+const idRunesCount = 64
 
 // Mask to get an id rune idx from a random byte.
-const _ID_RUNES_IDX_MASK = _ID_RUNES_COUNT - 1
+const idRunesIdxMask = idRunesCount - 1
 
 // Valid runes to be used for session ids
 // Its length must be _ID_RUNES_COUNT.
-var _ID_RUNES = []rune("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_")
+var idRunes = []rune("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_")
 
 func init() {
-	// Is _ID_RUNES_COUNT a power of 2?
-	if _ID_RUNES_COUNT&(_ID_RUNES_COUNT-1) != 0 {
-		panic(fmt.Sprint("_ID_RUNES_COUNT is not a power of 2: ", _ID_RUNES_COUNT))
+	// Is idRunesCount a power of 2?
+	if idRunesCount&(idRunesCount-1) != 0 {
+		panic(fmt.Sprint("_ID_RUNES_COUNT is not a power of 2: ", idRunesCount))
 	}
-	if len(_ID_RUNES) != _ID_RUNES_COUNT {
-		panic(fmt.Sprint("len(_ID_RUNES) != ", _ID_RUNES_COUNT))
+	if len(idRunes) != idRunesCount {
+		panic(fmt.Sprint("len(_ID_RUNES) != ", idRunesCount))
 	}
 }
 
 // Length of the session ids
-const _ID_LENGTH = 22
+const idLength = 22
 
 // genId generates a session id.
 func genId() string {
-	r := make([]byte, _ID_LENGTH)
+	r := make([]byte, idLength)
 	io.ReadFull(rand.Reader, r)
 
-	id := make([]rune, _ID_LENGTH)
-	for i := 0; i < _ID_LENGTH; i++ {
-		id[i] = _ID_RUNES[r[i]&_ID_RUNES_IDX_MASK]
+	id := make([]rune, idLength)
+	for i := 0; i < idLength; i++ {
+		id[i] = idRunes[r[i]&idRunesIdxMask]
 	}
 
 	return string(id)

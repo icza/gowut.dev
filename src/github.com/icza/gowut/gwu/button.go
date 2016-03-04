@@ -62,7 +62,7 @@ func (c *buttonImpl) Render(w writer) {
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
 	c.renderEnabled(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 
 	c.renderText(w)
 

@@ -787,30 +787,30 @@ func (s *styleImpl) render(w writer) {
 	s.renderClasses(w)
 
 	if s.attrs != nil {
-		w.Write(_STR_STYLE)
+		w.Write(strStyle)
 		s.renderAttrs(w)
-		w.Write(_STR_QUOTE)
+		w.Write(strQuote)
 	}
 }
 
 func (s *styleImpl) renderClasses(w writer) {
 	if len(s.classes) > 0 {
-		w.Write(_STR_CLASS)
+		w.Write(strClass)
 		for i, class := range s.classes {
 			if i > 0 {
-				w.Write(_STR_SPACE)
+				w.Write(strSpace)
 			}
 			w.Writes(class)
 		}
-		w.Write(_STR_QUOTE)
+		w.Write(strQuote)
 	}
 }
 
 func (s *styleImpl) renderAttrs(w writer) {
 	for name, value := range s.attrs {
 		w.Writes(name)
-		w.Write(_STR_COLON)
+		w.Write(strColon)
 		w.Writes(value)
-		w.Write(_STR_SEMICOL)
+		w.Write(strSemicol)
 	}
 }

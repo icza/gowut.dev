@@ -295,9 +295,9 @@ func (c *cellFmtImpl) renderWithAligns(tag []byte, halign HAlign, valign VAlign,
 	}
 
 	if halign != HA_DEFAULT {
-		w.Write(_STR_ALIGN)
+		w.Write(strAlign)
 		w.Writes(string(halign))
-		w.Write(_STR_QUOTE)
+		w.Write(strQuote)
 	}
 
 	if c.styleImpl != nil {
@@ -305,19 +305,19 @@ func (c *cellFmtImpl) renderWithAligns(tag []byte, halign HAlign, valign VAlign,
 	}
 
 	if valign != VA_DEFAULT || c.styleImpl != nil {
-		w.Write(_STR_STYLE)
+		w.Write(strStyle)
 		if valign != VA_DEFAULT {
 			w.Write(_STR_VALIGN)
 			w.Writes(string(valign))
-			w.Write(_STR_SEMICOL)
+			w.Write(strSemicol)
 		}
 		if c.styleImpl != nil {
 			c.styleImpl.renderAttrs(w)
 		}
-		w.Write(_STR_QUOTE)
+		w.Write(strQuote)
 	}
 
-	w.Write(_STR_GT)
+	w.Write(strGT)
 }
 
 // TableView interface defines a component which is rendered into a table.
@@ -399,16 +399,16 @@ var _STR_ST_VALIGN = []byte(` style="vertical-align:`) // ` style="vertical-alig
 // renderTr renders an HTML TR tag with horizontal and vertical
 // alignment info included.
 func (c *tableViewImpl) renderTr(w writer) {
-	w.Write(_STR_TR_OP)
+	w.Write(strTROp)
 	if c.halign != HA_DEFAULT {
-		w.Write(_STR_ALIGN)
+		w.Write(strAlign)
 		w.Writes(string(c.halign))
-		w.Write(_STR_QUOTE)
+		w.Write(strQuote)
 	}
 	if c.valign != VA_DEFAULT {
 		w.Write(_STR_ST_VALIGN)
 		w.Writes(string(c.valign))
-		w.Write(_STR_QUOTE)
+		w.Write(strQuote)
 	}
-	w.Write(_STR_GT)
+	w.Write(strGT)
 }

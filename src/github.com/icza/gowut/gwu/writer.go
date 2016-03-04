@@ -26,42 +26,42 @@ import (
 )
 
 // Number of cached ints.
-const _CACHED_INTS = 32
+const cachedInts = 32
 
 // Byte slice vars (constants) of frequently used strings.
 // Render methods use these to avoid array allocations
 // when converting strings to byte slices in order to write them.
 var (
-	_STR_SPACE    = []byte(" ")  // " " (space string)
-	_STR_QUOTE    = []byte(`"`)  // `"` (quotation mark)
-	_STR_EQ_QUOTE = []byte(`="`) // `="` (equal sign and a quotation mark)
-	_STR_COMMA    = []byte(",")  // "," (comma string)
-	_STR_COLON    = []byte(":")  // ":" (colon string)
-	_STR_SEMICOL  = []byte(";")  // ";" (semicolon string)
-	_STR_LT       = []byte("<")  // "<" (less than string)
-	_STR_GT       = []byte(">")  // ">" (greater than string)
+	strSpace   = []byte(" ")  // " " (space string)
+	strQuote   = []byte(`"`)  // `"` (quotation mark)
+	strEqQuote = []byte(`="`) // `="` (equal sign and a quotation mark)
+	strComma   = []byte(",")  // "," (comma string)
+	strColon   = []byte(":")  // ":" (colon string)
+	strSemicol = []byte(";")  // ";" (semicolon string)
+	strLT      = []byte("<")  // "<" (less than string)
+	strGT      = []byte(">")  // ">" (greater than string)
 
-	_STR_SPAN_OP  = []byte("<span")    // "<span"
-	_STR_SPAN_CL  = []byte("</span>")  // "</span>"
-	_STR_TABLE_OP = []byte("<table")   // "<table"
-	_STR_TABLE_CL = []byte("</table>") // "</table>"
-	_STR_TD       = []byte("<td>")     // "<td>"
-	_STR_TR       = []byte("<tr>")     // "<tr>"
-	_STR_TD_OP    = []byte("<td")      // "<td"
-	_STR_TR_OP    = []byte("<tr")      // "<tr"
+	strSpanOp  = []byte("<span")    // "<span"
+	strSpanCl  = []byte("</span>")  // "</span>"
+	strTableOp = []byte("<table")   // "<table"
+	strTableCl = []byte("</table>") // "</table>"
+	strTD      = []byte("<td>")     // "<td>"
+	strTR      = []byte("<tr>")     // "<tr>"
+	strTDOp    = []byte("<td")      // "<td"
+	strTROp    = []byte("<tr")      // "<tr"
 
-	_STR_STYLE = []byte(` style="`) // ` style="`
-	_STR_CLASS = []byte(` class="`) // ` class="`
-	_STR_ALIGN = []byte(` align="`) // ` align="`
+	strStyle = []byte(` style="`) // ` style="`
+	strClass = []byte(` class="`) // ` class="`
+	strAlign = []byte(` align="`) // ` align="`
 
-	_STR_INTS  [_CACHED_INTS][]byte                                            // Numbers
-	_STR_BOOLS = map[bool][]byte{false: []byte("false"), true: []byte("true")} // Bools
+	strInts  [cachedInts][]byte                                              // Numbers
+	strBools = map[bool][]byte{false: []byte("false"), true: []byte("true")} // Bools
 )
 
 // init initializes the cached ints.
 func init() {
-	for i := 0; i < _CACHED_INTS; i++ {
-		_STR_INTS[i] = []byte(strconv.Itoa(i))
+	for i := 0; i < cachedInts; i++ {
+		strInts[i] = []byte(strconv.Itoa(i))
 	}
 }
 
@@ -82,8 +82,8 @@ func (w writer) Writev(v interface{}) (n int, err error) {
 	case string:
 		return w.Write([]byte(v2))
 	case int:
-		if v2 < _CACHED_INTS && v2 >= 0 {
-			return w.Write(_STR_INTS[v2])
+		if v2 < cachedInts && v2 >= 0 {
+			return w.Write(strInts[v2])
 		}
 		return w.Write([]byte(strconv.Itoa(v2)))
 	case []byte:
@@ -91,7 +91,7 @@ func (w writer) Writev(v interface{}) (n int, err error) {
 	case fmt.Stringer:
 		return w.Write([]byte(v2.String()))
 	case bool:
-		return w.Write(_STR_BOOLS[v2])
+		return w.Write(strBools[v2])
 	}
 
 	fmt.Printf("Not supported type: %T\n", v)
@@ -138,12 +138,12 @@ func (w writer) Writees(s string) (n int, err error) {
 // ` name="value"`
 func (w writer) WriteAttr(name, value string) (n int, err error) {
 	// Easiest implementation would be:
-	// return w.Writevs(_STR_SPACE, name, _STR_EQ_QUOTE, value, _STR_QUOTE)
+	// return w.Writevs(strSpace, name, strEqQuote, value, strQuote)
 
 	// ...but since this is called very frequently, I allow some extra lines of code
 	// for the sake of efficiency (also avoiding array allocation for the varargs...)
 
-	n, err = w.Write(_STR_SPACE)
+	n, err = w.Write(strSpace)
 	if err != nil {
 		return
 	}
@@ -155,7 +155,7 @@ func (w writer) WriteAttr(name, value string) (n int, err error) {
 		return
 	}
 
-	m, err = w.Write(_STR_EQ_QUOTE)
+	m, err = w.Write(strEqQuote)
 	n += m
 	if err != nil {
 		return
@@ -167,7 +167,7 @@ func (w writer) WriteAttr(name, value string) (n int, err error) {
 		return
 	}
 
-	m, err = w.Write(_STR_QUOTE)
+	m, err = w.Write(strQuote)
 	n += m
 
 	return

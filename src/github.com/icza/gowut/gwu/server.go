@@ -659,23 +659,23 @@ func (s *serverImpl) handleEvent(sess Session, win Window, wr http.ResponseWrite
 	// If we reload, nothing else matters
 	if shared.reload {
 		hasAction = true
-		w.Writevs(_ERA_RELOAD_WIN, _STR_COMMA, shared.reloadWin)
+		w.Writevs(_ERA_RELOAD_WIN, strComma, shared.reloadWin)
 	} else {
 		if len(shared.dirtyComps) > 0 {
 			hasAction = true
 			w.Writev(_ERA_DIRTY_COMPS)
 			for id, _ := range shared.dirtyComps {
-				w.Write(_STR_COMMA)
+				w.Write(strComma)
 				w.Writev(int(id))
 			}
 		}
 		if shared.focusedComp != nil {
 			if hasAction {
-				w.Write(_STR_SEMICOL)
+				w.Write(strSemicol)
 			} else {
 				hasAction = true
 			}
-			w.Writevs(_ERA_FOCUS_COMP, _STR_COMMA, int(shared.focusedComp.Id()))
+			w.Writevs(_ERA_FOCUS_COMP, strComma, int(shared.focusedComp.Id()))
 			// Also register focusable comp at window
 			win.SetFocusedCompId(shared.focusedComp.Id())
 		}

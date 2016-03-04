@@ -203,22 +203,22 @@ func (c *expanderImpl) ContentFmt() CellFmt {
 }
 
 func (c *expanderImpl) Render(w writer) {
-	w.Write(_STR_TABLE_OP)
+	w.Write(strTableOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 
 	if c.header != nil {
 		c.renderTr(w)
-		c.headerFmt.render(_STR_TD_OP, w)
+		c.headerFmt.render(strTDOp, w)
 		c.header.Render(w)
 	}
 
 	if c.expanded && c.content != nil {
 		c.renderTr(w)
-		c.contentFmt.render(_STR_TD_OP, w)
+		c.contentFmt.render(strTDOp, w)
 		c.content.Render(w)
 	}
 
-	w.Write(_STR_TABLE_CL)
+	w.Write(strTableCl)
 }

@@ -54,12 +54,12 @@ func (c *htmlImpl) SetHtml(html string) {
 }
 
 func (c *htmlImpl) Render(w writer) {
-	w.Write(_STR_SPAN_OP)
+	w.Write(strSpanOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 
 	w.Writes(c.html)
 
-	w.Write(_STR_SPAN_CL)
+	w.Write(strSpanCl)
 }

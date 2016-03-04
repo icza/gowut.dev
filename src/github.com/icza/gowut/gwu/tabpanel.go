@@ -337,37 +337,37 @@ func (c *tabPanelImpl) SetSelected(idx int) {
 }
 
 func (c *tabPanelImpl) Render(w writer) {
-	w.Write(_STR_TABLE_OP)
+	w.Write(strTableOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 
 	switch c.tabBarPlacement {
 	case TB_PLACEMENT_TOP:
-		w.Write(_STR_TR)
-		c.tabBarFmt.render(_STR_TD_OP, w)
+		w.Write(strTR)
+		c.tabBarFmt.render(strTDOp, w)
 		c.tabBarImpl.Render(w)
 		c.renderTr(w)
 		c.renderContent(w)
 	case TB_PLACEMENT_BOTTOM:
 		c.renderTr(w)
 		c.renderContent(w)
-		w.Write(_STR_TR)
-		c.tabBarFmt.render(_STR_TD_OP, w)
+		w.Write(strTR)
+		c.tabBarFmt.render(strTDOp, w)
 		c.tabBarImpl.Render(w)
 	case TB_PLACEMENT_LEFT:
 		c.renderTr(w)
-		c.tabBarFmt.render(_STR_TD_OP, w)
+		c.tabBarFmt.render(strTDOp, w)
 		c.tabBarImpl.Render(w)
 		c.renderContent(w)
 	case TB_PLACEMENT_RIGHT:
 		c.renderTr(w)
 		c.renderContent(w)
-		c.tabBarFmt.render(_STR_TD_OP, w)
+		c.tabBarFmt.render(strTDOp, w)
 		c.tabBarImpl.Render(w)
 	}
 
-	w.Write(_STR_TABLE_CL)
+	w.Write(strTableCl)
 }
 
 // renderContent renders the selected content component.
@@ -378,6 +378,6 @@ func (c *tabPanelImpl) renderContent(w writer) {
 		c.renderTd(c2, w)
 		c2.Render(w)
 	} else {
-		w.Write(_STR_TD)
+		w.Write(strTD)
 	}
 }

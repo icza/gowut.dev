@@ -328,25 +328,25 @@ func (c *panelImpl) Render(w writer) {
 // using the natural layout strategy.
 func (c *panelImpl) layoutNatural(w writer) {
 	// No wrapper table but we still need a wrapper tag for attributes...
-	w.Write(_STR_SPAN_OP)
+	w.Write(strSpanOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 
 	for _, c2 := range c.comps {
 		c2.Render(w)
 	}
 
-	w.Write(_STR_SPAN_CL)
+	w.Write(strSpanCl)
 }
 
 // layoutHorizontal renders the panel and the child components
 // using the horizontal layout strategy.
 func (c *panelImpl) layoutHorizontal(w writer) {
-	w.Write(_STR_TABLE_OP)
+	w.Write(strTableOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 
 	c.renderTr(w)
 
@@ -355,16 +355,16 @@ func (c *panelImpl) layoutHorizontal(w writer) {
 		c2.Render(w)
 	}
 
-	w.Write(_STR_TABLE_CL)
+	w.Write(strTableCl)
 }
 
 // layoutVertical renders the panel and the child components
 // using the vertical layout strategy.
 func (c *panelImpl) layoutVertical(w writer) {
-	w.Write(_STR_TABLE_OP)
+	w.Write(strTableOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 
 	// There is the same TR tag for each cell:
 	trWriter := bytes.NewBuffer(nil)
@@ -377,14 +377,14 @@ func (c *panelImpl) layoutVertical(w writer) {
 		c2.Render(w)
 	}
 
-	w.Write(_STR_TABLE_CL)
+	w.Write(strTableCl)
 }
 
 // renderTd renders the formatted HTML TD tag for the specified child component.
 func (c *panelImpl) renderTd(c2 Comp, w writer) {
 	if cf := c.cellFmts[c2.Id()]; cf == nil {
-		w.Write(_STR_TD)
+		w.Write(strTD)
 	} else {
-		cf.render(_STR_TD_OP, w)
+		cf.render(strTDOp, w)
 	}
 }

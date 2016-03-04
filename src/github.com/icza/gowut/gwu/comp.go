@@ -283,14 +283,14 @@ func (c *compImpl) renderEHandlers(w writer) {
 
 		// To render                 : ` <etypeAttr>="se(event,etype,compId,value)"`
 		// Example (checkbox onclick): ` onclick="se(event,0,4327,this.checked)"`
-		w.Write(_STR_SPACE)
+		w.Write(strSpace)
 		w.Write(etypeAttr)
 		w.Write(_STR_SE_PREFIX)
 		w.Writev(int(etype))
-		w.Write(_STR_COMMA)
+		w.Write(strComma)
 		w.Writev(int(c.id))
 		if len(c.valueProviderJs) > 0 && c.syncOnETypes != nil && c.syncOnETypes[etype] {
-			w.Write(_STR_COMMA)
+			w.Write(strComma)
 			w.Write(c.valueProviderJs)
 		}
 		w.Write(_STR_SE_SUFFIX)

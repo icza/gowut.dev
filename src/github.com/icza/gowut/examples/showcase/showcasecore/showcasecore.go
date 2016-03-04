@@ -64,7 +64,7 @@ func buildExpanderDemo(event gwu.Event) gwu.Comp {
 	p.AddVSpace(5)
 	e := gwu.NewExpander()
 	e.SetHeader(gwu.NewLabel("I'm an Expander."))
-	e.SetContent(gwu.NewLabel("I'm the content of the Expander."))
+	e.SetContent(gwu.NewLabel("And I'm the content of the Expander."))
 	p.Add(e)
 	e.AddEHandlerFunc(func(ev gwu.Event) {
 		if e.Expanded() {

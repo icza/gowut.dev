@@ -368,10 +368,10 @@ func (c *tableImpl) TrimRow(row int) {
 }
 
 func (c *tableImpl) Render(w writer) {
-	w.Write(_STR_TABLE_OP)
+	w.Write(strTableOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 
 	// Create a reusable cell index
 	ci := cellIdx{}
@@ -387,7 +387,7 @@ func (c *tableImpl) Render(w writer) {
 		}
 	}
 
-	w.Write(_STR_TABLE_CL)
+	w.Write(strTableCl)
 }
 
 // renderRowTr renders the formatted HTML TR tag for the specified row.
@@ -408,15 +408,15 @@ func (c *tableImpl) renderRowTr(row int, w writer) {
 			va = defva
 		}
 
-		rf.renderWithAligns(_STR_TR_OP, ha, va, w)
+		rf.renderWithAligns(strTROp, ha, va, w)
 	}
 }
 
 // renderTd renders the formatted HTML TD tag for the specified cell.
 func (c *tableImpl) renderTd(ci cellIdx, w writer) {
 	if cf := c.cellFmts[ci]; cf == nil {
-		w.Write(_STR_TD)
+		w.Write(strTD)
 	} else {
-		cf.render(_STR_TD_OP, w)
+		cf.render(strTDOp, w)
 	}
 }

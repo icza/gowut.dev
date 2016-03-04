@@ -212,7 +212,7 @@ func (c *listBoxImpl) Render(w writer) {
 	c.renderAttrsAndStyle(w)
 	c.renderEnabled(w)
 	c.renderEHandlers(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 
 	for i, value := range c.values {
 		if c.selected[i] {

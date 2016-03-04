@@ -151,15 +151,15 @@ func NewRadioGroup(name string) RadioGroup {
 }
 
 var (
-	_STR_CHECKBOX     = []byte("checkbox")     // "checkbox"
-	_STR_RADIO        = []byte("radio")        // "radio"
-	_STR_THIS_CHECKED = []byte("this.checked") // "this.checked"
+	strCheckbox    = []byte("checkbox")     // "checkbox"
+	strRadio       = []byte("radio")        // "radio"
+	strThisChecked = []byte("this.checked") // "this.checked"
 )
 
 // NewCheckBox creates a new CheckBox.
 // The initial state is false.
 func NewCheckBox(text string) CheckBox {
-	c := newStateButtonImpl(text, _STR_CHECKBOX, nil, "gwu-CheckBox-Disabled")
+	c := newStateButtonImpl(text, strCheckbox, nil, "gwu-CheckBox-Disabled")
 	c.Style().AddClass("gwu-CheckBox")
 	return c
 }
@@ -188,14 +188,14 @@ func NewSwitchButton() SwitchButton {
 // NewRadioButton creates a new radio button.
 // The initial state is false.
 func NewRadioButton(text string, group RadioGroup) RadioButton {
-	c := newStateButtonImpl(text, _STR_RADIO, group, "gwu-RadioButton-Disabled")
+	c := newStateButtonImpl(text, strRadio, group, "gwu-RadioButton-Disabled")
 	c.Style().AddClass("gwu-RadioButton")
 	return c
 }
 
 // newStateButtonImpl creates a new stateButtonImpl.
 func newStateButtonImpl(text string, inputType []byte, group RadioGroup, disabledClass string) *stateButtonImpl {
-	c := &stateButtonImpl{newButtonImpl(_STR_THIS_CHECKED, text), false, inputType, group, nextCompId(), disabledClass}
+	c := &stateButtonImpl{newButtonImpl(strThisChecked, text), false, inputType, group, nextCompId(), disabledClass}
 	// Use ETYPE_CLICK because IE fires onchange only when focus is lost...
 	c.AddSyncOnETypes(ETYPE_CLICK)
 	return c
@@ -290,46 +290,46 @@ func (c *stateButtonImpl) preprocessEvent(event Event, r *http.Request) {
 }
 
 var (
-	_STR_INPUT     = []byte(`<input type="`)      // `<input type="`
-	_STR_ID        = []byte(`" id="`)             // `" id="`
-	_STR_NAME      = []byte(` name="`)            // ` name="`
-	_STR_CHECKED   = []byte(` checked="checked"`) // ` checked="checked"`
-	_STR_LABEL_FOR = []byte(`><label for="`)      // `><label for="`
-	_STR_LABEL_CL  = []byte("</label>")           // "</label>"
+	strInput    = []byte(`<input type="`)      // `<input type="`
+	strId       = []byte(`" id="`)             // `" id="`
+	strName     = []byte(` name="`)            // ` name="`
+	strChecked  = []byte(` checked="checked"`) // ` checked="checked"`
+	strLabelFor = []byte(`><label for="`)      // `><label for="`
+	strLabelCl  = []byte("</label>")           // "</label>"
 )
 
 func (c *stateButtonImpl) Render(w writer) {
 	// Proper state button consists of multiple HTML tags (input and label), so render a wrapper tag for them:
-	w.Write(_STR_SPAN_OP)
+	w.Write(strSpanOp)
 	c.renderAttrsAndStyle(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 
-	w.Write(_STR_INPUT)
+	w.Write(strInput)
 	w.Write(c.inputType)
-	w.Write(_STR_ID)
+	w.Write(strId)
 	w.Writev(int(c.inputId))
-	w.Write(_STR_QUOTE)
+	w.Write(strQuote)
 	if c.group != nil {
-		w.Write(_STR_NAME)
+		w.Write(strName)
 		w.Writes(c.group.Name())
-		w.Write(_STR_QUOTE)
+		w.Write(strQuote)
 	}
 	if c.state {
-		w.Write(_STR_CHECKED)
+		w.Write(strChecked)
 	}
 	c.renderEnabled(w)
 	c.renderEHandlers(w)
 
-	w.Write(_STR_LABEL_FOR)
+	w.Write(strLabelFor)
 	w.Writev(int(c.inputId))
-	w.Write(_STR_QUOTE)
+	w.Write(strQuote)
 	// TODO readding click handler here causes double event sending...
 	// But we might add mouseover and other handlers still...
 	//c.renderEHandlers(w)
-	w.Write(_STR_GT)
+	w.Write(strGT)
 	c.renderText(w)
-	w.Write(_STR_LABEL_CL)
-	w.Write(_STR_SPAN_CL)
+	w.Write(strLabelCl)
+	w.Write(strSpanCl)
 }
 
 func (c *switchButtonImpl) Enabled() bool {
@@ -390,12 +390,12 @@ func (c *switchButtonImpl) preprocessEvent(event Event, r *http.Request) {
 }
 
 var (
-	_STR_CL_TR = []byte("><tr>")            // "><tr>"
-	_STR_TD_50 = []byte(`<td width="50%">`) // `<td width="50%">`
+	strClTr = []byte("><tr>")            // "><tr>"
+	strTD50 = []byte(`<td width="50%">`) // `<td width="50%">`
 )
 
 func (c *switchButtonImpl) Render(w writer) {
-	w.Write(_STR_TABLE_OP)
+	w.Write(strTableOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
 	// For Internet Explorer only:
@@ -404,13 +404,13 @@ func (c *switchButtonImpl) Render(w writer) {
 	// disabled (must have a 'disabled' attribute) if the switch button is disabled in order
 	// for clicks really be disabled.
 	c.onButton.renderEnabled(w)
-	w.Write(_STR_CL_TR)
+	w.Write(strClTr)
 
-	w.Write(_STR_TD_50)
+	w.Write(strTD50)
 	c.onButton.Render(w)
 
-	w.Write(_STR_TD_50)
+	w.Write(strTD50)
 	c.offButton.Render(w)
 
-	w.Write(_STR_TABLE_CL)
+	w.Write(strTableCl)
 }
