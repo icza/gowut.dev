@@ -22,7 +22,7 @@ import (
 )
 
 // Static JavaScript resource name
-const resNameStaticJs = "gowut-" + GOWUT_VERSION + ".js"
+const resNameStaticJs = "gowut-" + GowutVersion + ".js"
 
 // Static javascript code
 var staticJs []byte
@@ -44,10 +44,10 @@ func init() {
 		"',_pKeyCode='" + paramKeyCode +
 		"';\n" +
 		// Modifier key masks
-		"var _modKeyAlt=" + strconv.Itoa(int(MOD_KEY_ALT)) +
-		",_modKeyCtlr=" + strconv.Itoa(int(MOD_KEY_CTRL)) +
-		",_modKeyMeta=" + strconv.Itoa(int(MOD_KEY_META)) +
-		",_modKeyShift=" + strconv.Itoa(int(MOD_KEY_SHIFT)) +
+		"var _modKeyAlt=" + strconv.Itoa(int(ModKeyAlt)) +
+		",_modKeyCtlr=" + strconv.Itoa(int(ModKeyCtrl)) +
+		",_modKeyMeta=" + strconv.Itoa(int(ModKeyMeta)) +
+		",_modKeyShift=" + strconv.Itoa(int(ModKeyShift)) +
 		";\n" +
 		// Event response action consts
 		"var _eraNoAction=" + strconv.Itoa(eraNoAction) +

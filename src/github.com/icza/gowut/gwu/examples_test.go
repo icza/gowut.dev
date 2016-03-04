@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package gwu_test
+package gwu
 
 import (
 	"code/google/com/p/gowut/gwu"
@@ -23,29 +23,29 @@ import (
 func ExampleButton() {
 	b := gwu.NewButton("Click me")
 	b.AddEHandlerFunc(func(e gwu.Event) {
-		if e.MouseBtn() == gwu.MOUSE_BTN_MIDDLE {
+		if e.MouseBtn() == gwu.MouseBtnMiddle {
 			// Middle click
 		}
-	}, gwu.ETYPE_CLICK)
+	}, gwu.ETypeClick)
 }
 
 // Example code determining what kind of key is involved.
 func ExampleTextBox() {
 	b := gwu.NewTextBox("")
-	tb.AddSyncOnETypes(gwu.ETYPE_KEY_UP) // This is here so we will see up-to-date value in the event handler
+	tb.AddSyncOnETypes(gwu.ETypeKeyUp) // This is here so we will see up-to-date value in the event handler
 	b.AddEHandlerFunc(func(e gwu.Event) {
-		if e.ModKey(gwu.MOD_KEY_SHIFT) {
+		if e.ModKey(gwu.ModKeyShift) {
 			// SHIFT is pressed
 		}
 
 		c := e.KeyCode()
 		switch {
-		case c == gwu.KEY_ENTER: // Enter
-		case c >= gwu.KEY_0 && c <= gwu.KEY_9:
+		case c == gwu.KeyEnter: // Enter
+		case c >= gwu.Key0 && c <= gwu.Key9:
 			fallthrough
-		case c >= gwu.KEY_NUMPAD_0 && c <= gwuKEY_NUMPAD_9: // Number
-		case c >= gwu.KEY_A && c <= gwu.KEY_Z: // Letter
-		case c >= gwu.KEY_F1 && c <= gwu.KEY_F12: // Function key
+		case c >= gwu.KeyNumpad0 && c <= gwu.KeyNumpad9: // Number
+		case c >= gwu.KeyA && c <= gwu.KeyZ: // Letter
+		case c >= gwu.KeyF1 && c <= gwu.KeyF12: // Function key
 		}
-	}, gwu.ETYPE_KEY_UP)
+	}, gwu.ETypeKeyUp)
 }

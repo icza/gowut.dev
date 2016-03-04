@@ -108,8 +108,8 @@ type tableImpl struct {
 }
 
 // NewTable creates a new Table.
-// Default horizontal alignment is HA_DEFAULT,
-// default vertical alignment is VA_DEFAULT.
+// Default horizontal alignment is HADefault,
+// default vertical alignment is VADefault.
 func NewTable() Table {
 	c := &tableImpl{tableViewImpl: newTableViewImpl()}
 	c.Style().AddClass("gwu-Table")
@@ -401,10 +401,10 @@ func (c *tableImpl) renderRowTr(row int, w writer) {
 		// If rf does not specify alignments, it means alignments must not be overriden,
 		// default alignments of the table must be used!
 		ha, va := rf.halign, rf.valign
-		if ha == HA_DEFAULT {
+		if ha == HADefault {
 			ha = defha
 		}
-		if va == VA_DEFAULT {
+		if va == VADefault {
 			va = defva
 		}
 

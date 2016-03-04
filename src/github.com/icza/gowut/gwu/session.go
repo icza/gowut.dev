@@ -125,7 +125,7 @@ const idRunesCount = 64
 const idRunesIdxMask = idRunesCount - 1
 
 // Valid runes to be used for session ids
-// Its length must be _ID_RUNES_COUNT.
+// Its length must be idRunesCount.
 var idRunes = []rune("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_")
 
 func init() {

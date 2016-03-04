@@ -24,15 +24,15 @@ import (
 
 // TextBox interface defines a component for text input purpose.
 //
-// Suggested event type to handle actions: ETYPE_CHANGE
+// Suggested event type to handle actions: ETypeChange
 //
 // By default the value of the TextBox is synchronized with the server
-// on ETYPE_CHANGE event which is when the TextBox loses focus
+// on ETypeChange event which is when the TextBox loses focus
 // or when the ENTER key is pressed.
 // If you want a TextBox to synchronize values during editing
-// (while you type in characters), add the ETYPE_KEY_UP event type
+// (while you type in characters), add the ETypeKeyUp event type
 // to the events on which synchronization happens by calling:
-// 		AddSyncOnETypes(ETYPE_KEY_UP)
+// 		AddSyncOnETypes(ETypeKeyUp)
 //
 // Default style class: "gwu-TextBox"
 type TextBox interface {
@@ -78,15 +78,15 @@ type TextBox interface {
 
 // PasswBox interface defines a text box for password input purpose.
 //
-// Suggested event type to handle actions: ETYPE_CHANGE
+// Suggested event type to handle actions: ETypeChange
 //
 // By default the value of the PasswBox is synchronized with the server
-// on ETYPE_CHANGE event which is when the PasswBox loses focus
+// on ETypeChange event which is when the PasswBox loses focus
 // or when the ENTER key is pressed.
 // If you want a PasswBox to synchronize values during editing
-// (while you type in characters), add the ETYPE_KEY_UP event type
+// (while you type in characters), add the ETypeKeyUp event type
 // to the events on which synchronization happens by calling:
-// 		AddSyncOnETypes(ETYPE_KEY_UP)
+// 		AddSyncOnETypes(ETypeKeyUp)
 //
 // Default style class: "gwu-PasswBox"
 type PasswBox interface {
@@ -125,7 +125,7 @@ func NewPasswBox(text string) TextBox {
 // newTextBoxImpl creates a new textBoxImpl.
 func newTextBoxImpl(valueProviderJs []byte, text string, isPassw bool) textBoxImpl {
 	c := textBoxImpl{newCompImpl(valueProviderJs), newHasTextImpl(text), newHasEnabledImpl(), isPassw, 1, 20}
-	c.AddSyncOnETypes(ETYPE_CHANGE)
+	c.AddSyncOnETypes(ETypeChange)
 	return c
 }
 

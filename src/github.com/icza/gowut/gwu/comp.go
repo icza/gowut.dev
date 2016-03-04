@@ -132,7 +132,7 @@ type compImpl struct {
 	styleImpl *styleImpl        // Style builder.
 
 	handlers        map[EventType][]EventHandler // Event handlers mapped from event type. Lazily initialized.
-	valueProviderJs []byte                       // If the HTML representation of the component has a value, this JavaScript code code must provide it. It will be automatically sent as the PARAM_COMP_ID parameter.
+	valueProviderJs []byte                       // If the HTML representation of the component has a value, this JavaScript code code must provide it. It will be automatically sent as the paramCompId parameter.
 	syncOnETypes    map[EventType]bool           // Tells on which event types should comp value sync happen.
 }
 
@@ -263,7 +263,7 @@ func (c *compImpl) AddSyncOnETypes(etypes ...EventType) {
 	for _, etype := range etypes {
 		if !c.syncOnETypes[etype] { // If not yet synced...
 			c.syncOnETypes[etype] = true
-			c.AddEHandler(EMPTY_EHANDLER, etype)
+			c.AddEHandler(EmptyEHandler, etype)
 		}
 	}
 }

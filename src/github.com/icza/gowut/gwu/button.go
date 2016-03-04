@@ -19,7 +19,7 @@ package gwu
 
 // Button interface defines a clickable button.
 //
-// Suggested event type to handle actions: ETYPE_CLICK
+// Suggested event type to handle actions: ETypeClick
 //
 // Default style class: "gwu-Button"
 type Button interface {

@@ -20,7 +20,7 @@ package gwu
 // Expander interface defines a component which can show and hide
 // another component when clicked on the header.
 //
-// You can register ETYPE_STATE_CHANGE event handlers which will be called when the user
+// You can register ETypeStateChange event handlers which will be called when the user
 // expands or collapses the expander by clicking on the header. The event source will be
 // the expander. The event will have a parent event whose source will be the clicked
 // header component and will contain the mouse coordinates.
@@ -73,8 +73,8 @@ type expanderImpl struct {
 // By default expanders are collapsed.
 func NewExpander() Expander {
 	c := &expanderImpl{tableViewImpl: newTableViewImpl(), expanded: true, headerFmt: newCellFmtImpl(), contentFmt: newCellFmtImpl()}
-	c.headerFmt.SetAlign(HA_LEFT, VA_MIDDLE)
-	c.contentFmt.SetAlign(HA_LEFT, VA_TOP)
+	c.headerFmt.SetAlign(HALeft, VAMiddle)
+	c.contentFmt.SetAlign(HALeft, VATop)
 	c.Style().AddClass("gwu-Expander")
 	// Init styles by changing expanded state, to the default value.
 	c.SetExpanded(false)
@@ -151,10 +151,10 @@ func (c *expanderImpl) SetHeader(header Comp) {
 	header.AddEHandlerFunc(func(e Event) {
 		c.SetExpanded(!c.expanded)
 		e.MarkDirty(c)
-		if c.handlers[ETYPE_STATE_CHANGE] != nil {
-			c.dispatchEvent(e.forkEvent(ETYPE_STATE_CHANGE, c))
+		if c.handlers[ETypeStateChange] != nil {
+			c.dispatchEvent(e.forkEvent(ETypeStateChange, c))
 		}
-	}, ETYPE_CLICK)
+	}, ETypeClick)
 }
 
 func (c *expanderImpl) Content() Comp {

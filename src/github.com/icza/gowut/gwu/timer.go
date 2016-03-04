@@ -25,7 +25,7 @@ import (
 // or a series of timed events periodically.
 //
 // Timers don't have a visual part, they are used only to generate events.
-// The generated events are of type ETYPE_STATE_CHANGE.
+// The generated events are of type ETypeStateChange.
 //
 // Note that receiving an event from a Timer (like from any other components)
 // updates the last accessed property of the associated session, causing
@@ -137,7 +137,7 @@ func (c *timerImpl) Render(w writer) {
 	w.Write(strScriptOp)
 	w.Writev(int(c.id))
 	w.Write(strComma)
-	w.Writev(int(ETYPE_STATE_CHANGE))
+	w.Writev(int(ETypeStateChange))
 	w.Write(strComma)
 	w.Writev(int(c.timeout / time.Millisecond))
 	w.Write(strComma)

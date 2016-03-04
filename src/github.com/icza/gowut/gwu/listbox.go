@@ -26,7 +26,7 @@ import (
 // ListBox interface defines a component which allows selecting one or multiple values
 // from a predefined list.
 //
-// Suggested event type to handle changes: ETYPE_CHANGE
+// Suggested event type to handle changes: ETypeChange
 //
 // Default style class: "gwu-ListBox"
 type ListBox interface {
@@ -97,7 +97,7 @@ var (
 // NewListBox creates a new ListBox.
 func NewListBox(values []string) ListBox {
 	c := &listBoxImpl{newCompImpl(strSelidx), newHasEnabledImpl(), values, false, make([]bool, len(values)), 1}
-	c.AddSyncOnETypes(ETYPE_CHANGE)
+	c.AddSyncOnETypes(ETypeChange)
 	c.Style().AddClass("gwu-ListBox")
 	return c
 }

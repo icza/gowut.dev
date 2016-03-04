@@ -129,11 +129,11 @@ type HAlign string
 
 // Horizontal alignment constants.
 const (
-	HA_LEFT   HAlign = "left"   // Horizontal left alignment
-	HA_CENTER HAlign = "center" // Horizontal center alignment
-	HA_RIGHT  HAlign = "right"  // Horizontal right alignment
+	HALeft   HAlign = "left"   // Horizontal left alignment
+	HACenter        = "center" // Horizontal center alignment
+	HARight         = "right"  // Horizontal right alignment
 
-	HA_DEFAULT HAlign = "" // Browser default (or inherited) horizontal alignment
+	HADefault = "" // Browser default (or inherited) horizontal alignment
 )
 
 // Vertical alignment type.
@@ -141,11 +141,11 @@ type VAlign string
 
 // Vertical alignment constants.
 const (
-	VA_TOP    VAlign = "top"    // Vertical top alignment
-	VA_MIDDLE VAlign = "middle" // Vertical center alignment
-	VA_BOTTOM VAlign = "bottom" // Vertical bottom alignment
+	VATop    VAlign = "top"    // Vertical top alignment
+	VAMiddle        = "middle" // Vertical center alignment
+	VABottom        = "bottom" // Vertical bottom alignment
 
-	VA_DEFAULT VAlign = "" // Browser default (or inherited) vertical alignment
+	VADefault = "" // Browser default (or inherited) vertical alignment
 )
 
 // HasHVAlign interfaces defines a horizontal and a vertical
@@ -234,13 +234,13 @@ type cellFmtImpl struct {
 }
 
 // newCellFmtImpl creates a new cellFmtImpl.
-// Default horizontal alignment is HA_DEFAULT,
-// default vertical alignment is VA_DEFAULT.
+// Default horizontal alignment is HADefult,
+// default vertical alignment is VADefault.
 func newCellFmtImpl() *cellFmtImpl {
-	// Initialize hasHVAlignImpl with HA_DEFAULT and VA_DEFAULT
+	// Initialize hasHVAlignImpl with HADefault and VADefault
 	// so if aligns are not changed, they will not be rendered =>
 	// they will be inherited (from TR).
-	return &cellFmtImpl{hasHVAlignImpl: newHasHVAlignImpl(HA_DEFAULT, VA_DEFAULT)}
+	return &cellFmtImpl{hasHVAlignImpl: newHasHVAlignImpl(HADefault, VADefault)}
 }
 
 func (c *cellFmtImpl) Style() Style {
@@ -294,7 +294,7 @@ func (c *cellFmtImpl) renderWithAligns(tag []byte, halign HAlign, valign VAlign,
 		w.WriteAttr(name, value)
 	}
 
-	if halign != HA_DEFAULT {
+	if halign != HADefault {
 		w.Write(strAlign)
 		w.Writes(string(halign))
 		w.Write(strQuote)
@@ -304,9 +304,9 @@ func (c *cellFmtImpl) renderWithAligns(tag []byte, halign HAlign, valign VAlign,
 		c.styleImpl.renderClasses(w)
 	}
 
-	if valign != VA_DEFAULT || c.styleImpl != nil {
+	if valign != VADefault || c.styleImpl != nil {
 		w.Write(strStyle)
-		if valign != VA_DEFAULT {
+		if valign != VADefault {
 			w.Write(strVAlign)
 			w.Writes(string(valign))
 			w.Write(strSemicol)
@@ -340,14 +340,14 @@ type TableView interface {
 	CellSpacing() int
 
 	// SetCellSpacing sets the cell spacing.
-	// Has no effect if layout is LAYOUT_NATURAL.
+	// Has no effect if layout is LayoutNatural.
 	SetCellSpacing(spacing int)
 
 	// CellPadding returns the cell spacing.
 	CellPadding() int
 
 	// SetCellPadding sets the cell padding.
-	// Has no effect if layout is LAYOUT_NATURAL.
+	// Has no effect if layout is LayoutNatural.
 	SetCellPadding(padding int)
 }
 
@@ -358,13 +358,13 @@ type tableViewImpl struct {
 }
 
 // newTableViewImpl creates a new tableViewImpl.
-// Default horizontal alignment is HA_DEFAULT,
-// default vertical alignment is VA_DEFAULT.
+// Default horizontal alignment is HADefault,
+// default vertical alignment is VADefault.
 func newTableViewImpl() tableViewImpl {
-	// Initialize hasHVAlignImpl with HA_DEFAULT and VA_DEFAULT
+	// Initialize hasHVAlignImpl with HADefault and VADefault
 	// so if aligns are not changed, they will not be rendered =>
 	// they will be inherited (from TR).
-	c := tableViewImpl{compImpl: newCompImpl(nil), hasHVAlignImpl: newHasHVAlignImpl(HA_DEFAULT, VA_DEFAULT)}
+	c := tableViewImpl{compImpl: newCompImpl(nil), hasHVAlignImpl: newHasHVAlignImpl(HADefault, VADefault)}
 	c.SetCellSpacing(0)
 	c.SetCellPadding(0)
 	return c
@@ -400,12 +400,12 @@ var strStVAlign = []byte(` style="vertical-align:`) // ` style="vertical-align:`
 // alignment info included.
 func (c *tableViewImpl) renderTr(w writer) {
 	w.Write(strTROp)
-	if c.halign != HA_DEFAULT {
+	if c.halign != HADefault {
 		w.Write(strAlign)
 		w.Writes(string(c.halign))
 		w.Write(strQuote)
 	}
-	if c.valign != VA_DEFAULT {
+	if c.valign != VADefault {
 		w.Write(strStVAlign)
 		w.Writes(string(c.valign))
 		w.Write(strQuote)

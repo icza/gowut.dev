@@ -86,7 +86,7 @@ type windowImpl struct {
 }
 
 // NewWindow creates a new window.
-// The default layout strategy is LAYOUT_VERTICAL.
+// The default layout strategy is LayoutVertical.
 func NewWindow(name, text string) Window {
 	c := &windowImpl{panelImpl: newPanelImpl(), hasTextImpl: newHasTextImpl(text), name: name}
 	c.Style().AddClass("gwu-Window")
@@ -126,7 +126,7 @@ func (c *windowImpl) Render(w writer) {
 	// First render window event handlers as window functions.
 	found := false
 	for etype, _ := range c.handlers {
-		if etype.Category() != ECAT_WINDOW {
+		if etype.Category() != ECatWindow {
 			continue
 		}
 

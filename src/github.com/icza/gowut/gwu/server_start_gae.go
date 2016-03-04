@@ -29,7 +29,7 @@ func (s *serverImpl) Start(openWins ...string) error {
 		s.serveHTTP(w, r)
 	})
 
-	http.HandleFunc(s.appPath+_PATH_STATIC, func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc(s.appPath+pathStatic, func(w http.ResponseWriter, r *http.Request) {
 		s.serveStatic(w, r)
 	})
 

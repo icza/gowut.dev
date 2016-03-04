@@ -204,7 +204,7 @@ func newServerImpl(appName, addr, certFile, keyFile string) *serverImpl {
 	}
 
 	s := &serverImpl{sessionImpl: newSessionImpl(false), appName: appName, addr: addr, sessions: make(map[string]Session),
-		sessCreatorNames: make(map[string]string), theme: THEME_DEFAULT}
+		sessCreatorNames: make(map[string]string), theme: ThemeDefault}
 
 	if s.appName == "" {
 		s.appPath = "/"

@@ -38,7 +38,7 @@ func buildHomeDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	content := []string{
-		"This app is written in and showcases Gowut " + gwu.GOWUT_VERSION + ".",
+		"This app is written in and showcases Gowut " + gwu.GowutVersion + ".",
 		"Everything you see here is modeled and represented in Go (server side). Everything you see here is created with Go code only (no HTML).",
 		"When you make modifications to components (e.g. enter text into a TextBox), that is automatically trasmitted to the server side via AJAX calls.",
 		"If you close the window and reopen the URL, you will see everything as you left it.",
@@ -59,7 +59,7 @@ func buildExpanderDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	l := gwu.NewLabel("Click on the Expander's header.")
-	l.Style().SetColor(gwu.CLR_GREEN)
+	l.Style().SetColor(gwu.ClrGreen)
 	p.Add(l)
 	p.AddVSpace(5)
 	e := gwu.NewExpander()
@@ -73,7 +73,7 @@ func buildExpanderDemo(event gwu.Event) gwu.Comp {
 			l.SetText("You collapsed it.")
 		}
 		ev.MarkDirty(l)
-	}, gwu.ETYPE_STATE_CHANGE)
+	}, gwu.ETypeStateChange)
 
 	p.AddVSpace(20)
 	var ee gwu.Expander
@@ -97,7 +97,7 @@ func buildLinkContainerDemo(event gwu.Event) gwu.Comp {
 
 	link := gwu.NewLink("An obvious link, to Google Home", "https://google.com/")
 	inside := gwu.NewPanel()
-	inside.Style().SetBorder2(1, gwu.BRD_STYLE_SOLID, gwu.CLR_GRAY)
+	inside.Style().SetBorder2(1, gwu.BrdStyleSolid, gwu.ClrGray)
 	inside.Add(gwu.NewLabel("Everything inside this box also links to Google!"))
 	inside.Add(gwu.NewButton("Me too!"))
 	link.SetComp(inside)
@@ -139,7 +139,7 @@ func buildTableDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	l := gwu.NewLabel("Tip: Switch to the 'debug' theme (top right) to see cell borders.")
-	l.Style().SetColor(gwu.CLR_RED).SetFontStyle(gwu.FONT_STYLE_ITALIC)
+	l.Style().SetColor(gwu.ClrRed).SetFontStyle(gwu.FontStyleItalic)
 	p.Add(l)
 
 	p.AddVSpace(20)
@@ -167,8 +167,8 @@ func buildTableDemo(event gwu.Event) gwu.Comp {
 	p.Add(gwu.NewLabel("Advanced table structure with modified alignment, row and col spans:"))
 	p.AddVSpace(10)
 	t = gwu.NewTable()
-	t.Style().SetBorder2(1, gwu.BRD_STYLE_SOLID, gwu.CLR_GREY)
-	t.SetAlign(gwu.HA_RIGHT, gwu.VA_TOP)
+	t.Style().SetBorder2(1, gwu.BrdStyleSolid, gwu.ClrGrey)
+	t.SetAlign(gwu.HARight, gwu.VATop)
 	t.EnsureSize(5, 5)
 	for row := 0; row < 5; row++ {
 		for col := 0; col < 5; col++ {
@@ -178,15 +178,15 @@ func buildTableDemo(event gwu.Event) gwu.Comp {
 	t.SetColSpan(2, 1, 2)
 	t.SetRowSpan(3, 1, 2)
 	t.CellFmt(2, 2).Style().SetSizePx(150, 80)
-	t.CellFmt(2, 2).SetAlign(gwu.HA_RIGHT, gwu.VA_BOTTOM)
-	t.RowFmt(2).SetAlign(gwu.HA_DEFAULT, gwu.VA_MIDDLE)
+	t.CellFmt(2, 2).SetAlign(gwu.HARight, gwu.VABottom)
+	t.RowFmt(2).SetAlign(gwu.HADefault, gwu.VAMiddle)
 	t.CompAt(2, 1).Style().SetFullSize()
 	t.CompAt(4, 2).Style().SetFullWidth()
-	t.RowFmt(0).Style().SetBackground(gwu.CLR_RED)
-	t.RowFmt(1).Style().SetBackground(gwu.CLR_GREEN)
-	t.RowFmt(2).Style().SetBackground(gwu.CLR_BLUE)
-	t.RowFmt(3).Style().SetBackground(gwu.CLR_GREY)
-	t.RowFmt(4).Style().SetBackground(gwu.CLR_TEAL)
+	t.RowFmt(0).Style().SetBackground(gwu.ClrRed)
+	t.RowFmt(1).Style().SetBackground(gwu.ClrGreen)
+	t.RowFmt(2).Style().SetBackground(gwu.ClrBlue)
+	t.RowFmt(3).Style().SetBackground(gwu.ClrGrey)
+	t.RowFmt(4).Style().SetBackground(gwu.ClrTeal)
 	p.Add(t)
 
 	return p
@@ -206,11 +206,11 @@ func buildTabPanelDemo(event gwu.Event) gwu.Comp {
 	table.Add(gwu.NewLabel("Tab bar vertical align:"), 2, 0)
 
 	placemslb := gwu.NewListBox([]string{"Top", "Right", "Bottom", "Left"})
-	placems := []gwu.TabBarPlacement{gwu.TB_PLACEMENT_TOP, gwu.TB_PLACEMENT_RIGHT, gwu.TB_PLACEMENT_BOTTOM, gwu.TB_PLACEMENT_LEFT}
+	placems := []gwu.TabBarPlacement{gwu.TbPlacementTop, gwu.TbPlacementRight, gwu.TbPlacementBottom, gwu.TbPlacementLeft}
 	halignslb := gwu.NewListBox([]string{"Left", "Center", "Right"})
-	haligns := []gwu.HAlign{gwu.HA_LEFT, gwu.HA_CENTER, gwu.HA_RIGHT}
+	haligns := []gwu.HAlign{gwu.HALeft, gwu.HACenter, gwu.HARight}
 	valignslb := gwu.NewListBox([]string{"Top", "Middle", "Bottom"})
-	valigns := []gwu.VAlign{gwu.VA_TOP, gwu.VA_MIDDLE, gwu.VA_BOTTOM}
+	valigns := []gwu.VAlign{gwu.VATop, gwu.VAMiddle, gwu.VABottom}
 	placemslb.Style().SetFullWidth()
 	halignslb.Style().SetFullWidth()
 	valignslb.Style().SetFullWidth()
@@ -221,15 +221,15 @@ func buildTabPanelDemo(event gwu.Event) gwu.Comp {
 	placemslb.AddEHandlerFunc(func(e gwu.Event) {
 		t.SetTabBarPlacement(placems[placemslb.SelectedIdx()])
 		e.MarkDirty(t)
-	}, gwu.ETYPE_CHANGE)
+	}, gwu.ETypeChange)
 	halignslb.AddEHandlerFunc(func(e gwu.Event) {
 		t.TabBarFmt().SetHAlign(haligns[halignslb.SelectedIdx()])
 		e.MarkDirty(t)
-	}, gwu.ETYPE_CHANGE)
+	}, gwu.ETypeChange)
 	valignslb.AddEHandlerFunc(func(e gwu.Event) {
 		t.TabBarFmt().SetVAlign(valigns[valignslb.SelectedIdx()])
 		e.MarkDirty(t)
-	}, gwu.ETYPE_CHANGE)
+	}, gwu.ETypeChange)
 
 	p.Add(table)
 
@@ -242,17 +242,17 @@ func buildTabPanelDemo(event gwu.Event) gwu.Comp {
 			t.Style().SetSize("", "")
 		}
 		e.MarkDirty(t)
-	}, gwu.ETYPE_CLICK)
+	}, gwu.ETypeClick)
 	p.Add(fix)
 
 	p.AddVSpace(10)
 	l := gwu.NewLabel("Click on tabs...")
-	l.Style().SetColor(gwu.CLR_GREEN)
+	l.Style().SetColor(gwu.ClrGreen)
 	p.Add(l)
 	t.AddEHandlerFunc(func(e gwu.Event) {
 		l.SetText("Clicked on tab: " + strconv.Itoa(t.Selected()))
 		e.MarkDirty(l)
-	}, gwu.ETYPE_STATE_CHANGE)
+	}, gwu.ETypeStateChange)
 	p.AddVSpace(10)
 	c := gwu.NewPanel()
 	c.Add(gwu.NewLabel("This is a TabPanel."))
@@ -263,7 +263,7 @@ func buildTabPanelDemo(event gwu.Event) gwu.Comp {
 	b.AddEHandlerFunc(func(e gwu.Event) {
 		t.SetSelected(3)
 		e.MarkDirty(t)
-	}, gwu.ETYPE_CLICK)
+	}, gwu.ETypeClick)
 	c.Add(b)
 	t.AddString("Home", c)
 	c = gwu.NewPanel()
@@ -319,7 +319,7 @@ func buildCheckBoxDemo(event gwu.Event) gwu.Comp {
 			}
 			suml.SetText(fmt.Sprintf("%d day%s is a total of %d hours a week.", sum, plural(sum), sum*8))
 			e.MarkDirty(suml)
-		}, gwu.ETYPE_CLICK)
+		}, gwu.ETypeClick)
 	}
 
 	p.Add(suml)
@@ -337,7 +337,7 @@ func buildListBoxDemo(event gwu.Event) gwu.Comp {
 	lb.AddEHandlerFunc(func(e gwu.Event) {
 		l.Style().SetBackground(lb.SelectedValue())
 		e.MarkDirty(l)
-	}, gwu.ETYPE_CHANGE)
+	}, gwu.ETypeChange)
 	row.Add(lb)
 	p.Add(row)
 
@@ -358,7 +358,7 @@ func buildListBoxDemo(event gwu.Event) gwu.Comp {
 			sumLabel.SetText(fmt.Sprintf("Now quite there... (sum = %d)", sum))
 		}
 		e.MarkDirty(sumLabel)
-	}, gwu.ETYPE_CHANGE)
+	}, gwu.ETypeChange)
 	p.Add(lb2)
 	p.Add(sumLabel)
 
@@ -372,14 +372,14 @@ func buildTextBoxDemo(event gwu.Event) gwu.Comp {
 	row := gwu.NewHorizontalPanel()
 	tb := gwu.NewTextBox("")
 	tb.SetMaxLength(15)
-	tb.AddSyncOnETypes(gwu.ETYPE_KEY_UP)
+	tb.AddSyncOnETypes(gwu.ETypeKeyUp)
 	length := gwu.NewLabel("")
-	length.Style().SetFontSize("80%").SetFontStyle(gwu.FONT_STYLE_ITALIC)
+	length.Style().SetFontSize("80%").SetFontStyle(gwu.FontStyleItalic)
 	tb.AddEHandlerFunc(func(e gwu.Event) {
 		rem := 15 - len(tb.Text())
 		length.SetText(fmt.Sprintf("(%d character%s left...)", rem, plural(rem)))
 		e.MarkDirty(length)
-	}, gwu.ETYPE_CHANGE, gwu.ETYPE_KEY_UP)
+	}, gwu.ETypeChange, gwu.ETypeKeyUp)
 	row.Add(tb)
 	row.Add(length)
 	p.Add(row)
@@ -463,7 +463,7 @@ func buildSwitchButtonDemo(event gwu.Event) gwu.Comp {
 	sw.AddEHandlerFunc(func(e gwu.Event) {
 		sw2.SetEnabled(sw.State())
 		e.MarkDirty(sw2)
-	}, gwu.ETYPE_CLICK)
+	}, gwu.ETypeClick)
 	p.Add(row)
 
 	return p
@@ -478,16 +478,16 @@ func buildButtonDemo(event gwu.Event) gwu.Comp {
 	b := gwu.NewButton("Normal Button")
 	b.AddEHandlerFunc(func(e gwu.Event) {
 		switch e.Type() {
-		case gwu.ETYPE_MOUSE_OVER:
+		case gwu.ETypeMouseOver:
 			l.SetText("Mouse is over...")
-		case gwu.ETYPE_MOUSE_OUT:
+		case gwu.ETypeMouseOut:
 			l.SetText("Mouse is out.")
-		case gwu.ETYPE_CLICK:
+		case gwu.ETypeClick:
 			x, y := e.Mouse()
 			l.SetText(fmt.Sprintf("Clicked at x=%d, y=%d", x, y))
 		}
 		e.MarkDirty(l)
-	}, gwu.ETYPE_CLICK, gwu.ETYPE_MOUSE_OVER, gwu.ETYPE_MOUSE_OUT)
+	}, gwu.ETypeClick, gwu.ETypeMouseOver, gwu.ETypeMouseOut)
 	btnp.Add(b)
 
 	b = gwu.NewButton("Disabled Button")
@@ -558,7 +558,7 @@ func buildLabelDemo(event gwu.Event) gwu.Comp {
 			}
 		}
 		e.MarkDirty(p)
-	}, gwu.ETYPE_CLICK)
+	}, gwu.ETypeClick)
 	p.Add(b)
 
 	return p
@@ -605,19 +605,19 @@ func buildTimerDemo(event gwu.Event) gwu.Comp {
 	b := gwu.NewButton("Defuse!")
 	t.AddEHandlerFunc(func(e gwu.Event) {
 		l.SetText("BOOOOM! You were too slow!")
-		l.Style().SetColor(gwu.CLR_RED)
+		l.Style().SetColor(gwu.ClrRed)
 		b.SetEnabled(false)
 		e.MarkDirty(l, b)
-	}, gwu.ETYPE_STATE_CHANGE)
+	}, gwu.ETypeStateChange)
 	hiddenPan.Add(t)
 	row := gwu.NewHorizontalPanel()
 	b.AddEHandlerFunc(func(e gwu.Event) {
 		t.SetActive(false)
 		l.SetText("Bomb defused! Phew! Good Job!")
-		l.Style().SetColor(gwu.CLR_GREEN)
+		l.Style().SetColor(gwu.ClrGreen)
 		b.SetEnabled(false)
 		e.MarkDirty(t, l, b)
-	}, gwu.ETYPE_CLICK)
+	}, gwu.ETypeClick)
 	row.Add(b)
 	b2 := gwu.NewButton("Plant a new Bomb!")
 	b2.AddEHandlerFunc(func(e gwu.Event) {
@@ -627,7 +627,7 @@ func buildTimerDemo(event gwu.Event) gwu.Comp {
 		l.Style().SetColor("")
 		b.SetEnabled(true)
 		e.MarkDirty(t, l, b)
-	}, gwu.ETYPE_CLICK)
+	}, gwu.ETypeClick)
 	row.Add(b2)
 	p.Add(row)
 
@@ -646,14 +646,14 @@ func buildTimerDemo(event gwu.Event) gwu.Comp {
 			t2.SetActive(false)
 			e.MarkDirty(t2)
 		}
-	}, gwu.ETYPE_STATE_CHANGE)
+	}, gwu.ETypeStateChange)
 	hiddenPan.Add(t2)
 	b3 := gwu.NewButton("Restart")
 	b3.AddEHandlerFunc(func(e gwu.Event) {
 		counter = 30
 		t2.SetActive(true)
 		e.MarkDirty(t2)
-	}, gwu.ETYPE_CLICK)
+	}, gwu.ETypeClick)
 	p.Add(b3)
 
 	event.MarkDirty(hiddenPan)
@@ -679,20 +679,20 @@ func buildShowcaseWin(sess gwu.Session) {
 	win.Style().SetFullSize()
 	win.AddEHandlerFunc(func(e gwu.Event) {
 		switch e.Type() {
-		case gwu.ETYPE_WIN_LOAD:
+		case gwu.ETypeWinLoad:
 			log.Println("LOADING window:", e.Src().Id())
-		case gwu.ETYPE_WIN_UNLOAD:
+		case gwu.ETypeWinUnload:
 			log.Println("UNLOADING window:", e.Src().Id())
 		}
-	}, gwu.ETYPE_WIN_LOAD, gwu.ETYPE_WIN_UNLOAD)
+	}, gwu.ETypeWinLoad, gwu.ETypeWinUnload)
 
 	hiddenPan := gwu.NewNaturalPanel()
 	sess.SetAttr("hiddenPan", hiddenPan)
 
 	header := gwu.NewHorizontalPanel()
-	header.Style().SetFullWidth().SetBorderBottom2(2, gwu.BRD_STYLE_SOLID, "#777777")
+	header.Style().SetFullWidth().SetBorderBottom2(2, gwu.BrdStyleSolid, "#777777")
 	l := gwu.NewLabel("Gowut - Showcase of Features")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("120%")
+	l.Style().SetFontWeight(gwu.FontWeightBold).SetFontSize("120%")
 	header.Add(l)
 	header.AddHConsumer()
 	header.Add(gwu.NewLabel("Theme:"))
@@ -700,7 +700,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	themes.AddEHandlerFunc(func(e gwu.Event) {
 		win.SetTheme(themes.SelectedValue())
 		e.ReloadWin("show")
-	}, gwu.ETYPE_CHANGE)
+	}, gwu.ETypeChange)
 	header.Add(themes)
 	header.AddHSpace(10)
 	reset := gwu.NewLink("Reset", "#")
@@ -708,21 +708,21 @@ func buildShowcaseWin(sess gwu.Session) {
 	reset.AddEHandlerFunc(func(e gwu.Event) {
 		e.RemoveSess()
 		e.ReloadWin("show")
-	}, gwu.ETYPE_CLICK)
+	}, gwu.ETypeClick)
 	header.Add(reset)
 	setNoWrap(header)
 	win.Add(header)
 
 	content := gwu.NewHorizontalPanel()
 	content.SetCellPadding(1)
-	content.SetVAlign(gwu.VA_TOP)
+	content.SetVAlign(gwu.VATop)
 	content.Style().SetFullSize()
 
 	demoWrapper := gwu.NewPanel()
 	demoWrapper.Style().SetPaddingLeftPx(5)
 	demoWrapper.AddVSpace(10)
 	demoTitle := gwu.NewLabel("")
-	demoTitle.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("110%")
+	demoTitle.Style().SetFontWeight(gwu.FontWeightBold).SetFontSize("110%")
 	demoWrapper.Add(demoTitle)
 	demoWrapper.AddVSpace(10)
 
@@ -755,27 +755,27 @@ func buildShowcaseWin(sess gwu.Session) {
 
 	createDemo := func(name string, buildFunc func(gwu.Event) gwu.Comp) pdemo {
 		link := gwu.NewLabel(name)
-		link.Style().SetFullWidth().SetCursor(gwu.CURSOR_POINTER).SetDisplay(gwu.DISPLAY_BLOCK).SetColor(gwu.CLR_BLUE)
+		link.Style().SetFullWidth().SetCursor(gwu.CursorPointer).SetDisplay(gwu.DisplayBlock).SetColor(gwu.ClrBlue)
 		demo := &demo{link: link, buildFunc: buildFunc}
 		link.AddEHandlerFunc(func(e gwu.Event) {
 			selectDemo(demo, e)
-		}, gwu.ETYPE_CLICK)
+		}, gwu.ETypeClick)
 		links.Add(link)
 		demos[name] = demo
 		return demo
 	}
 
-	links.Style().SetFullHeight().SetBorderRight2(2, gwu.BRD_STYLE_SOLID, "#777777")
+	links.Style().SetFullHeight().SetBorderRight2(2, gwu.BrdStyleSolid, "#777777")
 	links.AddVSpace(5)
 	homeDemo := createDemo("Home", buildHomeDemo)
 	selectDemo(homeDemo, nil)
 	links.AddVSpace(5)
 	l = gwu.NewLabel("Component Palette")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetFontSize("110%")
+	l.Style().SetFontWeight(gwu.FontWeightBold).SetFontSize("110%")
 	links.Add(l)
 	links.AddVSpace(5)
 	l = gwu.NewLabel("Containers")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)
+	l.Style().SetFontWeight(gwu.FontWeightBold)
 	links.Add(l)
 	createDemo("Expander", buildExpanderDemo)
 	createDemo("Link (as Container)", buildLinkContainerDemo)
@@ -785,7 +785,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	createDemo("Window", buildWindowDemo)
 	links.AddVSpace(5)
 	l = gwu.NewLabel("Input components")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD).SetDisplay(gwu.DISPLAY_BLOCK)
+	l.Style().SetFontWeight(gwu.FontWeightBold).SetDisplay(gwu.DisplayBlock)
 	links.Add(l)
 	createDemo("CheckBox", buildCheckBoxDemo)
 	createDemo("ListBox", buildListBoxDemo)
@@ -795,7 +795,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	createDemo("SwitchButton", buildSwitchButtonDemo)
 	links.AddVSpace(5)
 	l = gwu.NewLabel("Other components")
-	l.Style().SetFontWeight(gwu.FONT_WEIGHT_BOLD)
+	l.Style().SetFontWeight(gwu.FontWeightBold)
 	links.Add(l)
 	createDemo("Button", buildButtonDemo)
 	createDemo("Html", buildHtmlDemo)
@@ -813,15 +813,15 @@ func buildShowcaseWin(sess gwu.Session) {
 	win.CellFmt(content).Style().SetFullSize()
 
 	footer := gwu.NewHorizontalPanel()
-	footer.Style().SetFullWidth().SetBorderTop2(2, gwu.BRD_STYLE_SOLID, "#777777")
+	footer.Style().SetFullWidth().SetBorderTop2(2, gwu.BrdStyleSolid, "#777777")
 	footer.Add(hiddenPan)
 	footer.AddHConsumer()
 	l = gwu.NewLabel("Copyright © 2013-2016 András Belicza. All rights reserved.")
-	l.Style().SetFontStyle(gwu.FONT_STYLE_ITALIC).SetFontSize("95%")
+	l.Style().SetFontStyle(gwu.FontStyleItalic).SetFontSize("95%")
 	footer.Add(l)
 	footer.AddHSpace(10)
 	link := gwu.NewLink("Visit Gowut Home page", "https://sites.google.com/site/gowebuitoolkit/")
-	link.Style().SetFontStyle(gwu.FONT_STYLE_ITALIC).SetFontSize("95%")
+	link.Style().SetFontStyle(gwu.FontStyleItalic).SetFontSize("95%")
 	footer.Add(link)
 	setNoWrap(footer)
 	win.Add(footer)
@@ -829,11 +829,11 @@ func buildShowcaseWin(sess gwu.Session) {
 	sess.AddWin(win)
 }
 
-// setNoWrap sets WHITE_SPACE_NOWRAP to all children of the specified panel.
+// setNoWrap sets WhiteSpaceNowrap to all children of the specified panel.
 func setNoWrap(panel gwu.Panel) {
 	count := panel.CompsCount()
 	for i := count - 1; i >= 0; i-- {
-		panel.CompAt(i).Style().SetWhiteSpace(gwu.WHITE_SPACE_NOWRAP)
+		panel.CompAt(i).Style().SetWhiteSpace(gwu.WhiteSpaceNowrap)
 	}
 }
 

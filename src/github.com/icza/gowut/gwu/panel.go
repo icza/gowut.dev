@@ -26,9 +26,9 @@ type Layout int
 
 // Layout strategies.
 const (
-	LAYOUT_NATURAL    Layout = iota // Natural layout: elements are displayed in their natural order.
-	LAYOUT_VERTICAL                 // Vertical layout: elements are layed out vertically.
-	LAYOUT_HORIZONTAL               // Horizontal layout: elements are layed out horizontally.
+	LayoutNatural    Layout = iota // Natural layout: elements are displayed in their natural order.
+	LayoutVertical                 // Vertical layout: elements are layed out vertically.
+	LayoutHorizontal               // Horizontal layout: elements are layed out horizontally.
 )
 
 // PanelView interface defines a container which stores child components
@@ -60,7 +60,7 @@ type PanelView interface {
 
 	// CellFmt returns the cell formatter of the specified child component.
 	// If the specified component is not a child, nil is returned.
-	// Cell formatting has no effect if layout is LAYOUT_NATURAL.
+	// Cell formatting has no effect if layout is LayoutNatural.
 	CellFmt(c Comp) CellFmt
 }
 
@@ -82,26 +82,26 @@ type Panel interface {
 	Insert(c Comp, idx int) bool
 
 	// AddHSpace adds and returns a fixed-width horizontal space consumer.
-	// Useful when layout is LAYOUT_HORIZONTAL.
+	// Useful when layout is LayoutHorizontal.
 	AddHSpace(width int) Comp
 
 	// AddVSpace adds and returns a fixed-height vertical space consumer.
-	// Useful when layout is LAYOUT_VERTICAL.
+	// Useful when layout is LayoutVertical.
 	AddVSpace(height int) Comp
 
 	// AddSpace adds and returns a fixed-size space consumer.
 	AddSpace(width, height int) Comp
 
 	// AddHConsumer adds and returns a horizontal (free) space consumer.
-	// Useful when layout is LAYOUT_HORIZONTAL.
+	// Useful when layout is LayoutHorizontal.
 	//
 	// Tip: When adding a horizontal space consumer, you may set the
 	// white space style attribute of other components in the the panel
-	// to WHITE_SPACE_NOWRAP to avoid texts getting wrapped to multiple lines.
+	// to WhiteSpaceNowrap to avoid texts getting wrapped to multiple lines.
 	AddHConsumer() Comp
 
 	// AddVConsumer adds and returns a vertical (free) space consumer.
-	// Useful when layout is LAYOUT_VERTICAL.
+	// Useful when layout is LayoutVertical.
 	AddVConsumer() Comp
 }
 
@@ -115,9 +115,9 @@ type panelImpl struct {
 }
 
 // NewPanel creates a new Panel.
-// Default layout strategy is LAYOUT_VERTICAL,
-// default horizontal alignment is HA_DEFAULT,
-// default vertical alignment is VA_DEFAULT.
+// Default layout strategy is LayoutVertical,
+// default horizontal alignment is HADefault,
+// default vertical alignment is VADefault.
 func NewPanel() Panel {
 	c := newPanelImpl()
 	c.Style().AddClass("gwu-Panel")
@@ -125,36 +125,36 @@ func NewPanel() Panel {
 }
 
 // NewNaturalPanel creates a new Panel initialized with
-// LAYOUT_NATURAL layout.
-// Default horizontal alignment is HA_DEFAULT,
-// default vertical alignment is VA_DEFAULT.
+// LayoutNatural layout.
+// Default horizontal alignment is HADefault,
+// default vertical alignment is VADefault.
 func NewNaturalPanel() Panel {
 	p := NewPanel()
-	p.SetLayout(LAYOUT_NATURAL)
+	p.SetLayout(LayoutNatural)
 	return p
 }
 
 // NewHorizontalPanel creates a new Panel initialized with
-// LAYOUT_HORIZONTAL layout.
-// Default horizontal alignment is HA_DEFAULT,
-// default vertical alignment is VA_DEFAULT.
+// LayoutHorizontal layout.
+// Default horizontal alignment is HADefault,
+// default vertical alignment is VADefault.
 func NewHorizontalPanel() Panel {
 	p := NewPanel()
-	p.SetLayout(LAYOUT_HORIZONTAL)
+	p.SetLayout(LayoutHorizontal)
 	return p
 }
 
 // NewVerticalPanel creates a new Panel initialized with
-// LAYOUT_VERTICAL layout.
-// Default horizontal alignment is HA_DEFAULT,
-// default vertical alignment is VA_DEFAULT.
+// LayoutVertical layout.
+// Default horizontal alignment is HADefault,
+// default vertical alignment is VADefault.
 func NewVerticalPanel() Panel {
 	return NewPanel()
 }
 
 // newPanelImpl creates a new panelImpl.
 func newPanelImpl() panelImpl {
-	return panelImpl{tableViewImpl: newTableViewImpl(), layout: LAYOUT_VERTICAL, comps: make([]Comp, 0, 2)}
+	return panelImpl{tableViewImpl: newTableViewImpl(), layout: LayoutVertical, comps: make([]Comp, 0, 2)}
 }
 
 func (c *panelImpl) Remove(c2 Comp) bool {
@@ -280,21 +280,21 @@ func (c *panelImpl) Insert(c2 Comp, idx int) bool {
 
 func (c *panelImpl) AddHSpace(width int) Comp {
 	l := NewLabel("")
-	l.Style().SetDisplay(DISPLAY_BLOCK).SetWidthPx(width)
+	l.Style().SetDisplay(DisplayBlock).SetWidthPx(width)
 	c.Add(l)
 	return l
 }
 
 func (c *panelImpl) AddVSpace(height int) Comp {
 	l := NewLabel("")
-	l.Style().SetDisplay(DISPLAY_BLOCK).SetHeightPx(height)
+	l.Style().SetDisplay(DisplayBlock).SetHeightPx(height)
 	c.Add(l)
 	return l
 }
 
 func (c *panelImpl) AddSpace(width, height int) Comp {
 	l := NewLabel("")
-	l.Style().SetDisplay(DISPLAY_BLOCK).SetSizePx(width, height)
+	l.Style().SetDisplay(DisplayBlock).SetSizePx(width, height)
 	c.Add(l)
 	return l
 }
@@ -315,11 +315,11 @@ func (c *panelImpl) AddVConsumer() Comp {
 
 func (c *panelImpl) Render(w writer) {
 	switch c.layout {
-	case LAYOUT_NATURAL:
+	case LayoutNatural:
 		c.layoutNatural(w)
-	case LAYOUT_HORIZONTAL:
+	case LayoutHorizontal:
 		c.layoutHorizontal(w)
-	case LAYOUT_VERTICAL:
+	case LayoutVertical:
 		c.layoutVertical(w)
 	}
 }

@@ -41,7 +41,7 @@ type StateButton interface {
 // CheckBox interface defines a check box, a button which has
 // 2 states: selected/deselected.
 //
-// Suggested event type to handle changes: ETYPE_CLICK
+// Suggested event type to handle changes: ETypeClick
 //
 // Default style classes: "gwu-CheckBox", "gwu-CheckBox-Disabled"
 type CheckBox interface {
@@ -52,7 +52,7 @@ type CheckBox interface {
 // SwitchButton interface defines a button which can be switched
 // ON and OFF.
 //
-// Suggested event type to handle changes: ETYPE_CLICK
+// Suggested event type to handle changes: ETypeClick
 //
 // Default style classes: "gwu-SwitchButton", "gwu-SwitchButton-On-Active"
 // "gwu-SwitchButton-On-Inactive", "gwu-SwitchButton-Off-Active",
@@ -104,7 +104,7 @@ type RadioGroup interface {
 // Selecting an unselected radio button deselects the selected
 // radio button of the group, if there was one.
 //
-// Suggested event type to handle changes: ETYPE_CLICK
+// Suggested event type to handle changes: ETypeClick
 //
 // Default style classes: "gwu-RadioButton", "gwu-RadioButton-Disabled"
 type RadioButton interface {
@@ -177,7 +177,7 @@ func NewSwitchButton() SwitchButton {
 	valueProviderJs := []byte("sbtnVal(event,'" + onButton.Id().String() + "','" + offButton.Id().String() + "')")
 
 	c := &switchButtonImpl{newCompImpl(valueProviderJs), &onButton, &offButton, true} // Note the "true" state, so the following SetState(false) will be executed (different states)!
-	c.AddSyncOnETypes(ETYPE_CLICK)
+	c.AddSyncOnETypes(ETypeClick)
 	c.SetAttr("cellspacing", "0")
 	c.SetAttr("cellpadding", "0")
 	c.Style().AddClass("gwu-SwitchButton")
@@ -196,8 +196,8 @@ func NewRadioButton(text string, group RadioGroup) RadioButton {
 // newStateButtonImpl creates a new stateButtonImpl.
 func newStateButtonImpl(text string, inputType []byte, group RadioGroup, disabledClass string) *stateButtonImpl {
 	c := &stateButtonImpl{newButtonImpl(strThisChecked, text), false, inputType, group, nextCompId(), disabledClass}
-	// Use ETYPE_CLICK because IE fires onchange only when focus is lost...
-	c.AddSyncOnETypes(ETYPE_CLICK)
+	// Use ETypeClick because IE fires onchange only when focus is lost...
+	c.AddSyncOnETypes(ETypeClick)
 	return c
 }
 
@@ -399,7 +399,7 @@ func (c *switchButtonImpl) Render(w writer) {
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
 	// For Internet Explorer only:
-	// Since state synchronization is done on ETYPE_CLICK, which will add a click handler
+	// Since state synchronization is done on ETypeClick, which will add a click handler
 	// to the wrapper tag and not to the on/off buttons, the wrapper tag itself must be
 	// disabled (must have a 'disabled' attribute) if the switch button is disabled in order
 	// for clicks really be disabled.

@@ -19,21 +19,21 @@ package gwu
 
 // Built-in CSS themes.
 const (
-	THEME_DEFAULT = "default" // Default CSS theme
-	THEME_DEBUG   = "debug"   // Debug CSS theme, useful for developing/debugging purposes.
+	ThemeDefault = "default" // Default CSS theme
+	ThemeDebug   = "debug"   // Debug CSS theme, useful for developing/debugging purposes.
 )
 
 // resNameStaticCss returns the CSS resource name
 // for the specified CSS theme.
 func resNameStaticCss(theme string) string {
 	// E.g. "gowut-default-0.8.0.css"
-	return "gowut-" + theme + "-" + GOWUT_VERSION + ".css"
+	return "gowut-" + theme + "-" + GowutVersion + ".css"
 }
 
 var staticCss map[string][]byte = make(map[string][]byte)
 
 func init() {
-	staticCss[resNameStaticCss(THEME_DEFAULT)] = []byte("" +
+	staticCss[resNameStaticCss(ThemeDefault)] = []byte("" +
 		`
 .gwuimg-collapsed {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAATUlEQVQ4y83RsQkAMAhEURNc+iZw7KQNgnjGRlv5D0SRMQPgADjVbr3AuzCz1QJYKAUyiAYiqAx4aHe/p9XAn6C/IQ1kb9TfMATYcM5cL5cg3qDaS5UAAAAASUVORK5CYII=)}
 .gwuimg-expanded {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAATElEQVQ4y2NgGGjACGNUVlb+J0Vje3s7IwMDAwMT1VxAiitgtlPfBcS4Atl22rgAnyvQbaedC7C5ApvtVHEBXlBZWfmfUKwwMQx5AADNQhjmAryM3wAAAABJRU5ErkJggg==)}
@@ -93,7 +93,7 @@ body {font-family:Arial}
 .gwu-TabPanel-Content {border:1px solid #8080f8; width:100%; height:100%}
 `)
 
-	staticCss[resNameStaticCss(THEME_DEBUG)] = []byte(string(staticCss[resNameStaticCss(THEME_DEFAULT)]) +
+	staticCss[resNameStaticCss(ThemeDebug)] = []byte(string(staticCss[resNameStaticCss(ThemeDefault)]) +
 		`
 .gwu-Window td, .gwu-Table td, .gwu-Panel td, .gwu-TabPanel td {border:1px solid black}
 `)

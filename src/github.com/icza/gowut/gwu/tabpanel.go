@@ -65,10 +65,10 @@ type TabBarPlacement int
 
 // Tab bar placements.
 const (
-	TB_PLACEMENT_TOP    TabBarPlacement = iota // Tab bar placement to Top
-	TB_PLACEMENT_BOTTOM                        // Tab bar placement to Bottom
-	TB_PLACEMENT_LEFT                          // Tab bar placement to Left
-	TB_PLACEMENT_RIGHT                         // Tab bar placement to Right
+	TbPlacementTop    TabBarPlacement = iota // Tab bar placement to Top
+	TbPlacementBottom                        // Tab bar placement to Bottom
+	TbPlacementLeft                          // Tab bar placement to Left
+	TbPlacementRight                         // Tab bar placement to Right
 )
 
 // TabPanel interface defines a PanelView which has multiple child components
@@ -88,7 +88,7 @@ const (
 // alignments for individual tab components using TabBar().CellFmt(). You can also set
 // other cell formatting applied to the tab bar using TabBarFmt() method.
 //
-// You can register ETYPE_STATE_CHANGE event handlers which will be called when the user
+// You can register ETypeStateChange event handlers which will be called when the user
 // changes tab selection by clicking on a tab. The event source will be the tab panel.
 // The event will have a parent event whose source will be the clicked tab and will
 // contain the mouse coordinates.
@@ -149,15 +149,15 @@ type tabPanelImpl struct {
 }
 
 // NewTabPanel creates a new TabPanel.
-// Default tab bar placement is TB_PLACEMENT_TOP,
-// default horizontal alignment is HA_DEFAULT,
-// default vertical alignment is VA_DEFAULT.
+// Default tab bar placement is TbPlacementTop,
+// default horizontal alignment is HADefault,
+// default vertical alignment is VADefault.
 func NewTabPanel() TabPanel {
 	c := &tabPanelImpl{panelImpl: newPanelImpl(), tabBarImpl: newTabBarImpl(), tabBarFmt: newCellFmtImpl(), selected: -1, prevSelected: -1}
 	c.tabBarFmt.Style().AddClass("gwu-TabBar")
 	c.tabBarImpl.setParent(c)
-	c.SetTabBarPlacement(TB_PLACEMENT_TOP)
-	c.tabBarFmt.SetAlign(HA_LEFT, VA_TOP)
+	c.SetTabBarPlacement(TbPlacementTop)
+	c.tabBarFmt.SetAlign(HALeft, VATop)
 	c.Style().AddClass("gwu-TabPanel")
 	return c
 }
@@ -243,34 +243,34 @@ func (c *tabPanelImpl) SetTabBarPlacement(tabBarPlacement TabBarPlacement) {
 
 	// Remove old style class
 	switch c.tabBarPlacement {
-	case TB_PLACEMENT_TOP:
+	case TbPlacementTop:
 		style.RemoveClass("gwu-TabBar-Top")
-	case TB_PLACEMENT_BOTTOM:
+	case TbPlacementBottom:
 		style.RemoveClass("gwu-TabBar-Bottom")
-	case TB_PLACEMENT_LEFT:
+	case TbPlacementLeft:
 		style.RemoveClass("gwu-TabBar-Left")
-	case TB_PLACEMENT_RIGHT:
+	case TbPlacementRight:
 		style.RemoveClass("gwu-TabBar-Right")
 	}
 
 	c.tabBarPlacement = tabBarPlacement
 
 	switch tabBarPlacement {
-	case TB_PLACEMENT_TOP:
-		c.tabBarImpl.SetLayout(LAYOUT_HORIZONTAL)
-		c.tabBarImpl.SetAlign(HA_LEFT, VA_BOTTOM)
+	case TbPlacementTop:
+		c.tabBarImpl.SetLayout(LayoutHorizontal)
+		c.tabBarImpl.SetAlign(HALeft, VABottom)
 		style.AddClass("gwu-TabBar-Top")
-	case TB_PLACEMENT_BOTTOM:
-		c.tabBarImpl.SetLayout(LAYOUT_HORIZONTAL)
-		c.tabBarImpl.SetAlign(HA_LEFT, VA_TOP)
+	case TbPlacementBottom:
+		c.tabBarImpl.SetLayout(LayoutHorizontal)
+		c.tabBarImpl.SetAlign(HALeft, VATop)
 		style.AddClass("gwu-TabBar-Bottom")
-	case TB_PLACEMENT_LEFT:
-		c.tabBarImpl.SetLayout(LAYOUT_VERTICAL)
-		c.tabBarImpl.SetAlign(HA_RIGHT, VA_TOP)
+	case TbPlacementLeft:
+		c.tabBarImpl.SetLayout(LayoutVertical)
+		c.tabBarImpl.SetAlign(HARight, VATop)
 		style.AddClass("gwu-TabBar-Left")
-	case TB_PLACEMENT_RIGHT:
-		c.tabBarImpl.SetLayout(LAYOUT_VERTICAL)
-		c.tabBarImpl.SetAlign(HA_LEFT, VA_TOP)
+	case TbPlacementRight:
+		c.tabBarImpl.SetLayout(LayoutVertical)
+		c.tabBarImpl.SetAlign(HALeft, VATop)
 		style.AddClass("gwu-TabBar-Right")
 	}
 }
@@ -293,15 +293,15 @@ func (c *tabPanelImpl) Add(tab, content Comp) {
 	tab.AddEHandlerFunc(func(e Event) {
 		c.SetSelected(c.CompIdx(content))
 		e.MarkDirty(c)
-		if c.handlers[ETYPE_STATE_CHANGE] != nil {
-			c.dispatchEvent(e.forkEvent(ETYPE_STATE_CHANGE, c))
+		if c.handlers[ETypeStateChange] != nil {
+			c.dispatchEvent(e.forkEvent(ETypeStateChange, c))
 		}
-	}, ETYPE_CLICK)
+	}, ETypeClick)
 }
 
 func (c *tabPanelImpl) AddString(tab string, content Comp) {
 	tabc := NewLabel(tab)
-	tabc.Style().SetDisplay(DISPLAY_BLOCK) // Display: block - so the whole cell of the tab is clickable
+	tabc.Style().SetDisplay(DisplayBlock) // Display: block - so the whole cell of the tab is clickable
 	c.Add(tabc, content)
 }
 
@@ -343,24 +343,24 @@ func (c *tabPanelImpl) Render(w writer) {
 	w.Write(strGT)
 
 	switch c.tabBarPlacement {
-	case TB_PLACEMENT_TOP:
+	case TbPlacementTop:
 		w.Write(strTR)
 		c.tabBarFmt.render(strTDOp, w)
 		c.tabBarImpl.Render(w)
 		c.renderTr(w)
 		c.renderContent(w)
-	case TB_PLACEMENT_BOTTOM:
+	case TbPlacementBottom:
 		c.renderTr(w)
 		c.renderContent(w)
 		w.Write(strTR)
 		c.tabBarFmt.render(strTDOp, w)
 		c.tabBarImpl.Render(w)
-	case TB_PLACEMENT_LEFT:
+	case TbPlacementLeft:
 		c.renderTr(w)
 		c.tabBarFmt.render(strTDOp, w)
 		c.tabBarImpl.Render(w)
 		c.renderContent(w)
-	case TB_PLACEMENT_RIGHT:
+	case TbPlacementRight:
 		c.renderTr(w)
 		c.renderContent(w)
 		c.tabBarFmt.render(strTDOp, w)
