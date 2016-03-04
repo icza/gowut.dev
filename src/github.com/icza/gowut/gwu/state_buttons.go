@@ -277,7 +277,7 @@ func (c *stateButtonImpl) setStateProp(state bool) {
 }
 
 func (c *stateButtonImpl) preprocessEvent(event Event, r *http.Request) {
-	value := r.FormValue(_PARAM_COMP_VALUE)
+	value := r.FormValue(paramCompValue)
 	if len(value) == 0 {
 		return
 	}
@@ -375,7 +375,7 @@ func (c *switchButtonImpl) SetOnOff(on, off string) {
 }
 
 func (c *switchButtonImpl) preprocessEvent(event Event, r *http.Request) {
-	value := r.FormValue(_PARAM_COMP_VALUE)
+	value := r.FormValue(paramCompValue)
 	if len(value) == 0 {
 		return
 	}

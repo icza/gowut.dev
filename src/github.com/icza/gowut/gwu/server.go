@@ -30,36 +30,36 @@ import (
 
 // Internal path constants.
 const (
-	_PATH_STATIC      = "_gwu_static/" // App path-relative path for GWU static contents.
-	_PATH_EVENT       = "e"            // Window-relative path for sending events
-	_PATH_RENDER_COMP = "rc"           // Window-relative path for rendering a component
+	pathStatic     = "_gwu_static/" // App path-relative path for GWU static contents.
+	pathEvent      = "e"            // Window-relative path for sending events
+	pathRenderComp = "rc"           // Window-relative path for rendering a component
 )
 
 // Parameters passed between the browser and the server.
 const (
-	_PARAM_EVENT_TYPE      = "et"   // Event type parameter name
-	_PARAM_COMP_ID         = "cid"  // Component id parameter name
-	_PARAM_COMP_VALUE      = "cval" // Component value parameter name
-	_PARAM_FOCUSED_COMP_ID = "fcid" // Focused component id parameter name
-	_PARAM_MOUSE_WX        = "mwx"  // Mouse x pixel coordinate (inside window)
-	_PARAM_MOUSE_WY        = "mwy"  // Mouse y pixel coordinate (inside window)
-	_PARAM_MOUSE_X         = "mx"   // Mouse x pixel coordinate (relative to source component)
-	_PARAM_MOUSE_Y         = "my"   // Mouse y pixel coordinate (relative to source component)
-	_PARAM_MOUSE_BTN       = "mb"   // Mouse button
-	_PARAM_MOD_KEYS        = "mk"   // Modifier key states
-	_PARAM_KEY_CODE        = "kc"   // Key code
+	paramEventType     = "et"   // Event type parameter name
+	paramCompId        = "cid"  // Component id parameter name
+	paramCompValue     = "cval" // Component value parameter name
+	paramFocusedCompId = "fcid" // Focused component id parameter name
+	paramMouseWX       = "mwx"  // Mouse x pixel coordinate (inside window)
+	paramMouseWY       = "mwy"  // Mouse y pixel coordinate (inside window)
+	paramMouseX        = "mx"   // Mouse x pixel coordinate (relative to source component)
+	paramMouseY        = "my"   // Mouse y pixel coordinate (relative to source component)
+	paramMouseBtn      = "mb"   // Mouse button
+	paramModKeys       = "mk"   // Modifier key states
+	paramKeyCode       = "kc"   // Key code
 )
 
 // Event response actions (client actions to take after processing an event).
 const (
-	_ERA_NO_ACTION   = iota // Event processing OK and no action required
-	_ERA_RELOAD_WIN         // Window name to be reloaded
-	_ERA_DIRTY_COMPS        // There are dirty components which needs to be refreshed
-	_ERA_FOCUS_COMP         // Focus a compnent
+	eraNoAction   = iota // Event processing OK and no action required
+	eraReloadWin         // Window name to be reloaded
+	eraDirtyComps        // There are dirty components which needs to be refreshed
+	eraFocusComp         // Focus a compnent
 )
 
 // GWU session id cookie name
-const _GWU_SESSID_COOKIE = "gwu-sessid"
+const gwuSessidCookie = "gwu-sessid"
 
 // SessionHandler interface defines a callback to get notified
 // for certain events related to session life-cycles.
@@ -314,7 +314,7 @@ func (s *serverImpl) addSessCookie(sess Session, w http.ResponseWriter) {
 	// HttpOnly: do not allow non-HTTP access to it (like javascript) to prevent stealing it...
 	// Secure: only send it over HTTPS
 	// MaxAge: to specify the max age of the cookie in seconds, else it's a session cookie and gets deleted after the browser is closed.
-	c := http.Cookie{Name: _GWU_SESSID_COOKIE, Value: sess.Id(), Path: s.appPath, HttpOnly: true, Secure: s.secure,
+	c := http.Cookie{Name: gwuSessidCookie, Value: sess.Id(), Path: s.appPath, HttpOnly: true, Secure: s.secure,
 		MaxAge: 72 * 60 * 60} // 72 hours max age
 	http.SetCookie(w, &c)
 
@@ -355,8 +355,8 @@ func (s *serverImpl) AddStaticDir(path, dir string) error {
 
 	path = s.appPath + path
 
-	if path == s.appPath+_PATH_STATIC {
-		return errors.New("path cannot be '" + _PATH_STATIC + "' (reserved)!")
+	if path == s.appPath+pathStatic {
+		return errors.New("path cannot be '" + pathStatic + "' (reserved)!")
 	}
 
 	http.Handle(path, http.StripPrefix(path, http.FileServer(http.Dir(dir))))
@@ -402,7 +402,7 @@ func (s *serverImpl) serveStatic(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res := parts[0]
-	if res == _RES_NAME_STATIC_JS {
+	if res == resNameStaticJs {
 		w.Header().Set("Expires", time.Now().Add(72*time.Hour).Format(http.TimeFormat)) // Set 72 hours caching
 		w.Header().Set("Content-Type", "application/x-javascript; charset=utf-8")
 		w.Write(staticJs)
@@ -431,7 +431,7 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Check session
 	var sess Session
-	c, err := r.Cookie(_GWU_SESSID_COOKIE)
+	c, err := r.Cookie(gwuSessidCookie)
 	if err == nil {
 		sess = s.sessions[c.Value]
 	}
@@ -506,12 +506,12 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 	rwMutex := sess.rwMutex()
 
 	switch path {
-	case _PATH_EVENT:
+	case pathEvent:
 		rwMutex.Lock()
 		defer rwMutex.Unlock()
 
 		s.handleEvent(sess, win, w, r)
-	case _PATH_RENDER_COMP:
+	case pathRenderComp:
 		rwMutex.RLock()
 		defer rwMutex.RUnlock()
 
@@ -575,7 +575,7 @@ func (s *serverImpl) renderWinList(sess Session, wr http.ResponseWriter, r *http
 
 // renderComp renders just a component.
 func (s *serverImpl) renderComp(win Window, w http.ResponseWriter, r *http.Request) {
-	id, err := AtoID(r.FormValue(_PARAM_COMP_ID))
+	id, err := AtoID(r.FormValue(paramCompId))
 	if err != nil {
 		http.Error(w, "Invalid component id!", http.StatusBadRequest)
 		return
@@ -597,12 +597,12 @@ func (s *serverImpl) renderComp(win Window, w http.ResponseWriter, r *http.Reque
 
 // handleEvent handles the event dispatching.
 func (s *serverImpl) handleEvent(sess Session, win Window, wr http.ResponseWriter, r *http.Request) {
-	focCompId, err := AtoID(r.FormValue(_PARAM_FOCUSED_COMP_ID))
+	focCompId, err := AtoID(r.FormValue(paramFocusedCompId))
 	if err == nil {
 		win.SetFocusedCompId(focCompId)
 	}
 
-	id, err := AtoID(r.FormValue(_PARAM_COMP_ID))
+	id, err := AtoID(r.FormValue(paramCompId))
 	if err != nil {
 		http.Error(wr, "Invalid component id!", http.StatusBadRequest)
 		return
@@ -617,7 +617,7 @@ func (s *serverImpl) handleEvent(sess Session, win Window, wr http.ResponseWrite
 		return
 	}
 
-	etype := parseIntParam(r, _PARAM_EVENT_TYPE)
+	etype := parseIntParam(r, paramEventType)
 	if etype < 0 {
 		http.Error(wr, "Invalid event type!", http.StatusBadRequest)
 		return
@@ -629,18 +629,18 @@ func (s *serverImpl) handleEvent(sess Session, win Window, wr http.ResponseWrite
 	event := newEventImpl(EventType(etype), comp, s, sess)
 	shared := event.shared
 
-	event.x = parseIntParam(r, _PARAM_MOUSE_X)
+	event.x = parseIntParam(r, paramMouseX)
 	if event.x >= 0 {
-		event.y = parseIntParam(r, _PARAM_MOUSE_Y)
-		shared.wx = parseIntParam(r, _PARAM_MOUSE_WX)
-		shared.wy = parseIntParam(r, _PARAM_MOUSE_WY)
-		shared.mbtn = MouseBtn(parseIntParam(r, _PARAM_MOUSE_BTN))
+		event.y = parseIntParam(r, paramMouseY)
+		shared.wx = parseIntParam(r, paramMouseWX)
+		shared.wy = parseIntParam(r, paramMouseWY)
+		shared.mbtn = MouseBtn(parseIntParam(r, paramMouseBtn))
 	} else {
 		event.y, shared.wx, shared.wy, shared.mbtn = -1, -1, -1, -1
 	}
 
-	shared.modKeys = parseIntParam(r, _PARAM_MOD_KEYS)
-	shared.keyCode = Key(parseIntParam(r, _PARAM_KEY_CODE))
+	shared.modKeys = parseIntParam(r, paramModKeys)
+	shared.keyCode = Key(parseIntParam(r, paramKeyCode))
 
 	comp.preprocessEvent(event, r)
 
@@ -659,11 +659,11 @@ func (s *serverImpl) handleEvent(sess Session, win Window, wr http.ResponseWrite
 	// If we reload, nothing else matters
 	if shared.reload {
 		hasAction = true
-		w.Writevs(_ERA_RELOAD_WIN, strComma, shared.reloadWin)
+		w.Writevs(eraReloadWin, strComma, shared.reloadWin)
 	} else {
 		if len(shared.dirtyComps) > 0 {
 			hasAction = true
-			w.Writev(_ERA_DIRTY_COMPS)
+			w.Writev(eraDirtyComps)
 			for id, _ := range shared.dirtyComps {
 				w.Write(strComma)
 				w.Writev(int(id))
@@ -675,13 +675,13 @@ func (s *serverImpl) handleEvent(sess Session, win Window, wr http.ResponseWrite
 			} else {
 				hasAction = true
 			}
-			w.Writevs(_ERA_FOCUS_COMP, strComma, int(shared.focusedComp.Id()))
+			w.Writevs(eraFocusComp, strComma, int(shared.focusedComp.Id()))
 			// Also register focusable comp at window
 			win.SetFocusedCompId(shared.focusedComp.Id())
 		}
 	}
 	if !hasAction {
-		w.Writev(_ERA_NO_ACTION)
+		w.Writev(eraNoAction)
 	}
 }
 

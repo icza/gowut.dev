@@ -83,12 +83,12 @@ func (c *hasEnabledImpl) SetEnabled(enabled bool) {
 	c.enabled = enabled
 }
 
-var _STR_DISABLED = []byte(` disabled="disabled"`) // ` disabled="disabled"`
+var strDisabled = []byte(` disabled="disabled"`) // ` disabled="disabled"`
 
 // renderEnabled renders the enabled attribute.
 func (c *hasEnabledImpl) renderEnabled(w writer) {
 	if !c.enabled {
-		w.Write(_STR_DISABLED)
+		w.Write(strDisabled)
 	}
 }
 
@@ -282,7 +282,7 @@ func (c *cellFmtImpl) render(tag []byte, w writer) {
 	c.renderWithAligns(tag, c.halign, c.valign, w)
 }
 
-var _STR_VALIGN = []byte("vertical-align:") // "vertical-align:"
+var strVAlign = []byte("vertical-align:") // "vertical-align:"
 
 // render renders the formatted HTML tag for the specified tag name
 // using the specified alignments instead of ours.
@@ -307,7 +307,7 @@ func (c *cellFmtImpl) renderWithAligns(tag []byte, halign HAlign, valign VAlign,
 	if valign != VA_DEFAULT || c.styleImpl != nil {
 		w.Write(strStyle)
 		if valign != VA_DEFAULT {
-			w.Write(_STR_VALIGN)
+			w.Write(strVAlign)
 			w.Writes(string(valign))
 			w.Write(strSemicol)
 		}
@@ -394,7 +394,7 @@ func (c *tableViewImpl) SetCellPadding(padding int) {
 	c.SetIAttr("cellpadding", padding)
 }
 
-var _STR_ST_VALIGN = []byte(` style="vertical-align:`) // ` style="vertical-align:`
+var strStVAlign = []byte(` style="vertical-align:`) // ` style="vertical-align:`
 
 // renderTr renders an HTML TR tag with horizontal and vertical
 // alignment info included.
@@ -406,7 +406,7 @@ func (c *tableViewImpl) renderTr(w writer) {
 		w.Write(strQuote)
 	}
 	if c.valign != VA_DEFAULT {
-		w.Write(_STR_ST_VALIGN)
+		w.Write(strStVAlign)
 		w.Writes(string(c.valign))
 		w.Write(strQuote)
 	}

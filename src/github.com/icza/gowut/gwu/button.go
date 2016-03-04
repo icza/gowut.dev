@@ -53,12 +53,12 @@ func newButtonImpl(valueProviderJs []byte, text string) buttonImpl {
 }
 
 var (
-	_STR_BUTTON_OP = []byte(`<button type="button"`) // `<button type="button"`
-	_STR_BUTTON_CL = []byte("</button>")             // "</button>"
+	strButtonOp = []byte(`<button type="button"`) // `<button type="button"`
+	strButtonCl = []byte("</button>")             // "</button>"
 )
 
 func (c *buttonImpl) Render(w writer) {
-	w.Write(_STR_BUTTON_OP)
+	w.Write(strButtonOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
 	c.renderEnabled(w)
@@ -66,5 +66,5 @@ func (c *buttonImpl) Render(w writer) {
 
 	c.renderText(w)
 
-	w.Write(_STR_BUTTON_CL)
+	w.Write(strButtonCl)
 }

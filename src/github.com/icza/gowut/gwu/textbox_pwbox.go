@@ -178,12 +178,12 @@ func (c *textBoxImpl) SetMaxLength(maxLength int) {
 func (c *textBoxImpl) preprocessEvent(event Event, r *http.Request) {
 	// Empty string for text box is a valid value.
 	// So we have to check whether it is supplied, not just whether its len() > 0
-	value := r.FormValue(_PARAM_COMP_VALUE)
+	value := r.FormValue(paramCompValue)
 	if len(value) > 0 {
 		c.text = value
 	} else {
 		// Empty string might be a valid value, if the component value param is present:
-		values, present := r.Form[_PARAM_COMP_VALUE] // Form is surely parsed (we called FormValue())
+		values, present := r.Form[paramCompValue] // Form is surely parsed (we called FormValue())
 		if present && len(values) > 0 {
 			c.text = values[0]
 		}

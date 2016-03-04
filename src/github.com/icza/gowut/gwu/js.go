@@ -22,7 +22,7 @@ import (
 )
 
 // Static JavaScript resource name
-const _RES_NAME_STATIC_JS = "gowut-" + GOWUT_VERSION + ".js"
+const resNameStaticJs = "gowut-" + GOWUT_VERSION + ".js"
 
 // Static javascript code
 var staticJs []byte
@@ -31,17 +31,17 @@ func init() {
 	// Init staticJs
 	staticJs = []byte("" +
 		// Param consts
-		"var _pEventType='" + _PARAM_EVENT_TYPE +
-		"',_pCompId='" + _PARAM_COMP_ID +
-		"',_pCompValue='" + _PARAM_COMP_VALUE +
-		"',_pFocCompId='" + _PARAM_FOCUSED_COMP_ID +
-		"',_pMouseWX='" + _PARAM_MOUSE_WX +
-		"',_pMouseWY='" + _PARAM_MOUSE_WY +
-		"',_pMouseX='" + _PARAM_MOUSE_X +
-		"',_pMouseY='" + _PARAM_MOUSE_Y +
-		"',_pMouseBtn='" + _PARAM_MOUSE_BTN +
-		"',_pModKeys='" + _PARAM_MOD_KEYS +
-		"',_pKeyCode='" + _PARAM_KEY_CODE +
+		"var _pEventType='" + paramEventType +
+		"',_pCompId='" + paramCompId +
+		"',_pCompValue='" + paramCompValue +
+		"',_pFocCompId='" + paramFocusedCompId +
+		"',_pMouseWX='" + paramMouseWX +
+		"',_pMouseWY='" + paramMouseWY +
+		"',_pMouseX='" + paramMouseX +
+		"',_pMouseY='" + paramMouseY +
+		"',_pMouseBtn='" + paramMouseBtn +
+		"',_pModKeys='" + paramModKeys +
+		"',_pKeyCode='" + paramKeyCode +
 		"';\n" +
 		// Modifier key masks
 		"var _modKeyAlt=" + strconv.Itoa(int(MOD_KEY_ALT)) +
@@ -50,10 +50,10 @@ func init() {
 		",_modKeyShift=" + strconv.Itoa(int(MOD_KEY_SHIFT)) +
 		";\n" +
 		// Event response action consts
-		"var _eraNoAction=" + strconv.Itoa(_ERA_NO_ACTION) +
-		",_eraReloadWin=" + strconv.Itoa(_ERA_RELOAD_WIN) +
-		",_eraDirtyComps=" + strconv.Itoa(_ERA_DIRTY_COMPS) +
-		",_eraFocusComp=" + strconv.Itoa(_ERA_FOCUS_COMP) +
+		"var _eraNoAction=" + strconv.Itoa(eraNoAction) +
+		",_eraReloadWin=" + strconv.Itoa(eraReloadWin) +
+		",_eraDirtyComps=" + strconv.Itoa(eraDirtyComps) +
+		",_eraFocusComp=" + strconv.Itoa(eraFocusComp) +
 		";" +
 		`
 

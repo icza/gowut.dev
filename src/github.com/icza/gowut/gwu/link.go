@@ -127,12 +127,12 @@ func (c *linkImpl) SetComp(c2 Comp) {
 }
 
 var (
-	_STR_A_OP = []byte("<a")   // "<a"
-	_STR_A_CL = []byte("</a>") // "</a>"
+	strAOp = []byte("<a")   // "<a"
+	strACl = []byte("</a>") // "</a>"
 )
 
 func (c *linkImpl) Render(w writer) {
-	w.Write(_STR_A_OP)
+	w.Write(strAOp)
 	c.renderUrl("href", w)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
@@ -144,5 +144,5 @@ func (c *linkImpl) Render(w writer) {
 		c.comp.Render(w)
 	}
 
-	w.Write(_STR_A_CL)
+	w.Write(strACl)
 }

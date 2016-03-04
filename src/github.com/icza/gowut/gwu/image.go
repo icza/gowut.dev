@@ -47,17 +47,17 @@ func NewImage(text, url string) Image {
 }
 
 var (
-	_STR_IMG_OP = []byte("<img")   // "<img"
-	_STR_ALT    = []byte(` alt="`) // ` alt="`
-	_STR_IMG_CL = []byte(`">`)     // `">`
+	strImgOp = []byte("<img")   // "<img"
+	strAlt   = []byte(` alt="`) // ` alt="`
+	strImgCl = []byte(`">`)     // `">`
 )
 
 func (c *imageImpl) Render(w writer) {
-	w.Write(_STR_IMG_OP)
+	w.Write(strImgOp)
 	c.renderUrl("src", w)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
-	w.Write(_STR_ALT)
+	w.Write(strAlt)
 	c.renderText(w)
-	w.Write(_STR_IMG_CL)
+	w.Write(strImgCl)
 }

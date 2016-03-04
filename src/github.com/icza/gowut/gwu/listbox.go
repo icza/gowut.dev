@@ -91,12 +91,12 @@ type listBoxImpl struct {
 }
 
 var (
-	_STR_SELIDXS = []byte("selIdxs(this)") // "selIdxs(this)"
+	strSelidx = []byte("selIdxs(this)") // "selIdxs(this)"
 )
 
 // NewListBox creates a new ListBox.
 func NewListBox(values []string) ListBox {
-	c := &listBoxImpl{newCompImpl(_STR_SELIDXS), newHasEnabledImpl(), values, false, make([]bool, len(values)), 1}
+	c := &listBoxImpl{newCompImpl(strSelidx), newHasEnabledImpl(), values, false, make([]bool, len(values)), 1}
 	c.AddSyncOnETypes(ETYPE_CHANGE)
 	c.Style().AddClass("gwu-ListBox")
 	return c
@@ -180,7 +180,7 @@ func (c *listBoxImpl) ClearSelected() {
 }
 
 func (c *listBoxImpl) preprocessEvent(event Event, r *http.Request) {
-	value := r.FormValue(_PARAM_COMP_VALUE)
+	value := r.FormValue(paramCompValue)
 	if len(value) == 0 {
 		return
 	}
@@ -195,18 +195,18 @@ func (c *listBoxImpl) preprocessEvent(event Event, r *http.Request) {
 }
 
 var (
-	_STR_SELECT_OP     = []byte("<select")                      // "<select"
-	_STR_MULTIPLE      = []byte(` multiple="multiple"`)         // ` multiple="multiple"`
-	_STR_OPTION_OP_SEL = []byte(`<option selected="selected">`) // `<option selected="selected">`
-	_STR_OPTION_OP     = []byte("<option>")                     // "<option>"
-	_STR_OPTION_CL     = []byte("</option>")                    // "</option>"
-	_STR_SELECT_CL     = []byte("</select>")                    // "</select>"
+	strSelectOp    = []byte("<select")                      // "<select"
+	strMultiple    = []byte(` multiple="multiple"`)         // ` multiple="multiple"`
+	strOptionOpSel = []byte(`<option selected="selected">`) // `<option selected="selected">`
+	strOptionOp    = []byte("<option>")                     // "<option>"
+	strOptionCl    = []byte("</option>")                    // "</option>"
+	strSelectCl    = []byte("</select>")                    // "</select>"
 )
 
 func (c *listBoxImpl) Render(w writer) {
-	w.Write(_STR_SELECT_OP)
+	w.Write(strSelectOp)
 	if c.multi {
-		w.Write(_STR_MULTIPLE)
+		w.Write(strMultiple)
 	}
 	w.WriteAttr("size", strconv.Itoa(c.rows))
 	c.renderAttrsAndStyle(w)
@@ -216,13 +216,13 @@ func (c *listBoxImpl) Render(w writer) {
 
 	for i, value := range c.values {
 		if c.selected[i] {
-			w.Write(_STR_OPTION_OP_SEL)
+			w.Write(strOptionOpSel)
 		} else {
-			w.Write(_STR_OPTION_OP)
+			w.Write(strOptionOp)
 		}
 		w.Writees(value)
-		w.Write(_STR_OPTION_CL)
+		w.Write(strOptionCl)
 	}
 
-	w.Write(_STR_SELECT_CL)
+	w.Write(strSelectCl)
 }

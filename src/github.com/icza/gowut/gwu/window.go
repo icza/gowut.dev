@@ -151,7 +151,7 @@ func (win *windowImpl) RenderWin(w writer, s Server) {
 	// but windows are rendered "so rarely"...
 	w.Writes(`<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>`)
 	w.Writees(win.text)
-	w.Writess(`</title><link href="`, s.AppPath(), _PATH_STATIC)
+	w.Writess(`</title><link href="`, s.AppPath(), pathStatic)
 	if len(win.theme) == 0 {
 		w.Writes(resNameStaticCss(s.Theme()))
 	} else {
@@ -159,7 +159,7 @@ func (win *windowImpl) RenderWin(w writer, s Server) {
 	}
 	w.Writes(`" rel="stylesheet" type="text/css">`)
 	win.renderDynJs(w, s)
-	w.Writess(`<script src="`, s.AppPath(), _PATH_STATIC, _RES_NAME_STATIC_JS, `"></script>`)
+	w.Writess(`<script src="`, s.AppPath(), pathStatic, resNameStaticJs, `"></script>`)
 	w.Writess(win.heads...)
 	w.Writes("</head><body>")
 
@@ -173,8 +173,8 @@ func (win *windowImpl) renderDynJs(w writer, s Server) {
 	w.Writes("<script>")
 	w.Writess("var _pathApp='", s.AppPath(), "';")
 	w.Writess("var _pathWin='", s.AppPath(), win.name, "/';")
-	w.Writess("var _pathEvent=_pathWin+'", _PATH_EVENT, "';")
-	w.Writess("var _pathRenderComp=_pathWin+'", _PATH_RENDER_COMP, "';")
+	w.Writess("var _pathEvent=_pathWin+'", pathEvent, "';")
+	w.Writess("var _pathRenderComp=_pathWin+'", pathRenderComp, "';")
 	w.Writess("var _focCompId='", win.focusedCompId.String(), "';")
 	w.Writes("</script>")
 }

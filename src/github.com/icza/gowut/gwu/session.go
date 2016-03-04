@@ -131,10 +131,10 @@ var idRunes = []rune("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUV
 func init() {
 	// Is idRunesCount a power of 2?
 	if idRunesCount&(idRunesCount-1) != 0 {
-		panic(fmt.Sprint("_ID_RUNES_COUNT is not a power of 2: ", idRunesCount))
+		panic(fmt.Sprint("idRunesCount is not a power of 2: ", idRunesCount))
 	}
 	if len(idRunes) != idRunesCount {
-		panic(fmt.Sprint("len(_ID_RUNES) != ", idRunesCount))
+		panic(fmt.Sprint("len(idRunes) != ", idRunesCount))
 	}
 }
 

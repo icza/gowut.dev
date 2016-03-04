@@ -269,8 +269,8 @@ func (c *compImpl) AddSyncOnETypes(etypes ...EventType) {
 }
 
 var (
-	_STR_SE_PREFIX = []byte(`="se(event,`) // `="se(event,`
-	_STR_SE_SUFFIX = []byte(`)"`)          // `)"`
+	strSePrefix = []byte(`="se(event,`) // `="se(event,`
+	strSeSuffix = []byte(`)"`)          // `)"`
 )
 
 // rendrenderEventHandlers renders the event handlers as attributes.
@@ -285,7 +285,7 @@ func (c *compImpl) renderEHandlers(w writer) {
 		// Example (checkbox onclick): ` onclick="se(event,0,4327,this.checked)"`
 		w.Write(strSpace)
 		w.Write(etypeAttr)
-		w.Write(_STR_SE_PREFIX)
+		w.Write(strSePrefix)
 		w.Writev(int(etype))
 		w.Write(strComma)
 		w.Writev(int(c.id))
@@ -293,7 +293,7 @@ func (c *compImpl) renderEHandlers(w writer) {
 			w.Write(strComma)
 			w.Write(c.valueProviderJs)
 		}
-		w.Write(_STR_SE_SUFFIX)
+		w.Write(strSeSuffix)
 	}
 }
 
