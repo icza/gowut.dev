@@ -313,7 +313,7 @@ func (c *panelImpl) AddVConsumer() Comp {
 	return l
 }
 
-func (c *panelImpl) Render(w writer) {
+func (c *panelImpl) Render(w Writer) {
 	switch c.layout {
 	case LayoutNatural:
 		c.layoutNatural(w)
@@ -326,7 +326,7 @@ func (c *panelImpl) Render(w writer) {
 
 // layoutNatural renders the panel and the child components
 // using the natural layout strategy.
-func (c *panelImpl) layoutNatural(w writer) {
+func (c *panelImpl) layoutNatural(w Writer) {
 	// No wrapper table but we still need a wrapper tag for attributes...
 	w.Write(strSpanOp)
 	c.renderAttrsAndStyle(w)
@@ -342,7 +342,7 @@ func (c *panelImpl) layoutNatural(w writer) {
 
 // layoutHorizontal renders the panel and the child components
 // using the horizontal layout strategy.
-func (c *panelImpl) layoutHorizontal(w writer) {
+func (c *panelImpl) layoutHorizontal(w Writer) {
 	w.Write(strTableOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
@@ -360,7 +360,7 @@ func (c *panelImpl) layoutHorizontal(w writer) {
 
 // layoutVertical renders the panel and the child components
 // using the vertical layout strategy.
-func (c *panelImpl) layoutVertical(w writer) {
+func (c *panelImpl) layoutVertical(w Writer) {
 	w.Write(strTableOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
@@ -381,7 +381,7 @@ func (c *panelImpl) layoutVertical(w writer) {
 }
 
 // renderTd renders the formatted HTML TD tag for the specified child component.
-func (c *panelImpl) renderTd(c2 Comp, w writer) {
+func (c *panelImpl) renderTd(c2 Comp, w Writer) {
 	if cf := c.cellFmts[c2.Id()]; cf == nil {
 		w.Write(strTD)
 	} else {

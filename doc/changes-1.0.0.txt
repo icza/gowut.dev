@@ -2,19 +2,23 @@
 Changes and new features in 1.0.0:
 ----------------------------------
 
--Made changes to make Google App Engine (GAE) compatible.
+-Exported a new Writer which is used to render components, it is passed to all Render() methods.
+It is now possible to use components implemented entirely by you (this Writer is the last piece that was not exported previously).
+
+-Renamed all identifier names to conform to the Go naming conventions (from UPPER_CASE to CamelCase).
+(This is a backward incompatible change.)
+
+-Made changes to make it work Google App Engine (GAE) compatible.
 Gowut and the Gowut "Showcase of Features" demo app can now be run on GAE.
+Live demo is available here: https://gowut-demo.appspot.com/show
 
 -Table.Add() now only ensures the table has enough rows, and enough cells in the row.
 Previously it called Table.EnsureSize() if the cell was nonexistent. 
 
--New methods for Table: Trim() and TrimRow().
-This comes handy for example if the table contains cells where colspan > 1 is set;
-by calling this method we can ensure no empty cells will be rendered at the end of such rows.
+-New methods in Table: Trim() and TrimRow().
+These come handy for example if the table contains cells where colspan > 1 is set.
+By calling this method we can ensure no empty cells will be rendered at the end of such rows.
 For follow-up see issue #11: https://github.com/icza/gowut/issues/11
-
--TODO Incompatible change: renamed all constants to conform to the Go naming conventions
-(from UPPER_CASE to UpperCamelCase).
 
 -TODO The Gowut UI Server (gwu.Server) now supports adding custom headers which will be set in all server responses.
 https://github.com/icza/gowut/issues/10

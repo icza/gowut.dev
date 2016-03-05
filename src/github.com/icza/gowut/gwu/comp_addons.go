@@ -52,7 +52,7 @@ func (c *hasTextImpl) SetText(text string) {
 }
 
 // renderText renders the text.
-func (c *hasTextImpl) renderText(w writer) {
+func (c *hasTextImpl) renderText(w Writer) {
 	w.Writees(c.text)
 }
 
@@ -86,7 +86,7 @@ func (c *hasEnabledImpl) SetEnabled(enabled bool) {
 var strDisabled = []byte(` disabled="disabled"`) // ` disabled="disabled"`
 
 // renderEnabled renders the enabled attribute.
-func (c *hasEnabledImpl) renderEnabled(w writer) {
+func (c *hasEnabledImpl) renderEnabled(w Writer) {
 	if !c.enabled {
 		w.Write(strDisabled)
 	}
@@ -120,7 +120,7 @@ func (c *hasUrlImpl) SetUrl(url string) {
 }
 
 // renderUrl renders the URL string.
-func (c *hasUrlImpl) renderUrl(attr string, w writer) {
+func (c *hasUrlImpl) renderUrl(attr string, w Writer) {
 	w.WriteAttr(attr, c.url)
 }
 
@@ -278,7 +278,7 @@ func (c *cellFmtImpl) setIAttr(name string, value int) {
 
 // render renders the formatted HTML tag for the specified tag name.
 // tag must start with a less than sign, e.g. "<td".
-func (c *cellFmtImpl) render(tag []byte, w writer) {
+func (c *cellFmtImpl) render(tag []byte, w Writer) {
 	c.renderWithAligns(tag, c.halign, c.valign, w)
 }
 
@@ -287,7 +287,7 @@ var strVAlign = []byte("vertical-align:") // "vertical-align:"
 // render renders the formatted HTML tag for the specified tag name
 // using the specified alignments instead of ours.
 // tag must start with a less than sign, e.g. "<td".
-func (c *cellFmtImpl) renderWithAligns(tag []byte, halign HAlign, valign VAlign, w writer) {
+func (c *cellFmtImpl) renderWithAligns(tag []byte, halign HAlign, valign VAlign, w Writer) {
 	w.Write(tag)
 
 	for name, value := range c.attrs {
@@ -398,7 +398,7 @@ var strStVAlign = []byte(` style="vertical-align:`) // ` style="vertical-align:`
 
 // renderTr renders an HTML TR tag with horizontal and vertical
 // alignment info included.
-func (c *tableViewImpl) renderTr(w writer) {
+func (c *tableViewImpl) renderTr(w Writer) {
 	w.Write(strTROp)
 	if c.halign != HADefault {
 		w.Write(strAlign)

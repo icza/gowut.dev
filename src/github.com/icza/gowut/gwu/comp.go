@@ -120,7 +120,7 @@ type Comp interface {
 	dispatchEvent(e Event)
 
 	// Render renders the component (as HTML code).
-	Render(w writer)
+	Render(w Writer)
 }
 
 // Comp implementation.
@@ -217,7 +217,7 @@ func (c *compImpl) DescendantOf(c2 Comp) bool {
 }
 
 // renderAttrs renders the explicitly set attributes and styles.
-func (c *compImpl) renderAttrsAndStyle(w writer) {
+func (c *compImpl) renderAttrsAndStyle(w Writer) {
 	for name, value := range c.attrs {
 		w.WriteAttr(name, value)
 	}
@@ -274,7 +274,7 @@ var (
 )
 
 // rendrenderEventHandlers renders the event handlers as attributes.
-func (c *compImpl) renderEHandlers(w writer) {
+func (c *compImpl) renderEHandlers(w Writer) {
 	for etype, _ := range c.handlers {
 		etypeAttr := etypeAttrs[etype]
 		if len(etypeAttr) == 0 { // Only general events are added to the etypeAttrs map
@@ -310,5 +310,5 @@ func (c *compImpl) dispatchEvent(e Event) {
 
 // THIS IS AN EMPTY IMPLEMENTATION.
 // ALL COMPONENTS SHOULD DEFINE THEIR OWN
-func (c *compImpl) Render(w writer) {
+func (c *compImpl) Render(w Writer) {
 }

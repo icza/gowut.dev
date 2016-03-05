@@ -203,7 +203,7 @@ var (
 	strSelectCl    = []byte("</select>")                    // "</select>"
 )
 
-func (c *listBoxImpl) Render(w writer) {
+func (c *listBoxImpl) Render(w Writer) {
 	w.Write(strSelectOp)
 	if c.multi {
 		w.Write(strMultiple)

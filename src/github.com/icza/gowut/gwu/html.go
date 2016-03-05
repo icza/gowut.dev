@@ -53,7 +53,7 @@ func (c *htmlImpl) SetHtml(html string) {
 	c.html = html
 }
 
-func (c *htmlImpl) Render(w writer) {
+func (c *htmlImpl) Render(w Writer) {
 	w.Write(strSpanOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)

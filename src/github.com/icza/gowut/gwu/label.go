@@ -41,7 +41,7 @@ func NewLabel(text string) Label {
 	return c
 }
 
-func (c *labelImpl) Render(w writer) {
+func (c *labelImpl) Render(w Writer) {
 	w.Write(strSpanOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)

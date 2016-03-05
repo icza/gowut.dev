@@ -298,7 +298,7 @@ var (
 	strLabelCl  = []byte("</label>")           // "</label>"
 )
 
-func (c *stateButtonImpl) Render(w writer) {
+func (c *stateButtonImpl) Render(w Writer) {
 	// Proper state button consists of multiple HTML tags (input and label), so render a wrapper tag for them:
 	w.Write(strSpanOp)
 	c.renderAttrsAndStyle(w)
@@ -394,7 +394,7 @@ var (
 	strTD50 = []byte(`<td width="50%">`) // `<td width="50%">`
 )
 
-func (c *switchButtonImpl) Render(w writer) {
+func (c *switchButtonImpl) Render(w Writer) {
 	w.Write(strTableOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)

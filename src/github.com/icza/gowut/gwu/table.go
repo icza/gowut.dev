@@ -367,7 +367,7 @@ func (c *tableImpl) TrimRow(row int) {
 	c.comps[row] = rowComps[:ci.col+1]
 }
 
-func (c *tableImpl) Render(w writer) {
+func (c *tableImpl) Render(w Writer) {
 	w.Write(strTableOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
@@ -391,7 +391,7 @@ func (c *tableImpl) Render(w writer) {
 }
 
 // renderRowTr renders the formatted HTML TR tag for the specified row.
-func (c *tableImpl) renderRowTr(row int, w writer) {
+func (c *tableImpl) renderRowTr(row int, w Writer) {
 	var defha HAlign = c.halign // default halign of the table
 	var defva VAlign = c.valign // default valign of the table
 
@@ -413,7 +413,7 @@ func (c *tableImpl) renderRowTr(row int, w writer) {
 }
 
 // renderTd renders the formatted HTML TD tag for the specified cell.
-func (c *tableImpl) renderTd(ci cellIdx, w writer) {
+func (c *tableImpl) renderTd(ci cellIdx, w Writer) {
 	if cf := c.cellFmts[ci]; cf == nil {
 		w.Write(strTD)
 	} else {

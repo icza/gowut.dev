@@ -128,7 +128,7 @@ var (
 	strScriptCl = []byte(");</script>")         // ");</script>"
 )
 
-func (c *timerImpl) Render(w writer) {
+func (c *timerImpl) Render(w Writer) {
 	w.Write(strSpanOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)

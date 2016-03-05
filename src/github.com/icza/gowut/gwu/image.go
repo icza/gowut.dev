@@ -52,7 +52,7 @@ var (
 	strImgCl = []byte(`">`)     // `">`
 )
 
-func (c *imageImpl) Render(w writer) {
+func (c *imageImpl) Render(w Writer) {
 	w.Write(strImgOp)
 	c.renderUrl("src", w)
 	c.renderAttrsAndStyle(w)

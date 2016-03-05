@@ -55,7 +55,7 @@ type Window interface {
 	SetTheme(theme string)
 
 	// RenderWin renders the window as a complete HTML document.
-	RenderWin(w writer, s Server)
+	RenderWin(w Writer, s Server)
 }
 
 // WinSlice is a slice of windows which implements sort.Interface so it
@@ -117,7 +117,7 @@ func (s *windowImpl) SetTheme(theme string) {
 	s.theme = theme
 }
 
-func (c *windowImpl) Render(w writer) {
+func (c *windowImpl) Render(w Writer) {
 	// Attaching window events is outside of the HTML tag denoted by the window's id.
 	// This means if the window is re-rendered (not reloaded), changed window event handlers
 	// will not be reflected.
@@ -146,7 +146,7 @@ func (c *windowImpl) Render(w writer) {
 	c.panelImpl.Render(w)
 }
 
-func (win *windowImpl) RenderWin(w writer, s Server) {
+func (win *windowImpl) RenderWin(w Writer, s Server) {
 	// We could optimize this (store byte slices of static strings)
 	// but windows are rendered "so rarely"...
 	w.Writes(`<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>`)
@@ -169,7 +169,7 @@ func (win *windowImpl) RenderWin(w writer, s Server) {
 }
 
 // renderDynJs renders the dynamic JavaScript codes of Gowut.
-func (win *windowImpl) renderDynJs(w writer, s Server) {
+func (win *windowImpl) renderDynJs(w Writer, s Server) {
 	w.Writes("<script>")
 	w.Writess("var _pathApp='", s.AppPath(), "';")
 	w.Writess("var _pathWin='", s.AppPath(), win.name, "/';")

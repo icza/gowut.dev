@@ -420,13 +420,13 @@ type Style interface {
 
 	// render renders all style information (style class names
 	// and style attributes).
-	render(w writer)
+	render(w Writer)
 
 	// renderClasses renders the style class names.
-	renderClasses(w writer)
+	renderClasses(w Writer)
 
 	// renderAttrs renders the style attributes.
-	renderAttrs(w writer)
+	renderAttrs(w Writer)
 }
 
 type styleImpl struct {
@@ -783,7 +783,7 @@ func (s *styleImpl) SetWhiteSpace(value string) Style {
 	return s.Set(StWhiteSpace, value)
 }
 
-func (s *styleImpl) render(w writer) {
+func (s *styleImpl) render(w Writer) {
 	s.renderClasses(w)
 
 	if s.attrs != nil {
@@ -793,7 +793,7 @@ func (s *styleImpl) render(w writer) {
 	}
 }
 
-func (s *styleImpl) renderClasses(w writer) {
+func (s *styleImpl) renderClasses(w Writer) {
 	if len(s.classes) > 0 {
 		w.Write(strClass)
 		for i, class := range s.classes {
@@ -806,7 +806,7 @@ func (s *styleImpl) renderClasses(w writer) {
 	}
 }
 
-func (s *styleImpl) renderAttrs(w writer) {
+func (s *styleImpl) renderAttrs(w Writer) {
 	for name, value := range s.attrs {
 		w.Writes(name)
 		w.Write(strColon)

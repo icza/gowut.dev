@@ -131,7 +131,7 @@ var (
 	strACl = []byte("</a>") // "</a>"
 )
 
-func (c *linkImpl) Render(w writer) {
+func (c *linkImpl) Render(w Writer) {
 	w.Write(strAOp)
 	c.renderUrl("href", w)
 	c.renderAttrsAndStyle(w)

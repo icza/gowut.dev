@@ -190,7 +190,7 @@ func (c *textBoxImpl) preprocessEvent(event Event, r *http.Request) {
 	}
 }
 
-func (c *textBoxImpl) Render(w writer) {
+func (c *textBoxImpl) Render(w Writer) {
 	if c.rows <= 1 || c.isPassw {
 		c.renderInput(w)
 	} else {
@@ -208,7 +208,7 @@ var (
 )
 
 // renderInput renders the component as an input HTML tag.
-func (c *textBoxImpl) renderInput(w writer) {
+func (c *textBoxImpl) renderInput(w Writer) {
 	w.Write(strInputOp)
 	if c.isPassw {
 		w.Write(strPassword)
@@ -236,7 +236,7 @@ var (
 )
 
 // renderTextArea renders the component as an textarea HTML tag.
-func (c *textBoxImpl) renderTextArea(w writer) {
+func (c *textBoxImpl) renderTextArea(w Writer) {
 	w.Write(strTextareaOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEnabled(w)

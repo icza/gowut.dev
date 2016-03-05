@@ -202,7 +202,7 @@ func (c *expanderImpl) ContentFmt() CellFmt {
 	return c.contentFmt
 }
 
-func (c *expanderImpl) Render(w writer) {
+func (c *expanderImpl) Render(w Writer) {
 	w.Write(strTableOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)

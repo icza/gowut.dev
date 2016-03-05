@@ -336,7 +336,7 @@ func (c *tabPanelImpl) SetSelected(idx int) {
 	}
 }
 
-func (c *tabPanelImpl) Render(w writer) {
+func (c *tabPanelImpl) Render(w Writer) {
 	w.Write(strTableOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
@@ -371,7 +371,7 @@ func (c *tabPanelImpl) Render(w writer) {
 }
 
 // renderContent renders the selected content component.
-func (c *tabPanelImpl) renderContent(w writer) {
+func (c *tabPanelImpl) renderContent(w Writer) {
 	// Render only the selected content component
 	if c.selected >= 0 {
 		c2 := c.comps[c.selected]

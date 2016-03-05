@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// Our improved writer with helper methods to easier write data we need.
+// Gowut's improved and optimized writer with helper methods to easier write data we need.
 
 package gwu
 
@@ -22,11 +22,12 @@ import (
 	"fmt"
 	"html"
 	"io"
+	"log"
 	"strconv"
 )
 
 // Number of cached ints.
-const cachedInts = 32
+const cachedInts = 64
 
 // Byte slice vars (constants) of frequently used strings.
 // Render methods use these to avoid array allocations
@@ -65,19 +66,44 @@ func init() {
 	}
 }
 
-// writer is an improved writer with helper methods
-// to easier write data we need
-type writer struct {
+// Writer is an improved and optimized io.Writer with additionial helper methods
+// to easier write data we need to render components.
+type Writer interface {
+	io.Writer // Writer is an io.Writer
+
+	// Writev writes a value. It is highly optimized for certain values/types.
+	// Supported value types are string, int, []byte, bool.
+	Writev(v interface{}) (n int, err error)
+
+	// Writevs writes values. It is highly optimized for certain values/types.
+	// For supported value types see Writev().
+	Writevs(v ...interface{}) (n int, err error)
+
+	// Writes writes a string.
+	Writes(s string) (n int, err error)
+
+	// Writess writes strings.
+	Writess(ss ...string) (n int, err error)
+
+	// Writees writes a string after html-escaping it.
+	Writees(s string) (n int, err error)
+
+	// WriteAttr writes an attribute in the form of:
+	// ` name="value"`
+	WriteAttr(name, value string) (n int, err error)
+}
+
+// writerImpl is the implementation of our Writer.
+type writerImpl struct {
 	io.Writer // Writer implementation
 }
 
-// NewWriter returns an implementation of our writer.
-func NewWriter(w io.Writer) writer {
-	return writer{w}
+// NewWriter returns a new Writer, wrapping the specified io.Writer.
+func NewWriter(w io.Writer) Writer {
+	return writerImpl{w}
 }
 
-// Writev writes a value.
-func (w writer) Writev(v interface{}) (n int, err error) {
+func (w writerImpl) Writev(v interface{}) (n int, err error) {
 	switch v2 := v.(type) {
 	case string:
 		return w.Write([]byte(v2))
@@ -94,12 +120,11 @@ func (w writer) Writev(v interface{}) (n int, err error) {
 		return w.Write(strBools[v2])
 	}
 
-	fmt.Printf("Not supported type: %T\n", v)
+	log.Printf("Not supported type: %T\n", v)
 	return 0, errors.New(fmt.Sprintf("Not supported type: %T", v))
 }
 
-// Writevs writes values.
-func (w writer) Writevs(v ...interface{}) (n int, err error) {
+func (w writerImpl) Writevs(v ...interface{}) (n int, err error) {
 	for _, v2 := range v {
 		var m int
 		m, err = w.Writev(v2)
@@ -111,13 +136,11 @@ func (w writer) Writevs(v ...interface{}) (n int, err error) {
 	return
 }
 
-// Writes writes a string.
-func (w writer) Writes(s string) (n int, err error) {
+func (w writerImpl) Writes(s string) (n int, err error) {
 	return w.Write([]byte(s))
 }
 
-// Writess writes strings.
-func (w writer) Writess(ss ...string) (n int, err error) {
+func (w writerImpl) Writess(ss ...string) (n int, err error) {
 	for _, s := range ss {
 		var m int
 		m, err = w.Write([]byte(s))
@@ -129,14 +152,11 @@ func (w writer) Writess(ss ...string) (n int, err error) {
 	return
 }
 
-// Writees writes a string after html-escaping it.
-func (w writer) Writees(s string) (n int, err error) {
+func (w writerImpl) Writees(s string) (n int, err error) {
 	return w.Write([]byte(html.EscapeString(s)))
 }
 
-// WriteAttr writes an attribute in the form of:
-// ` name="value"`
-func (w writer) WriteAttr(name, value string) (n int, err error) {
+func (w writerImpl) WriteAttr(name, value string) (n int, err error) {
 	// Easiest implementation would be:
 	// return w.Writevs(strSpace, name, strEqQuote, value, strQuote)
 

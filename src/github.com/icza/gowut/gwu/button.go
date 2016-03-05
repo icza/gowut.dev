@@ -57,7 +57,7 @@ var (
 	strButtonCl = []byte("</button>")             // "</button>"
 )
 
-func (c *buttonImpl) Render(w writer) {
+func (c *buttonImpl) Render(w Writer) {
 	w.Write(strButtonOp)
 	c.renderAttrsAndStyle(w)
 	c.renderEHandlers(w)
