@@ -6,11 +6,8 @@ Changes and new features in 1.0.0:
 It is now possible to use components implemented entirely by you (this Writer is the last piece that was not exported previously).
 
 -Renamed all identifier names to conform to the Go naming conventions (from UPPER_CASE to CamelCase).
+Renaming is simple and consistent, for example CLR_RED => ClrRed, ETYPE_CLICK => ETypeClick etc.
 (This is a backward incompatible change.)
-
--Made changes to make it work Google App Engine (GAE) compatible.
-Gowut and the Gowut "Showcase of Features" demo app can now be run on GAE.
-Live demo is available here: https://gowut-demo.appspot.com/show
 
 -Table.Add() now only ensures the table has enough rows, and enough cells in the row.
 Previously it called Table.EnsureSize() if the cell was nonexistent. 
@@ -22,5 +19,9 @@ For follow-up see issue #11: https://github.com/icza/gowut/issues/11
 
 -TODO The Gowut UI Server (gwu.Server) now supports adding custom headers which will be set in all server responses.
 https://github.com/icza/gowut/issues/10
+
+-Made changes to make it work Google App Engine (GAE) compatible.
+Gowut and the Gowut "Showcase of Features" demo app can now be run on GAE.
+Live demo is available here: https://gowut-demo.appspot.com/show
 
 -Other minor changes, improvements and optimization.

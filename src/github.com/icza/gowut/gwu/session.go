@@ -21,7 +21,7 @@ import (
 	"crypto/rand"
 	"errors"
 	"fmt"
-	"io"
+	"log"
 	"sort"
 	"sync"
 	"time"
@@ -117,40 +117,30 @@ func newSessionImpl(private bool) sessionImpl {
 		attrs: make(map[string]interface{}), timeout: 30 * time.Minute, rwMutex_: &sync.RWMutex{}}
 }
 
-// Number of valid id runes.
-// Must be a power of 2!
-const idRunesCount = 64
-
-// Mask to get an id rune idx from a random byte.
-const idRunesIdxMask = idRunesCount - 1
-
-// Valid runes to be used for session ids
-// Its length must be idRunesCount.
-var idRunes = []rune("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_")
+// Valid characters (bytes) to be used in session ids
+// Its length must be a power of 2.
+const idChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_"
 
 func init() {
-	// Is idRunesCount a power of 2?
-	if idRunesCount&(idRunesCount-1) != 0 {
-		panic(fmt.Sprint("idRunesCount is not a power of 2: ", idRunesCount))
-	}
-	if len(idRunes) != idRunesCount {
-		panic(fmt.Sprint("len(idRunes) != ", idRunesCount))
+	// Is len(idChars) a power of 2?
+	if i := byte(len(idChars)); i&(i-1) != 0 {
+		panic(fmt.Sprint("len(idChars) must be power of 2: ", i))
 	}
 }
 
 // Length of the session ids
 const idLength = 22
 
-// genId generates a session id.
+// genId generates a new session id.
 func genId() string {
-	r := make([]byte, idLength)
-	io.ReadFull(rand.Reader, r)
-
-	id := make([]rune, idLength)
-	for i := 0; i < idLength; i++ {
-		id[i] = idRunes[r[i]&idRunesIdxMask]
+	id := make([]byte, idLength)
+	if _, err := rand.Read(id); err != nil {
+		log.Printf("Failed to read from secure random: %v", err)
 	}
 
+	for i, v := range id {
+		id[i] = idChars[v&byte(len(idChars)-1)]
+	}
 	return string(id)
 }
 
