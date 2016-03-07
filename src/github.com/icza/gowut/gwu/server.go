@@ -345,7 +345,7 @@ func (s *serverImpl) AddStaticDir(path, dir string) error {
 		path = path[1:]
 	}
 
-	if len(path) == 0 {
+	if path == "" {
 		return errors.New("path cannot be empty string!")
 	}
 
@@ -355,8 +355,8 @@ func (s *serverImpl) AddStaticDir(path, dir string) error {
 
 	path = s.appPath + path
 
-	if path == s.appPath+pathStatic {
-		return errors.New("path cannot be '" + pathStatic + "' (reserved)!")
+	if path == s.appPath+pathStatic || path == s.appPath+pathEvent || s.appPath+pathRenderComp {
+		return errors.New("Path cannot be '" + pathStatic + "' (reserved)!")
 	}
 
 	http.Handle(path, http.StripPrefix(path, http.FileServer(http.Dir(dir))))
@@ -381,14 +381,14 @@ func (s *serverImpl) serveStatic(w http.ResponseWriter, r *http.Request) {
 	// Parts example: "/appname/_gwu_static/gwu-0.8.0.js" => {"", "appname", "_gwu_static", "gwu-0.8.0.js"}
 	parts := strings.Split(r.URL.Path, "/")
 
-	if len(s.appName) == 0 {
+	if s.appName == "" {
 		// No app name, gui server resides in root
 		if len(parts) < 2 {
 			// This should never happen. Path is always at least a slash ("/").
 			http.NotFound(w, r)
 			return
 		}
-		// Omit the first empty string and _PATH_STATIC
+		// Omit the first empty string and pathStatic
 		parts = parts[2:]
 	} else {
 		// We have app name
@@ -397,13 +397,13 @@ func (s *serverImpl) serveStatic(w http.ResponseWriter, r *http.Request) {
 			http.NotFound(w, r)
 			return
 		}
-		// Omit the first empty string, app name and _PATH_STATIC
+		// Omit the first empty string, app name and pathStatic
 		parts = parts[3:]
 	}
 
 	res := parts[0]
 	if res == resNameStaticJs {
-		w.Header().Set("Expires", time.Now().Add(72*time.Hour).Format(http.TimeFormat)) // Set 72 hours caching
+		w.Header().Set("Expires", time.Now().UTC().Add(72*time.Hour).Format(http.TimeFormat)) // Set 72 hours caching
 		w.Header().Set("Content-Type", "application/x-javascript; charset=utf-8")
 		w.Write(staticJs)
 		return
@@ -411,7 +411,7 @@ func (s *serverImpl) serveStatic(w http.ResponseWriter, r *http.Request) {
 	if strings.HasSuffix(res, ".css") {
 		cssCode := staticCss[res]
 		if cssCode != nil {
-			w.Header().Set("Expires", time.Now().Add(72*time.Hour).Format(http.TimeFormat)) // Set 72 hours caching
+			w.Header().Set("Expires", time.Now().UTC().Add(72*time.Hour).Format(http.TimeFormat)) // Set 72 hours caching
 			w.Header().Set("Content-Type", "text/css; charset=utf-8")
 			w.Write(cssCode)
 			return
