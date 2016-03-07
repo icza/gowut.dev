@@ -18,8 +18,8 @@
 package main
 
 import (
+	"fmt"
 	"github.com/icza/gowut/gwu"
-	"strconv"
 )
 
 type MyButtonHandler struct {
@@ -31,7 +31,7 @@ func (h *MyButtonHandler) HandleEvent(e gwu.Event) {
 	if b, isButton := e.Src().(gwu.Button); isButton {
 		b.SetText(b.Text() + h.text)
 		h.counter++
-		b.SetToolTip("You've clicked " + strconv.Itoa(h.counter) + " times!")
+		b.SetToolTip(fmt.Sprintf("You've clicked %d times!", h.counter))
 		e.MarkDirty(b)
 	}
 }
@@ -51,7 +51,7 @@ func main() {
 	btnsPanel := gwu.NewNaturalPanel()
 	btn.AddEHandlerFunc(func(e gwu.Event) {
 		// Create and add a new button...
-		newbtn := gwu.NewButton("Extra #" + strconv.Itoa(btnsPanel.CompsCount()))
+		newbtn := gwu.NewButton(fmt.Sprintf("Extra #%d", btnsPanel.CompsCount()))
 		newbtn.AddEHandlerFunc(func(e gwu.Event) {
 			btnsPanel.Remove(newbtn) // ...which removes itself when clicked
 			e.MarkDirty(btnsPanel)
@@ -80,7 +80,7 @@ func main() {
 	p.Add(listBox)
 	countLabel := gwu.NewLabel("Selected count: 0")
 	listBox.AddEHandlerFunc(func(e gwu.Event) {
-		countLabel.SetText("Selected count: " + strconv.Itoa(len(listBox.SelectedIndices())))
+		countLabel.SetText(fmt.Sprintf("Selected count: %d", len(listBox.SelectedIndices())))
 		e.MarkDirty(countLabel)
 	}, gwu.ETypeChange)
 	p.Add(countLabel)

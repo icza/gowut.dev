@@ -37,7 +37,7 @@ func (h *MyButtonHandler) HandleEvent(e gwu.Event) {
 	if b, isButton := e.Src().(gwu.Button); isButton {
 		b.SetText(b.Text() + h.text)
 		h.counter++
-		b.SetToolTip("You've clicked " + strconv.Itoa(h.counter) + " times!")
+		b.SetToolTip(fmt.Sprintf("You've clicked %d times!", h.counter))
 		e.MarkDirty(b)
 	}
 }
@@ -87,7 +87,7 @@ func buildPrivateWins(s gwu.Session) {
 	extraBtns := gwu.NewPanel()
 	extraBtns.SetLayout(gwu.LayoutNatural)
 	button.AddEHandlerFunc(func(e gwu.Event) {
-		extraBtn := gwu.NewButton("Extra #" + strconv.Itoa(extraBtns.CompsCount()))
+		extraBtn := gwu.NewButton(fmt.Sprintf("Extra #%d", extraBtns.CompsCount()))
 		extraBtn.AddEHandlerFunc(func(e gwu.Event) {
 			extraBtn.Parent().Remove(extraBtn)
 			e.MarkDirty(extraBtns)
@@ -117,7 +117,7 @@ func buildPrivateWins(s gwu.Session) {
 	countLabel := gwu.NewLabel("Selected count: 0")
 	listBox.AddEHandlerFunc(func(e gwu.Event) {
 		selCount := len(listBox.SelectedIndices())
-		countLabel.SetText("Selected count: " + strconv.Itoa(selCount))
+		countLabel.SetText(fmt.Sprintf("Selected count: %d", selCount))
 		e.MarkDirty(countLabel)
 	}, gwu.ETypeChange)
 	p.Add(countLabel)
@@ -164,7 +164,7 @@ func buildPrivateWins(s gwu.Session) {
 	for row := 0; row < 5; row++ {
 		group := gwu.NewRadioGroup(strconv.Itoa(row))
 		for col := 0; col < 5; col++ {
-			radio := gwu.NewRadioButton("= "+strconv.Itoa(col)+" =", group)
+			radio := gwu.NewRadioButton(fmt.Sprintf("= %d =", col), group)
 			radio.AddEHandlerFunc(func(e gwu.Event) {
 				radios := []gwu.RadioButton{radio, radio.Group().PrevSelected()}
 				for _, radio := range radios {
@@ -197,17 +197,17 @@ func buildPrivateWins(s gwu.Session) {
 		if i == 3 {
 			img := gwu.NewImage("", "https://www.google.com/images/srpr/logo3w.png")
 			img.Style().SetWidthPx(100)
-			tabPanel.Add(img, gwu.NewLabel("This is some long content, random="+strconv.Itoa(rand.Int())))
+			tabPanel.Add(img, gwu.NewLabel(fmt.Sprintf("This is some long content, random=%d", rand.Int())))
 			continue
 		}
-		tabPanel.AddString(strconv.Itoa(i)+". tab", gwu.NewLabel("This is some long content, random="+strconv.Itoa(rand.Int())))
+		tabPanel.AddString(fmt.Sprintf("%d. tab", i), gwu.NewLabel(fmt.Sprintf("This is some long content, random=%d", rand.Int())))
 	}
 	win.Add(tabPanel)
 	tabPanel = gwu.NewTabPanel()
 	tabPanel.SetTabBarPlacement(gwu.TbPlacementLeft)
 	tabPanel.TabBarFmt().SetVAlign(gwu.VABottom)
 	for i := 7; i < 11; i++ {
-		l := gwu.NewLabel("This is some long content, random=" + strconv.Itoa(rand.Int()))
+		l := gwu.NewLabel(fmt.Sprintf("This is some long content, random=%d", rand.Int()))
 		if i == 9 {
 			img := gwu.NewImage("", "https://www.google.com/images/srpr/logo3w.png")
 			img.Style().SetWidthPx(100)
@@ -215,7 +215,7 @@ func buildPrivateWins(s gwu.Session) {
 			tabPanel.CellFmt(l).Style().SetSizePx(400, 400)
 			continue
 		}
-		tabPanel.AddString(strconv.Itoa(i)+". tab", l)
+		tabPanel.AddString(fmt.Sprintf("%d. tab", i), l)
 		tabPanel.CellFmt(l).Style().SetSizePx(400, 400)
 	}
 	win.Add(tabPanel)

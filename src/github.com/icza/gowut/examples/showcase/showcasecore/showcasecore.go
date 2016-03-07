@@ -854,6 +854,10 @@ func StartServer(appName string) {
 
 	server.AddSessCreatorName("show", "Showcase of Features - Gowut")
 	server.AddSHandler(SessHandler{})
+	// Just for the demo: Add an extra "Gowut-Server" header to all responses holding the Gowut version
+	server.SetHeaders(map[string][]string{
+		"Gowut-Server": {gwu.GowutVersion},
+	})
 
 	// Start GUI server
 	if err := server.Start("show"); err != nil {

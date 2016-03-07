@@ -254,7 +254,7 @@ https://github.com/icza/gowut/blob/master/examples/simple/simple_demo.go
 		if b, isButton := e.Src().(gwu.Button); isButton {
 			b.SetText(b.Text() + h.text)
 			h.counter++
-			b.SetToolTip("You've clicked " + strconv.Itoa(h.counter) + " times!")
+			b.SetToolTip(fmt.Sprintf("You've clicked %d times!", h.counter))
 			e.MarkDirty(b)
 		}
 	}
@@ -274,7 +274,7 @@ https://github.com/icza/gowut/blob/master/examples/simple/simple_demo.go
 		btnsPanel := gwu.NewNaturalPanel()
 		btn.AddEHandlerFunc(func(e gwu.Event) {
 			// Create and add a new button...
-			newbtn := gwu.NewButton("Extra #" + strconv.Itoa(btnsPanel.CompsCount()))
+			newbtn := gwu.NewButton(fmt.Sprintf("Extra #%d", btnsPanel.CompsCount()))
 			newbtn.AddEHandlerFunc(func(e gwu.Event) {
 				btnsPanel.Remove(newbtn) // ...which removes itself when clicked
 				e.MarkDirty(btnsPanel)
@@ -303,7 +303,7 @@ https://github.com/icza/gowut/blob/master/examples/simple/simple_demo.go
 		p.Add(listBox)
 		countLabel := gwu.NewLabel("Selected count: 0")
 		listBox.AddEHandlerFunc(func(e gwu.Event) {
-			countLabel.SetText("Selected count: " + strconv.Itoa(len(listBox.SelectedIndices())))
+			countLabel.SetText(fmt.Sprintf("Selected count: %d", len(listBox.SelectedIndices())))
 			e.MarkDirty(countLabel)
 		}, gwu.ETypeChange)
 		p.Add(countLabel)
@@ -383,7 +383,9 @@ Author email: gmail.com, user name: iczaaa
 
 Home page: https://sites.google.com/site/gowebuitoolkit/
 
-Source code: https://github.com/icza/gowut
+Source code (public releases): https://github.com/icza/gowut
+
+Source code (development): https://github.com/icza/gowut.dev
 
 Discussion forum: https://groups.google.com/d/forum/gowebuitoolkit
 

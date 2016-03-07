@@ -127,10 +127,24 @@ type Server interface {
 	// AddSHandler adds a new session handler.
 	AddSHandler(handler SessionHandler)
 
+	// SetHeaders sets extra headers that will be added to all responses.
+	// Supplied values will be copied, so changes to the passed map have no effect.
+	//
+	// For example to add an extra "Gowut-Server" header to all responses holding the Gowut version:
+	//     server.SetHeaders(map[string][]string{
+	//         "Gowut-Server": {gwu.GowutVersion},
+	//     })
+	SetHeaders(headers map[string][]string)
+
+	// Headers returns the extra headers that will be added to all repsonses.
+	// A copy is returned, so changes to the returned map have no effect.
+	Headers() map[string][]string
+
 	// AddStaticDir registers a directory whose content (files) recursively
 	// will be served by the server when requested.
 	// path is an app-path relative path to address a file, dir is the root directory
 	// to search in.
+	// Extra headers set by SetHeaders() will also be included in responses serving the static files.
 	//
 	// Example:
 	//     AddStaticDir("img", "/tmp/myimg")
@@ -175,6 +189,7 @@ type serverImpl struct {
 	sessionHandlers   []SessionHandler   // Registered session handlers
 	theme             string             // Default CSS theme of the server
 	logger            *log.Logger        // Logger.
+	headers           http.Header        // Extra headers that will be added to all responses.
 }
 
 // NewServer creates a new GUI server in HTTP mode.
@@ -340,6 +355,33 @@ func (s *serverImpl) sessCleaner() {
 	}
 }
 
+func (s *serverImpl) SetHeaders(headers map[string][]string) {
+	s.headers = make(map[string][]string, len(headers))
+	for k, v := range headers {
+		// Also copy value which is a slice
+		s.headers[k] = append(make([]string, 0, len(v)), v...)
+	}
+}
+
+func (s *serverImpl) Headers() map[string][]string {
+	headers := make(map[string][]string, len(s.headers))
+	for k, v := range s.headers {
+		// Also copy value which is a slice
+		headers[k] = append(make([]string, 0, len(v)), v...)
+	}
+	return headers
+}
+
+// addHeaders adds the extra headers to the specified response.
+func (s *serverImpl) addHeaders(w http.ResponseWriter) {
+	header := w.Header()
+	for k, v := range s.headers {
+		for _, v2 := range v {
+			header.Add(k, v2)
+		}
+	}
+}
+
 func (s *serverImpl) AddStaticDir(path, dir string) error {
 	if strings.HasPrefix(path, "/") {
 		path = path[1:]
@@ -355,11 +397,16 @@ func (s *serverImpl) AddStaticDir(path, dir string) error {
 
 	path = s.appPath + path
 
-	if path == s.appPath+pathStatic || path == s.appPath+pathEvent || s.appPath+pathRenderComp {
+	if path == s.appPath+pathStatic || path == s.appPath+pathEvent || path == s.appPath+pathRenderComp {
 		return errors.New("Path cannot be '" + pathStatic + "' (reserved)!")
 	}
 
-	http.Handle(path, http.StripPrefix(path, http.FileServer(http.Dir(dir))))
+	handler := http.StripPrefix(path, http.FileServer(http.Dir(dir)))
+	// To include extra headers in the response of static handler:
+	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
+		s.addHeaders(w)
+		handler.ServeHTTP(w, r)
+	})
 
 	return nil
 }
@@ -378,6 +425,8 @@ func (s *serverImpl) SetLogger(logger *log.Logger) {
 
 // serveStatic handles the static contents of GWU.
 func (s *serverImpl) serveStatic(w http.ResponseWriter, r *http.Request) {
+	s.addHeaders(w)
+
 	// Parts example: "/appname/_gwu_static/gwu-0.8.0.js" => {"", "appname", "_gwu_static", "gwu-0.8.0.js"}
 	parts := strings.Split(r.URL.Path, "/")
 
@@ -428,6 +477,8 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 	if s.logger != nil {
 		s.logger.Println("Incoming: ", r.URL.Path)
 	}
+
+	s.addHeaders(w)
 
 	// Check session
 	var sess Session
