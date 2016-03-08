@@ -1,4 +1,7 @@
 
+-Session monitor endpoint + component: periodically checks if session timed out, warns if so.
+These checks should not trigger a Session access.
+
 -Event request might contain rendered dirty comps right away, making additional calls to render comps needless -> faster response overall
 
 -Include ohlow widgets in the Html demo of the showcase app? https://www.ohloh.net/p/gowut/widgets

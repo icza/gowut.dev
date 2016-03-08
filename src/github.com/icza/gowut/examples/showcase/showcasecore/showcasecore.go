@@ -42,7 +42,7 @@ func buildHomeDemo(event gwu.Event) gwu.Comp {
 		"When you make modifications to components (e.g. enter text into a TextBox), that is automatically trasmitted to the server side via AJAX calls.",
 		"If you close the window and reopen the URL, you will see everything as you left it.",
 		"What you see and do here is also bound to You (using a Session), others don't see it and they can't interfere with it.",
-		"You may notice a small delay between your actions and the result (e.g. clicking on components on the left). This is due to the network latency: your action needs to be transmitted and changed (dirty) components needs to be refreshed (re-rendered). Gowut apps running locally do not have such delays.",
+		"You may notice a small delay between your actions and the result (response). This is due to the network latency: your action need to be transmitted and changed (dirty) components need to be refreshed (re-rendered). Gowut apps running locally do not have such delays.",
 		"Select components on the left side to see them in action.",
 	}
 
