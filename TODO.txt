@@ -1,4 +1,7 @@
 
+-New event response action: show a dialog (e.g. confirmation, input).
+After dialog is closed, it should generate a new event transferring the action/input from the dialog. 
+
 -Clicking on the icon of the Expander's header should also expand/collapse.
 This might require to add the icon as a separate component, and also register event handler to it.
 (Unless the style of the header's component is modified - which I want to avoid.)

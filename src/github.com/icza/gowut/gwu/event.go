@@ -279,7 +279,7 @@ type Event interface {
 	// forkEvent forks a new Event from this one.
 	// The new event will have a parent pointing to us.
 	// Accessing/changing the session and defining post-event actions in the forked
-	// event work like if they would be done on this event.
+	// event works as if they would be done on this event.
 	forkEvent(etype EventType, src Comp) Event
 }
 

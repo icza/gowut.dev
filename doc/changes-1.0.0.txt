@@ -15,7 +15,7 @@ You can use these to set HTTP response headers that will be added to all respons
 For antecedent, see issue #10: https://github.com/icza/gowut/issues/10
 
 -Table.Add() now only ensures the table has enough rows, and enough cells in the row.
-Previously it called Table.EnsureSize() if the cell was nonexistent. 
+Previously it called Table.EnsureSize() if the cell was nonexistent.
 
 -New methods in Table: Trim() and TrimRow().
 These come handy for example if the table contains cells where colspan > 1 is set.
