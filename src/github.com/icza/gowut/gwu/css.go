@@ -79,8 +79,8 @@ body {font-family:Arial}
 .gwu-SwitchButton-On-Active:disabled, .gwu-SwitchButton-Off-Active:disabled, .gwu-SwitchButton-On-Inactive:disabled, .gwu-SwitchButton-Off-Inactive:disabled {color:black}
 
 .gwu-Expander {}
-.gwu-Expander-Header, .gwu-Expander-Header-Expanded {padding-left:19px; cursor:pointer}
-.gwu-Expander-Content {padding-left:19px}
+.gwu-Expander-Header, .gwu-Expander-Header-Expanded {cursor:pointer}
+.gwu-Expander-Header, .gwu-Expander-Header-Expanded, .gwu-Expander-Content {padding-left:19px}
 
 .gwu-TabBar {}
 .gwu-TabBar-Top {padding:0px 5px 0px 5px; border-bottom:5px solid #8080f8}

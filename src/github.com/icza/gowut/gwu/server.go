@@ -127,8 +127,8 @@ type Server interface {
 	// AddSHandler adds a new session handler.
 	AddSHandler(handler SessionHandler)
 
-	// SetHeaders sets extra headers that will be added to all responses.
-	// Supplied values will be copied, so changes to the passed map have no effect.
+	// SetHeaders sets extra HTTP response headers that are added to all responses.
+	// Supplied values are copied, so changes to the passed map afterwards have no effect.
 	//
 	// For example to add an extra "Gowut-Server" header whose value is the Gowut version:
 	//     server.SetHeaders(map[string][]string{
@@ -136,20 +136,22 @@ type Server interface {
 	//     })
 	SetHeaders(headers map[string][]string)
 
-	// Headers returns the extra headers that will be added to all repsonses.
-	// A copy is returned, so changes to the returned map have no effect.
+	// Headers returns the extra HTTP response headers that are added to all repsonses.
+	// A copy is returned, so changes to the returned map afterwards have no effect.
 	Headers() map[string][]string
 
 	// AddStaticDir registers a directory whose content (files) recursively
 	// will be served by the server when requested.
 	// path is an app-path relative path to address a file, dir is the root directory
 	// to search in.
+	// Note that the app name must be included in absolute request paths,
+	// and it may be omitted if you want to use relative paths.
 	// Extra headers set by SetHeaders() will also be included in responses serving the static files.
 	//
 	// Example:
 	//     AddStaticDir("img", "/tmp/myimg")
-	// And then the request "/appname/img/faces/happy.gif" will serve "/tmp/myimg/faces/happy.gif".
-	// Note that the app name must be included in the request path!
+	// Then request for absolute path "/appname/img/faces/happy.gif" will serve
+	// "/tmp/myimg/faces/happy.gif", just as the the request for relative path "img/faces/happy.gif".
 	AddStaticDir(path, dir string) error
 
 	// Theme returns the default CSS theme of the server.

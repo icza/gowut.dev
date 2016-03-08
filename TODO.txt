@@ -1,4 +1,8 @@
 
+-Clicking on the icon of the Expander's header should also expand/collapse.
+This might require to add the icon as a separate component, and also register event handler to it.
+(Unless the style of the header's component is modified - which I want to avoid.)
+
 -Session monitor endpoint + component: periodically checks if session timed out, warns if so.
 These checks should not trigger a Session access.
 
