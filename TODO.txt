@@ -1,5 +1,5 @@
 
--Event request might contain rendered dirty comps right away, making another call to render comps needless -> faster response overall
+-Event request might contain rendered dirty comps right away, making additional calls to render comps needless -> faster response overall
 
 -Include ohlow widgets in the Html demo of the showcase app? https://www.ohloh.net/p/gowut/widgets
 

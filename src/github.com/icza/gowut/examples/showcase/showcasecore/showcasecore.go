@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"github.com/icza/gowut/gwu"
 	"log"
-	"strconv"
 	"time"
 )
 
@@ -39,11 +38,11 @@ func buildHomeDemo(event gwu.Event) gwu.Comp {
 
 	content := []string{
 		"This app is written in and showcases Gowut " + gwu.GowutVersion + ".",
-		"Everything you see here is modeled and represented in Go (server side). Everything you see here is created with Go code only (no HTML).",
+		"Everything you see here is modeled and represented in Go (server side). Everything is created with Go code only (no HTML).",
 		"When you make modifications to components (e.g. enter text into a TextBox), that is automatically trasmitted to the server side via AJAX calls.",
 		"If you close the window and reopen the URL, you will see everything as you left it.",
 		"What you see and do here is also bound to You (using a Session), others don't see it and they can't interfere with it.",
-		"You may notice a small delay between your actions and the result (e.g. clicking on components on the left). This is due to the network latency: your action needs to be transmitted and changed (dirty) components needs to be refreshed (re-rendered). Gowut apps run locally do not have such delays.",
+		"You may notice a small delay between your actions and the result (e.g. clicking on components on the left). This is due to the network latency: your action needs to be transmitted and changed (dirty) components needs to be refreshed (re-rendered). Gowut apps running locally do not have such delays.",
 		"Select components on the left side to see them in action.",
 	}
 
@@ -79,7 +78,7 @@ func buildExpanderDemo(event gwu.Event) gwu.Comp {
 	var ee gwu.Expander
 	for i := 5; i >= 0; i-- {
 		e2 := gwu.NewExpander()
-		e2.SetHeader(gwu.NewLabel("I hide embedded expanders. #" + strconv.Itoa(i)))
+		e2.SetHeader(gwu.NewLabel(fmt.Sprintf("I hide embedded expanders. #%d", i)))
 		if i == 5 {
 			e2.SetContent(gwu.NewLabel("No more."))
 		} else {
@@ -112,7 +111,7 @@ func buildPanelDemo(event gwu.Event) gwu.Comp {
 	p.Add(gwu.NewLabel("Panel with horizontal layout:"))
 	h := gwu.NewHorizontalPanel()
 	for i := 1; i <= 5; i++ {
-		h.Add(gwu.NewButton("Button " + strconv.Itoa(i)))
+		h.Add(gwu.NewButton(fmt.Sprintf("Button %d", i)))
 	}
 	p.Add(h)
 
@@ -120,7 +119,7 @@ func buildPanelDemo(event gwu.Event) gwu.Comp {
 	p.Add(gwu.NewLabel("Panel with vertical layout:"))
 	v := gwu.NewVerticalPanel()
 	for i := 1; i <= 5; i++ {
-		v.Add(gwu.NewButton("Button " + strconv.Itoa(i)))
+		v.Add(gwu.NewButton(fmt.Sprintf("Button %d", i)))
 	}
 	p.Add(v)
 
@@ -128,7 +127,7 @@ func buildPanelDemo(event gwu.Event) gwu.Comp {
 	p.Add(gwu.NewLabel("Panel with natural layout:"))
 	n := gwu.NewNaturalPanel()
 	for i := 1; i <= 20; i++ {
-		n.Add(gwu.NewButton("LONG BUTTON " + strconv.Itoa(i)))
+		n.Add(gwu.NewButton(fmt.Sprintf("LONG BUTTON %d", i)))
 	}
 	p.Add(n)
 
@@ -250,7 +249,7 @@ func buildTabPanelDemo(event gwu.Event) gwu.Comp {
 	l.Style().SetColor(gwu.ClrGreen)
 	p.Add(l)
 	t.AddEHandlerFunc(func(e gwu.Event) {
-		l.SetText("Clicked on tab: " + strconv.Itoa(t.Selected()))
+		l.SetText(fmt.Sprintf("Clicked on tab: %d", t.Selected()))
 		e.MarkDirty(l)
 	}, gwu.ETypeStateChange)
 	p.AddVSpace(10)

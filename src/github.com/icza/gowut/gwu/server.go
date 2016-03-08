@@ -130,7 +130,7 @@ type Server interface {
 	// SetHeaders sets extra headers that will be added to all responses.
 	// Supplied values will be copied, so changes to the passed map have no effect.
 	//
-	// For example to add an extra "Gowut-Server" header to all responses holding the Gowut version:
+	// For example to add an extra "Gowut-Server" header whose value is the Gowut version:
 	//     server.SetHeaders(map[string][]string{
 	//         "Gowut-Server": {gwu.GowutVersion},
 	//     })
