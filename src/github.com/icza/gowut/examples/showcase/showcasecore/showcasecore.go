@@ -96,7 +96,7 @@ func buildLinkContainerDemo(event gwu.Event) gwu.Comp {
 
 	link := gwu.NewLink("An obvious link, to Google Home", "https://google.com/")
 	inside := gwu.NewPanel()
-	inside.Style().SetBorder2(1, gwu.BrdStyleSolid, gwu.ClrGray)
+	inside.Style().SetPadding("5px").SetMarginTopPx(2).SetBorder2(1, gwu.BrdStyleSolid, gwu.ClrGray)
 	inside.Add(gwu.NewLabel("Everything inside this box also links to Google!"))
 	inside.Add(gwu.NewButton("Me too!"))
 	link.SetComp(inside)
@@ -126,7 +126,7 @@ func buildPanelDemo(event gwu.Event) gwu.Comp {
 	p.AddVSpace(20)
 	p.Add(gwu.NewLabel("Panel with natural layout:"))
 	n := gwu.NewNaturalPanel()
-	for i := 1; i <= 20; i++ {
+	for i := 1; i <= 40; i++ {
 		n.Add(gwu.NewButton(fmt.Sprintf("LONG BUTTON %d", i)))
 	}
 	p.Add(n)
@@ -163,7 +163,7 @@ func buildTableDemo(event gwu.Event) gwu.Comp {
 	p.Add(t)
 
 	p.AddVSpace(30)
-	p.Add(gwu.NewLabel("Advanced table structure with modified alignment, row and col spans:"))
+	p.Add(gwu.NewLabel("Advanced table structure with modified alignment, row- and col spans:"))
 	p.AddVSpace(10)
 	t = gwu.NewTable()
 	t.Style().SetBorder2(1, gwu.BrdStyleSolid, gwu.ClrGrey)
