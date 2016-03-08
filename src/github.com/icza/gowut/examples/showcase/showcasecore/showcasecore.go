@@ -689,7 +689,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	sess.SetAttr("hiddenPan", hiddenPan)
 
 	header := gwu.NewHorizontalPanel()
-	header.Style().SetFullWidth().SetBorderBottom2(2, gwu.BrdStyleSolid, "#777777")
+	header.Style().SetFullWidth().SetBorderBottom2(2, gwu.BrdStyleSolid, "#cccccc")
 	l := gwu.NewLabel("Gowut - Showcase of Features")
 	l.Style().SetFontWeight(gwu.FontWeightBold).SetFontSize("120%")
 	header.Add(l)
@@ -764,7 +764,7 @@ func buildShowcaseWin(sess gwu.Session) {
 		return demo
 	}
 
-	links.Style().SetFullHeight().SetBorderRight2(2, gwu.BrdStyleSolid, "#777777")
+	links.Style().SetFullHeight().SetBorderRight2(2, gwu.BrdStyleSolid, "#cccccc")
 	links.AddVSpace(5)
 	homeDemo := createDemo("Home", buildHomeDemo)
 	selectDemo(homeDemo, nil)
@@ -812,7 +812,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	win.CellFmt(content).Style().SetFullSize()
 
 	footer := gwu.NewHorizontalPanel()
-	footer.Style().SetFullWidth().SetBorderTop2(2, gwu.BrdStyleSolid, "#777777")
+	footer.Style().SetFullWidth().SetBorderTop2(2, gwu.BrdStyleSolid, "#cccccc")
 	footer.Add(hiddenPan)
 	footer.AddHConsumer()
 	l = gwu.NewLabel("Copyright © 2013-2016 András Belicza. All rights reserved.")
