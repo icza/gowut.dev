@@ -245,11 +245,11 @@ function addonbeforeunload(func) {
 
 var timers = new Object();
 
-function setupTimer(compId, etype, timeout, repeat, active, reset) {
+function setupTimer(compId, js, timeout, repeat, active, reset) {
 	var timer = timers[compId];
 	
 	if (timer != null) {
-		var changed = timer.timeout != timeout || timer.repeat != repeat || timer.reset != reset;
+		var changed = timer.js != js || timer.timeout != timeout || timer.repeat != repeat || timer.reset != reset;
 		if (!active || changed) {
 			if (timer.repeat)
 				clearInterval(timer.id);
@@ -265,16 +265,44 @@ function setupTimer(compId, etype, timeout, repeat, active, reset) {
 	
 	// Create new timer
 	timers[compId] = timer = new Object();
+	timer.js = js;
 	timer.timeout = timeout;
 	timer.repeat = repeat;
 	timer.reset = reset;
 	
 	// Start the timer
-	var js = "se(null," + etype + "," + compId + ");";
 	if (timer.repeat)
 		timer.id = setInterval(js, timeout);
 	else
 		timer.id = setTimeout(js, timeout);
+}
+
+function checkSession(compId) {
+	var e = document.getElementById(compId);
+	if (!e) // Component removed or not visible (e.g. on inactive tab of TabPanel)
+		return;
+	
+	var xmlhttp = createXmlHttp();
+	
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			var timeoutSec = parseFloat(xmlhttp.responseText)
+			if (timeoutSec < 0) {
+				e.classList.add("gwu-SessMonitor-Expired");
+				e.children[0].innerText = "Expired!";
+			}
+			else {
+				e.classList.remove("gwu-SessMonitor-Expired");
+				if (timeoutSec < 60)
+					e.children[0].innerText = "<1 min";
+				else
+					e.children[0].innerText = "~" + Math.round(timeoutSec / 60) + " min";
+			}
+		}
+	}
+	
+	xmlhttp.open("GET", _pathSessCheck, false); // synch call (if async, browser specific DOM rendering errors may arise)
+	xmlhttp.send();
 }
 
 // INITIALIZATION

@@ -695,6 +695,9 @@ func buildShowcaseWin(sess gwu.Session) {
 	title.Style().SetColor(gwu.ClrBlue).SetFontWeight(gwu.FontWeightBold).SetFontSize("120%").Set("text-decoration", "none")
 	header.Add(title)
 	header.AddHConsumer()
+	header.Add(gwu.NewLabel("Session timeout:"))
+	header.Add(gwu.NewSessMonitor())
+	header.AddHSpace(10)
 	header.Add(gwu.NewLabel("Theme:"))
 	themes := gwu.NewListBox([]string{"default", "debug"})
 	themes.AddEHandlerFunc(func(e gwu.Event) {

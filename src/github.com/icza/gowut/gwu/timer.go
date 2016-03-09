@@ -124,8 +124,10 @@ func (c *timerImpl) Reset() {
 }
 
 var (
-	strScriptOp = []byte("<script>setupTimer(") // "<script>setupTimer("
-	strScriptCl = []byte(");</script>")         // ");</script>"
+	strScriptOp    = []byte("<script>setupTimer(") // "<script>setupTimer("
+	strScriptCl    = []byte(");</script>")         // ");</script>"
+	strJsSendEvtOp = []byte(`"se(null,`)           // `"se(null,`
+	strJsParamCl   = []byte(`);"`)                 // `);"`
 )
 
 func (c *timerImpl) Render(w Writer) {
@@ -137,7 +139,13 @@ func (c *timerImpl) Render(w Writer) {
 	w.Write(strScriptOp)
 	w.Writev(int(c.id))
 	w.Write(strComma)
+	// js param
+	w.Write(strJsSendEvtOp)
 	w.Writev(int(ETypeStateChange))
+	w.Write(strComma)
+	w.Writev(int(c.id))
+	w.Write(strJsParamCl)
+	// end of js param
 	w.Write(strComma)
 	w.Writev(int(c.timeout / time.Millisecond))
 	w.Write(strComma)
