@@ -157,7 +157,7 @@ const (
 	KeyWin = 91
 
 	KeyNumpad0     = 96
-	KeyNumPad9     = 105
+	KeyNumpad9     = 105
 	KeyNumpadMul   = 106
 	KeyNumpadPlus  = 107
 	KeyNumpadMinus = 109
