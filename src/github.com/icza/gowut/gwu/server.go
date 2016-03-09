@@ -308,8 +308,8 @@ func (s *serverImpl) removeSess(e *eventImpl) {
 }
 
 // removeSess2 removes (invalidates) the specified session.
-// Only private sessions can be removed, calling this
-// the public session is a no-op.
+// Only private sessions can be removed, calling this with the
+// public session is a no-op.
 func (s *serverImpl) removeSess2(sess Session) {
 	if sess.Private() {
 		log.Println("SESSION removed:", sess.Id())

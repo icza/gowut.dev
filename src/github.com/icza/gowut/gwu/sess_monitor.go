@@ -39,8 +39,8 @@ func NewSessMonitor() SessMonitor {
 }
 
 var (
-	strEmptySpan     = []byte("<span></span>")  // "<span></span>"
-	strJsCheckSessOp = []byte(`"checkSession(`) // `"se(null,`
+	strEmptySpan     = []byte("<span></span>") // "<span></span>"
+	strJsCheckSessOp = []byte("checkSession(") // "checkSession("
 )
 
 func (c *sessMonitorImpl) Render(w Writer) {
@@ -51,10 +51,12 @@ func (c *sessMonitorImpl) Render(w Writer) {
 
 	w.Write(strEmptySpan) // Placeholder for timeout value
 
+	// <script>setupTimer(compId,"checkSession(compId)",60000,true,true,false);checkSession(compId);</script>
 	w.Write(strScriptOp)
 	w.Writev(int(c.id))
 	w.Write(strComma)
 	// js param
+	w.Write(strQuote)
 	w.Write(strJsCheckSessOp)
 	w.Writev(int(c.id))
 	w.Write(strJsParamCl)
@@ -67,12 +69,12 @@ func (c *sessMonitorImpl) Render(w Writer) {
 	w.Writev(true) // Active
 	w.Write(strComma)
 	w.Writev(false) // Reset
+	w.Write(strParenCl)
+	w.Write(strSemicol)
+	// Call sess check right away:
+	w.Write(strJsCheckSessOp)
+	w.Writev(int(c.id))
 	w.Write(strScriptCl)
 
-	// Call sess check right away:
-	// TODO
-	w.Writevs("<script>checkSession(", int(c.id), ");</script>")
-
 	w.Write(strSpanCl)
-
 }

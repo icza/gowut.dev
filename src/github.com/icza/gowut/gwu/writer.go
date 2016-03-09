@@ -41,6 +41,7 @@ var (
 	strSemicol = []byte(";")  // ";" (semicolon string)
 	strLT      = []byte("<")  // "<" (less than string)
 	strGT      = []byte(">")  // ">" (greater than string)
+	strParenCl = []byte(")")  // ")" (closing parenthesis)
 
 	strSpanOp  = []byte("<span")    // "<span"
 	strSpanCl  = []byte("</span>")  // "</span>"
