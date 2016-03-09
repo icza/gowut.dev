@@ -494,7 +494,6 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 	if sess == nil {
 		sess = &s.sessionImpl
 	}
-	sess.access()
 
 	// Parts example: "/appname/winname/e?et=0&cid=1" => {"", "appname", "winname", "e"}
 	parts := strings.Split(r.URL.Path, "/")
@@ -519,6 +518,16 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 		parts = parts[2:]
 	}
 
+	if len(parts) >= 1 && parts[0] == pathSessCheck {
+		// Session check. Must not call sess.acess()
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		sess.rwMutex().RLock()
+		remaining := sess.Timeout() - time.Now().Sub(sess.Accessed())
+		sess.rwMutex().RUnlock()
+		fmt.Fprintf(w, "%f", remaining.Seconds())
+		return
+	}
+
 	if len(parts) < 1 || parts[0] == "" {
 		// Missing window name, render window list
 		s.renderWinList(sess, w, r)
@@ -532,13 +541,14 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 	if win == nil && sess.Private() {
 		win = s.WinByName(winName) // Server is a Session, the public session
 		if win != nil {
-			s.access()
+			// We're serving a public window, switch to public session here entirely
+			sess = &s.sessionImpl
 		}
 	}
+
 	// If still not found and no private session, try the session creator names
 	if win == nil && !sess.Private() {
-		_, found := s.sessCreatorNames[winName]
-		if found {
+		if _, found := s.sessCreatorNames[winName]; found {
 			sess = s.newSession(nil)
 			s.addSessCookie(sess, w)
 			// Search again in the new session as SessionHandlers may have added windows.
@@ -554,13 +564,14 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	sess.access()
+
 	var path string
 	if len(parts) >= 2 {
 		path = parts[1]
 	}
 
 	rwMutex := sess.rwMutex()
-
 	switch path {
 	case pathEvent:
 		rwMutex.Lock()
