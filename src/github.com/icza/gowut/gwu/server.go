@@ -31,6 +31,7 @@ import (
 // Internal path constants.
 const (
 	pathStatic     = "_gwu_static/" // App path-relative path for GWU static contents.
+	pathSessCheck  = "_sess_ch"     // App path-relative path for checking session (without registering access)
 	pathEvent      = "e"            // Window-relative path for sending events
 	pathRenderComp = "rc"           // Window-relative path for rendering a component
 )
@@ -397,10 +398,12 @@ func (s *serverImpl) AddStaticDir(path, dir string) error {
 		path += "/"
 	}
 
+	origPath := path
 	path = s.appPath + path
 
-	if path == s.appPath+pathStatic || path == s.appPath+pathEvent || path == s.appPath+pathRenderComp {
-		return errors.New("Path cannot be '" + pathStatic + "' (reserved)!")
+	// pathEvent and pathRenderComp are window-relative so no need to check with those
+	if path == s.appPath+pathStatic || path == s.appPath+pathSessCheck {
+		return errors.New("Path cannot be '" + origPath + "' (reserved)!")
 	}
 
 	handler := http.StripPrefix(path, http.FileServer(http.Dir(dir)))
@@ -477,7 +480,7 @@ func (s *serverImpl) serveStatic(w http.ResponseWriter, r *http.Request) {
 // and also handles event dispatching.
 func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 	if s.logger != nil {
-		s.logger.Println("Incoming: ", r.URL.Path)
+		s.logger.Println("Incoming:", r.URL.Path)
 	}
 
 	s.addHeaders(w)
@@ -496,7 +499,7 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 	// Parts example: "/appname/winname/e?et=0&cid=1" => {"", "appname", "winname", "e"}
 	parts := strings.Split(r.URL.Path, "/")
 
-	if len(s.appName) == 0 {
+	if s.appName == "" {
 		// No app name, gui server resides in root
 		if len(parts) < 1 {
 			// This should never happen. Path is always at least a slash ("/").
@@ -516,7 +519,7 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 		parts = parts[2:]
 	}
 
-	if len(parts) < 1 || len(parts[0]) == 0 {
+	if len(parts) < 1 || parts[0] == "" {
 		// Missing window name, render window list
 		s.renderWinList(sess, w, r)
 		return

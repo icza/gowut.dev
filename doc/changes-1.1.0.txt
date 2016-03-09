@@ -1,0 +1,7 @@
+
+Changes and new features in 1.1.0:
+----------------------------------
+
+-[TODO] A session checking mechanism.
+
+-Other minor changes, improvements and optimization.

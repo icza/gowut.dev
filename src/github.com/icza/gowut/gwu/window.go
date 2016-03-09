@@ -152,7 +152,7 @@ func (win *windowImpl) RenderWin(w Writer, s Server) {
 	w.Writes(`<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>`)
 	w.Writees(win.text)
 	w.Writess(`</title><link href="`, s.AppPath(), pathStatic)
-	if len(win.theme) == 0 {
+	if win.theme == "" {
 		w.Writes(resNameStaticCss(s.Theme()))
 	} else {
 		w.Writes(resNameStaticCss(win.theme))
@@ -172,6 +172,7 @@ func (win *windowImpl) RenderWin(w Writer, s Server) {
 func (win *windowImpl) renderDynJs(w Writer, s Server) {
 	w.Writes("<script>")
 	w.Writess("var _pathApp='", s.AppPath(), "';")
+	w.Writess("var _pathSessCheck=_pathApp+'", pathSessCheck, "';")
 	w.Writess("var _pathWin='", s.AppPath(), win.name, "/';")
 	w.Writess("var _pathEvent=_pathWin+'", pathEvent, "';")
 	w.Writess("var _pathRenderComp=_pathWin+'", pathRenderComp, "';")
