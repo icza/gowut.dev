@@ -704,6 +704,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	header.Add(themes)
 	header.AddHSpace(10)
 	reset := gwu.NewLink("Reset", "#")
+	reset.Style().SetColor(gwu.ClrBlue)
 	reset.SetTarget("")
 	reset.AddEHandlerFunc(func(e gwu.Event) {
 		e.RemoveSess()
