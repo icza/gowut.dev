@@ -24,6 +24,23 @@ package gwu
 type SessMonitor interface {
 	// SessMonitor is a component.
 	Comp
+
+	// SetJsConverter sets the Javascript function name which converts
+	// a float second time value to a displayable string.
+	// The default value is "convertSessTimeout" whose implementation is:
+	//     function convertSessTimeout(sec) {
+	//         if (sec <= 0)
+	//             return "Expired!";
+	//         else if (sec < 60)
+	//             return "<1 min";
+	//         else
+	//             return "~" + Math.round(sec / 60) + " min";
+	//     }
+	SetJsConverter(jsFuncName string)
+
+	// JsConverter returns the name of the Javascript function which converts
+	// float second time values to displayable strings.
+	JsConverter() string
 }
 
 // Label implementation
@@ -35,7 +52,16 @@ type sessMonitorImpl struct {
 func NewSessMonitor() SessMonitor {
 	c := &sessMonitorImpl{newCompImpl(nil)}
 	c.Style().AddClass("gwu-SessMonitor")
+	c.SetJsConverter("convertSessTimeout")
 	return c
+}
+
+func (c *sessMonitorImpl) SetJsConverter(jsFuncName string) {
+	c.SetAttr("gwuJsFuncName", jsFuncName)
+}
+
+func (c *sessMonitorImpl) JsConverter() string {
+	return c.Attr("gwuJsFuncName")
 }
 
 var (

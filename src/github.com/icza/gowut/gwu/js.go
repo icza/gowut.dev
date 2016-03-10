@@ -287,22 +287,26 @@ function checkSession(compId) {
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			var timeoutSec = parseFloat(xmlhttp.responseText)
-			if (timeoutSec < 0) {
+			if (timeoutSec < 60)
 				e.classList.add("gwu-SessMonitor-Expired");
-				e.children[0].innerText = "Expired!";
-			}
-			else {
+			else
 				e.classList.remove("gwu-SessMonitor-Expired");
-				if (timeoutSec < 60)
-					e.children[0].innerText = "<1 min";
-				else
-					e.children[0].innerText = "~" + Math.round(timeoutSec / 60) + " min";
-			}
+			var cnvtr = window[e.getAttribute("gwuJsFuncName")];
+			e.children[0].innerText = typeof cnvtr === 'function' ? cnvtr(timeoutSec) : convertSessTimeout(timeoutSec);
 		}
 	}
 	
 	xmlhttp.open("GET", _pathSessCheck, false); // synch call (if async, browser specific DOM rendering errors may arise)
 	xmlhttp.send();
+}
+
+function convertSessTimeout(sec) {
+	if (sec <= 0)
+		return "Expired!";
+	else if (sec < 60)
+			return "<1 min";
+	else
+		return "~" + Math.round(sec / 60) + " min";
 }
 
 // INITIALIZATION
