@@ -59,22 +59,22 @@ func init() {
 
 function createXmlHttp() {
 	if (window.XMLHttpRequest) // IE7+, Firefox, Chrome, Opera, Safari
-		return xmlhttp=new XMLHttpRequest();
+		return new XMLHttpRequest();
 	else // IE6, IE5
-		return xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		return new ActiveXObject("Microsoft.XMLHTTP");
 }
 
 // Send event
 function se(event, etype, compId, compValue) {
-	var xmlhttp = createXmlHttp();
+	var xhr = createXmlHttp();
 	
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4 && xmlhttp.status == 200)
-			procEresp(xmlhttp);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200)
+			procEresp(xhr);
 	}
 	
-	xmlhttp.open("POST", _pathEvent, true); // asynch call
-	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhr.open("POST", _pathEvent, true); // asynch call
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	
 	var data="";
 	
@@ -112,11 +112,11 @@ function se(event, etype, compId, compValue) {
 		data += "&" + _pKeyCode + "=" + (event.which ? event.which : event.keyCode);
 	}
 	
-	xmlhttp.send(data);
+	xhr.send(data);
 }
 
-function procEresp(xmlhttp) {
-	var actions = xmlhttp.responseText.split(";");
+function procEresp(xhr) {
+	var actions = xhr.responseText.split(";");
 	
 	if (actions.length == 0) {
 		window.alert("No response received!");
@@ -154,13 +154,13 @@ function rerenderComp(compId) {
 	if (!e) // Component removed or not visible (e.g. on inactive tab of TabPanel)
 		return;
 	
-	var xmlhttp = createXmlHttp();
+	var xhr = createXmlHttp();
 	
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
 			// Remember focused comp which might be replaced here:
 			var focusedCompId = document.activeElement.id;
-			e.outerHTML = xmlhttp.responseText;
+			e.outerHTML = xhr.responseText;
 			focusComp(focusedCompId);
 			
 			// Inserted JS code is not executed automatically, do it manually:
@@ -172,10 +172,10 @@ function rerenderComp(compId) {
 		}
 	}
 	
-	xmlhttp.open("POST", _pathRenderComp, false); // synch call (if async, browser specific DOM rendering errors may arise)
-	xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhr.open("POST", _pathRenderComp, false); // synch call (if async, browser specific DOM rendering errors may arise)
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	
-	xmlhttp.send(_pCompId + "=" + compId);
+	xhr.send(_pCompId + "=" + compId);
 }
 
 // Get selected indices (of an HTML select)
@@ -282,11 +282,11 @@ function checkSession(compId) {
 	if (!e) // Component removed or not visible (e.g. on inactive tab of TabPanel)
 		return;
 	
-	var xmlhttp = createXmlHttp();
+	var xhr = createXmlHttp();
 	
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			var timeoutSec = parseFloat(xmlhttp.responseText)
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			var timeoutSec = parseFloat(xhr.responseText);
 			if (timeoutSec < 60)
 				e.classList.add("gwu-SessMonitor-Expired");
 			else
@@ -296,8 +296,14 @@ function checkSession(compId) {
 		}
 	}
 	
-	xmlhttp.open("GET", _pathSessCheck, false); // synch call (if async, browser specific DOM rendering errors may arise)
-	xmlhttp.send();
+	xhr.open("GET", _pathSessCheck, false); // synch call (else we can't catch connection error)
+	try {
+		xhr.send();
+		e.classList.remove("gwu-SessMonitor-Error");
+	} catch (err) {
+		e.classList.add("gwu-SessMonitor-Error");
+		e.children[0].innerText = "CONN ERR";
+	}
 }
 
 function convertSessTimeout(sec) {

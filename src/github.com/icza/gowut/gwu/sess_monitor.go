@@ -20,7 +20,8 @@ package gwu
 // SessMonitor interface defines a component which monitors and displays
 // the timeout of the session at client side.
 //
-// Default style classes: "gwu-SessMonitor", "gwu-SessMonitor-Expired"
+// Default style classes: "gwu-SessMonitor", "gwu-SessMonitor-Expired",
+// ".gwu-SessMonitor-Error"
 type SessMonitor interface {
 	// SessMonitor is a component.
 	Comp
@@ -43,7 +44,7 @@ type SessMonitor interface {
 	JsConverter() string
 }
 
-// Label implementation
+// SessMonitor implementation
 type sessMonitorImpl struct {
 	compImpl // Component implementation
 }

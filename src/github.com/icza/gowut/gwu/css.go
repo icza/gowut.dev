@@ -93,7 +93,7 @@ body {font-family:Arial}
 .gwu-TabPanel-Content {border:1px solid #8080f8; width:100%; height:100%}
 
 .gwu-SessMonitor {}
-.gwu-SessMonitor-Expired {color:red}
+.gwu-SessMonitor-Expired, .gwu-SessMonitor-Error {color:red}
 `)
 
 	staticCss[resNameStaticCss(ThemeDebug)] = []byte(string(staticCss[resNameStaticCss(ThemeDefault)]) +
