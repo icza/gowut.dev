@@ -76,6 +76,7 @@ type sessMonitorImpl struct {
 }
 
 // NewSessMonitor creates a new SessMonitor.
+// The default interval is 1 minute.
 func NewSessMonitor() SessMonitor {
 	c := &sessMonitorImpl{newCompImpl(nil), time.Minute, true}
 	c.Style().AddClass("gwu-SessMonitor")
