@@ -218,8 +218,8 @@ Containers to group and lay out components:
 
 Input components to get data from users:
 	CheckBox
-	ListBox    (it's either a drop-down list or a multi-line/multi-select list box)
-	TextBox    (it's either a one-line text box or a multi-line text area)
+	ListBox     (it's either a drop-down list or a multi-line/multi-select list box)
+	TextBox     (it's either a one-line text box or a multi-line text area)
 	PasswBox
 	RadioButton
 	SwitchButton
@@ -230,6 +230,7 @@ Other components:
 	Image
 	Label
 	Link
+	SessMonitor
 	Timer
 
 

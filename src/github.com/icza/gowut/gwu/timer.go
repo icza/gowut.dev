@@ -97,10 +97,9 @@ func (c *timerImpl) Timeout() time.Duration {
 
 func (c *timerImpl) SetTimeout(timeout time.Duration) {
 	if timeout < time.Millisecond {
-		c.timeout = time.Millisecond
-	} else {
-		c.timeout = timeout
+		timeout = time.Millisecond
 	}
+	c.timeout = timeout
 }
 
 func (c *timerImpl) Repeat() bool {

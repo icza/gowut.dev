@@ -289,7 +289,7 @@ func buildWindowDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 
 	p.Add(gwu.NewLabel("The Window represents the whole window, the page inside the browser."))
-	p.AddVSpace(5)
+	p.AddVSpace(20)
 	p.Add(gwu.NewLabel("The Window is the top of the component hierarchy. It is an extension of the Panel."))
 
 	return p
@@ -586,6 +586,16 @@ func buildLinkDemo(event gwu.Event) gwu.Comp {
 	return p
 }
 
+func buildSessMonitorDemo(event gwu.Event) gwu.Comp {
+	p := gwu.NewPanel()
+
+	p.Add(gwu.NewLabel("The SessMonitor component monitors and displays the session timeout and network connectivity without interacting with the session."))
+	p.AddVSpace(20)
+	p.Add(gwu.NewLabel("An example SessMonitor can be viewed on the right side of the header."))
+
+	return p
+}
+
 func buildTimerDemo(event gwu.Event) gwu.Comp {
 	p := gwu.NewPanel()
 	p.SetCellPadding(3)
@@ -806,6 +816,7 @@ func buildShowcaseWin(sess gwu.Session) {
 	createDemo("Image", buildImageDemo)
 	createDemo("Label", buildLabelDemo)
 	createDemo("Link", buildLinkDemo)
+	createDemo("SessMonitor", buildSessMonitorDemo)
 	createDemo("Timer", buildTimerDemo)
 	links.AddVConsumer()
 	setNoWrap(links)
