@@ -28,26 +28,8 @@ import (
 // Default style classes: "gwu-SessMonitor", "gwu-SessMonitor-Expired",
 // ".gwu-SessMonitor-Error"
 type SessMonitor interface {
-	// SessMonitor is a component.
-	Comp
-
-	// Interval returns the duration between session checks.
-	Interval() time.Duration
-
-	// SetInterval sets the duration between session checks.
-	//
-	// Note: while this method allows you to pass an arbitrary time.Duration,
-	// implementation might be using less precision (most likely millisecond).
-	// Durations less than 1 ms might be rounded up to 1 ms.
-	SetInterval(interval time.Duration)
-
-	// Active tells if the session monitor is active.
-	Active() bool
-
-	// SetActive sets if the session monitor is active.
-	// If the session monitor is not active, session checks will not be performed.
-	// If a session monitor is deactivated and activated again, its interval is reset.
-	SetActive(active bool)
+	// SessMonitor is a Timer, but it does not generate Events!
+	Timer
 
 	// SetJsConverter sets the Javascript function name which converts
 	// a float second time value to a displayable string.
@@ -69,38 +51,18 @@ type SessMonitor interface {
 
 // SessMonitor implementation
 type sessMonitorImpl struct {
-	compImpl // Component implementation
-
-	interval time.Duration // Duration between session checks
-	active   bool          // Tells if the timer is active
+	timerImpl // Timer implementation
 }
 
 // NewSessMonitor creates a new SessMonitor.
-// The default interval is 1 minute.
+// By default it is active repeats with 1 minute timeout duration.
 func NewSessMonitor() SessMonitor {
-	c := &sessMonitorImpl{newCompImpl(nil), time.Minute, true}
+	c := &sessMonitorImpl{
+		timerImpl{compImpl: newCompImpl(nil), timeout: time.Minute, active: true, repeat: true},
+	}
 	c.Style().AddClass("gwu-SessMonitor")
 	c.SetJsConverter("convertSessTimeout")
 	return c
-}
-
-func (c *sessMonitorImpl) Interval() time.Duration {
-	return c.interval
-}
-
-func (c *sessMonitorImpl) SetInterval(interval time.Duration) {
-	if interval < time.Millisecond {
-		interval = time.Millisecond
-	}
-	c.interval = interval
-}
-
-func (c *sessMonitorImpl) Active() bool {
-	return c.active
-}
-
-func (c *sessMonitorImpl) SetActive(active bool) {
-	c.active = active
 }
 
 func (c *sessMonitorImpl) SetJsConverter(jsFuncName string) {
@@ -122,31 +84,14 @@ func (c *sessMonitorImpl) Render(w Writer) {
 	c.renderEHandlers(w)
 	w.Write(strGT)
 
-	w.Write(strEmptySpan) // Placeholder for timeout value
+	w.Write(strEmptySpan) // Placeholder for session timeout value
 
-	// <script>setupTimer(compId,"checkSession(compId)",interval,true,active,0);checkSession(compId);</script>
 	w.Write(strScriptOp)
-	w.Writev(int(c.id))
-	w.Write(strComma)
-	// js param
-	w.Write(strQuote)
-	w.Write(strJsCheckSessOp)
-	w.Writev(int(c.id))
-	w.Write(strJsParamCl)
-	// end of js param
-	w.Write(strComma)
-	w.Writev(int(c.interval / time.Millisecond))
-	w.Write(strComma)
-	w.Writev(true) // Repeat
-	w.Write(strComma)
-	w.Writev(c.active) // Active
-	w.Write(strComma)
-	w.Writev(0) // Reset
-	w.Write(strParenCl)
-	w.Write(strSemicol)
+	c.renderSetupTimerJs(w, strJsCheckSessOp, int(c.id), strParenCl)
 	// Call sess check right away:
 	w.Write(strJsCheckSessOp)
 	w.Writev(int(c.id))
+	w.Write(strJsFuncCl)
 	w.Write(strScriptCl)
 
 	w.Write(strSpanCl)

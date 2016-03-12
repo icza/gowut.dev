@@ -132,14 +132,14 @@ func (c *windowImpl) Render(w Writer) {
 
 		if !found {
 			found = true
-			w.Writes("<script>")
+			w.Write(strScriptOp)
 		}
 		// To render       : add<etypeFunc>(function(){se(null,etype,id);});
 		// Example (onload): addonload(function(){se(null,13,4327);});
 		w.Writevs("add", etypeFuncs[etype], "(function(){se(null,", int(etype), ",", int(c.id), ");});")
 	}
 	if found {
-		w.Writes("</script>")
+		w.Write(strScriptCl)
 	}
 
 	// And now call panelImpl's Render()
@@ -170,12 +170,12 @@ func (win *windowImpl) RenderWin(w Writer, s Server) {
 
 // renderDynJs renders the dynamic JavaScript codes of Gowut.
 func (win *windowImpl) renderDynJs(w Writer, s Server) {
-	w.Writes("<script>")
+	w.Write(strScriptOp)
 	w.Writess("var _pathApp='", s.AppPath(), "';")
 	w.Writess("var _pathSessCheck=_pathApp+'", pathSessCheck, "';")
 	w.Writess("var _pathWin='", s.AppPath(), win.name, "/';")
 	w.Writess("var _pathEvent=_pathWin+'", pathEvent, "';")
 	w.Writess("var _pathRenderComp=_pathWin+'", pathRenderComp, "';")
 	w.Writess("var _focCompId='", win.focusedCompId.String(), "';")
-	w.Writes("</script>")
+	w.Write(strScriptCl)
 }
