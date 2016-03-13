@@ -166,6 +166,9 @@ type Server interface {
 	// Pass nil to disable logging. This is the default.
 	SetLogger(logger *log.Logger)
 
+	// Logger returns the logger that is used to log incoming requests.
+	Logger() *log.Logger
+
 	// Start starts the GUI server and waits for incoming connections.
 	//
 	// Sessionless window names may be specified as optional parameters
@@ -426,6 +429,10 @@ func (s *serverImpl) SetTheme(theme string) {
 
 func (s *serverImpl) SetLogger(logger *log.Logger) {
 	s.logger = logger
+}
+
+func (s *serverImpl) Logger() *log.Logger {
+	return s.logger
 }
 
 // serveStatic handles the static contents of GWU.
