@@ -40,8 +40,12 @@ type Window interface {
 	SetName(name string)
 
 	// AddHeadHtml adds an HTML text which will be included
-	// in the HTML head section.
+	// in the HTML <head> section.
 	AddHeadHtml(html string)
+
+	// RemoveHeadHtml removes an HTML head text
+	// that was previously added with AddHeadHtml().
+	RemoveHeadHtml(html string)
 
 	// SetFocusedCompId sets the id of the currently focused component.
 	SetFocusedCompId(id ID)
@@ -103,6 +107,17 @@ func (w *windowImpl) SetName(name string) {
 
 func (w *windowImpl) AddHeadHtml(html string) {
 	w.heads = append(w.heads, html)
+}
+
+func (w *windowImpl) RemoveHeadHtml(html string) {
+	for i, v := range w.heads {
+		if v == html {
+			old := w.heads
+			w.heads = apend(w.heads[:i], w.heads[i+1:]...)
+			old[len(old)-1] = ""
+			return
+		}
+	}
 }
 
 func (w *windowImpl) SetFocusedCompId(id ID) {
