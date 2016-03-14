@@ -75,6 +75,10 @@ type SessionHandler interface {
 	Removed(sess Session)
 }
 
+// Function type that handles the application root (when no window name is specified).
+// sess is the shared, public session if no private session is created.
+type AppRootHandlerFunc func(w http.ResponseWriter, r *http.Request, sess Session)
+
 // Server interface defines the GUI server which handles sessions,
 // renders the windows, components and handles event dispatching.
 type Server interface {
@@ -169,6 +173,22 @@ type Server interface {
 	// Logger returns the logger that is used to log incoming requests.
 	Logger() *log.Logger
 
+	// AddRootHeadHtml adds an HTML text which will be included
+	// in the HTML <head> section of the window list page (the app root).
+	// Note that these will be ignored if you take over the app root
+	// (by calling SetAppRootHandler).
+	AddRootHeadHtml(html string)
+
+	// RemoveRootHeadHtml removes an HTML head text
+	// that was previously added with AddRootHeadHtml().
+	RemoveRootHeadHtml(html string)
+
+	// SetAppRootHandler sets a function that is called when the app root is requested.
+	// The default function renders the window list, including authenticated windows
+	// and session creators - with clickable links.
+	// By setting your own hander, you will completely take over the app root.
+	SetAppRootHandler(f AppRootHandlerFunc)
+
 	// Start starts the GUI server and waits for incoming connections.
 	//
 	// Sessionless window names may be specified as optional parameters
@@ -184,18 +204,20 @@ type serverImpl struct {
 	sessionImpl // Single public session implementation
 	hasTextImpl // Has text implementation
 
-	appName           string             // Application name (part of the application path)
-	addr              string             // Server address
-	secure            bool               // Tells if the server is configured to run in secure (HTTPS) mode
-	appPath           string             // Application path
-	appUrl            string             // Application URL
-	sessions          map[string]Session // Sessions
-	certFile, keyFile string             // Certificate and key files for secure (HTTPS) mode
-	sessCreatorNames  map[string]string  // Session creator names
-	sessionHandlers   []SessionHandler   // Registered session handlers
-	theme             string             // Default CSS theme of the server
-	logger            *log.Logger        // Logger.
-	headers           http.Header        // Extra headers that will be added to all responses.
+	appName            string             // Application name (part of the application path)
+	addr               string             // Server address
+	secure             bool               // Tells if the server is configured to run in secure (HTTPS) mode
+	appPath            string             // Application path
+	appUrl             string             // Application URL
+	sessions           map[string]Session // Sessions
+	certFile, keyFile  string             // Certificate and key files for secure (HTTPS) mode
+	sessCreatorNames   map[string]string  // Session creator names
+	sessionHandlers    []SessionHandler   // Registered session handlers
+	theme              string             // Default CSS theme of the server
+	logger             *log.Logger        // Logger.
+	headers            http.Header        // Extra headers that will be added to all responses.
+	rootHeads          []string           // Additional head HTML texts of the window list page (app root)
+	appRootHandlerFunc AppRootHandlerFunc // App root handler function
 }
 
 // NewServer creates a new GUI server in HTTP mode.
@@ -242,6 +264,8 @@ func newServerImpl(appName, addr, certFile, keyFile string) *serverImpl {
 		s.certFile = certFile
 		s.keyFile = keyFile
 	}
+
+	s.appRootHandlerFunc = s.renderWinList
 
 	return s
 }
@@ -435,6 +459,25 @@ func (s *serverImpl) Logger() *log.Logger {
 	return s.logger
 }
 
+func (s *serverImpl) AddRootHeadHtml(html string) {
+	s.rootHeads = append(s.rootHeads, html)
+}
+
+func (s *serverImpl) RemoveRootHeadHtml(html string) {
+	for i, v := range s.rootHeads {
+		if v == html {
+			old := s.rootHeads
+			s.rootHeads = append(s.rootHeads[:i], s.rootHeads[i+1:]...)
+			old[len(old)-1] = ""
+			return
+		}
+	}
+}
+
+func (s *serverImpl) SetAppRootHandler(f AppRootHandlerFunc) {
+	s.appRootHandlerFunc = f
+}
+
 // serveStatic handles the static contents of GWU.
 func (s *serverImpl) serveStatic(w http.ResponseWriter, r *http.Request) {
 	s.addHeaders(w)
@@ -537,7 +580,7 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 
 	if len(parts) < 1 || parts[0] == "" {
 		// Missing window name, render window list
-		s.renderWinList(sess, w, r)
+		s.appRootHandlerFunc(w, r, sess)
 		return
 	}
 
@@ -601,7 +644,7 @@ func (s *serverImpl) serveHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 // renderWinList renders the window list of a session as HTML document with clickable links.
-func (s *serverImpl) renderWinList(sess Session, wr http.ResponseWriter, r *http.Request) {
+func (s *serverImpl) renderWinList(wr http.ResponseWriter, r *http.Request, sess Session) {
 	if s.logger != nil {
 		s.logger.Println("\tRending windows list.")
 	}
@@ -611,7 +654,9 @@ func (s *serverImpl) renderWinList(sess Session, wr http.ResponseWriter, r *http
 
 	w.Writes(`<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>`)
 	w.Writees(s.text)
-	w.Writess(" - Window list</title></head><body><h2>")
+	w.Writes(" - Window list</title>")
+	w.Writess(s.rootHeads...)
+	w.Writes("</head><body><h2>")
 	w.Writees(s.text)
 	w.Writes(" - Window list</h2>")
 

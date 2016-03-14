@@ -865,6 +865,9 @@ func (h SessHandler) Removed(s gwu.Session) {}
 func StartServer(appName string) {
 	// Create GUI server
 	server := gwu.NewServer(appName, "")
+	for _, headHtml := range extraHeadHtmls {
+		server.AddRootHeadHtml(headHtml)
+	}
 	server.AddStaticDir("/asdf", "w:/")
 	server.SetText("Gowut - Showcase of Features")
 
