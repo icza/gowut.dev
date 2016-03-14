@@ -113,7 +113,7 @@ func (w *windowImpl) RemoveHeadHtml(html string) {
 	for i, v := range w.heads {
 		if v == html {
 			old := w.heads
-			w.heads = apend(w.heads[:i], w.heads[i+1:]...)
+			w.heads = append(w.heads[:i], w.heads[i+1:]...)
 			old[len(old)-1] = ""
 			return
 		}
