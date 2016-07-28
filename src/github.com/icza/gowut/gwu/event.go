@@ -304,7 +304,10 @@ type Event interface {
 //         }
 //     }, gwu.ETypeClick)
 type HasRequestResponse interface {
+	// ResponseWriter returns the associated HTTP response writer.
 	ResponseWriter() http.ResponseWriter
+
+	// Request returns the associated HTTP request.
 	Request() *http.Request
 }
 

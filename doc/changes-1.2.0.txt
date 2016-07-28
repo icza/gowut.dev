@@ -1,7 +1,0 @@
-
-Changes and new features in 1.2.0:
-----------------------------------
-
--Fix: open web page with xdg-open in linux
-
--Other minor changes, improvements and optimization.
