@@ -745,7 +745,7 @@ func (s *serverImpl) handleEvent(sess Session, win Window, wr http.ResponseWrite
 		s.logger.Println("\tEvent from comp:", id, " event:", etype)
 	}
 
-	event := newEventImpl(EventType(etype), comp, s, sess)
+	event := newEventImpl(EventType(etype), comp, s, sess, wr, r)
 	shared := event.shared
 
 	event.x = parseIntParam(r, paramMouseX)
