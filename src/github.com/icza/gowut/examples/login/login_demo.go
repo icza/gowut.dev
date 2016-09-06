@@ -26,12 +26,12 @@ import (
 	"strconv"
 )
 
-type MyButtonHandler struct {
+type myButtonHandler struct {
 	counter int
 	text    string
 }
 
-func (h *MyButtonHandler) HandleEvent(e gwu.Event) {
+func (h *myButtonHandler) HandleEvent(e gwu.Event) {
 	// Check if event source is a Button, just to be sure...
 	// We add this handler to a button only, so this'll be always false.
 	if b, isButton := e.Src().(gwu.Button); isButton {
@@ -82,7 +82,7 @@ func buildPrivateWins(s gwu.Session) {
 	p.Add(img)
 	win.Add(p)
 	button := gwu.NewButton("Click me")
-	button.AddEHandler(&MyButtonHandler{text: ":-)"}, gwu.ETypeClick)
+	button.AddEHandler(&myButtonHandler{text: ":-)"}, gwu.ETypeClick)
 	win.Add(button)
 	extraBtns := gwu.NewPanel()
 	extraBtns.SetLayout(gwu.LayoutNatural)
