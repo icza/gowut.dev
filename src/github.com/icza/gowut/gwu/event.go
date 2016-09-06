@@ -250,7 +250,7 @@ type Event interface {
 	// Note: the Window itself (which is a Comp) can also be marked dirty
 	// causing the whole window content to be re-rendered without page reload!
 	//
-	// Marking a component dirty also marks all of its decendants dirty, recursively.
+	// Marking a component dirty also marks all of its descendants dirty, recursively.
 	//
 	// Also note that components will not be re-rendered multiple times.
 	// For example if a child component and its parent component are both

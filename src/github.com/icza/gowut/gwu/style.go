@@ -121,7 +121,7 @@ const (
 
 // White space constants.
 const (
-	WhiteSpaceNormal  = "normal"   // Sequences of white spaces are collapsed into a single whitespace. Text will wrap when neccessary. This is the default.
+	WhiteSpaceNormal  = "normal"   // Sequences of white spaces are collapsed into a single whitespace. Text will wrap when necessary. This is the default.
 	WhiteSpaceNowrap  = "nowrap"   // Sequences of whitespace will collapse into a single whitespace. Text will never wrap to the next line (the text is in one line).
 	WhiteSpacePre     = "pre"      // Whitespace is preserved. Text will only wrap on line breaks.
 	WhiteSpacePreLine = "pre-line" // Sequences of whitespace will collapse into a single whitespace. Text will wrap when necessary and on line breaks.
