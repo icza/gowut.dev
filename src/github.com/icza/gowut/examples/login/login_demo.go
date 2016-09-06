@@ -42,9 +42,9 @@ func (h *myButtonHandler) HandleEvent(e gwu.Event) {
 	}
 }
 
-type GreenHandler int
+type greenHandler struct{}
 
-func (h *GreenHandler) HandleEvent(e gwu.Event) {
+func (greenHandler) HandleEvent(e gwu.Event) {
 	var state bool
 	src := e.Src()
 
@@ -62,9 +62,6 @@ func (h *GreenHandler) HandleEvent(e gwu.Event) {
 	}
 	e.MarkDirty(src)
 }
-
-var greenHandler_ = GreenHandler(0)
-var greenHandler = &greenHandler_
 
 func buildPrivateWins(s gwu.Session) {
 	// Create and build a window
@@ -132,7 +129,7 @@ func buildPrivateWins(s gwu.Session) {
 		}
 		e.MarkDirty(greenCheckBox)
 	}, gwu.ETypeClick)
-	greenCheckBox.AddEHandler(greenHandler, gwu.ETypeClick)
+	greenCheckBox.AddEHandler(greenHandler{}, gwu.ETypeClick)
 	win.Add(greenCheckBox)
 
 	table := gwu.NewTable()
@@ -309,26 +306,26 @@ func buildLoginWin(s gwu.Session) {
 	s.AddWin(win)
 }
 
-type SessHandler struct{}
+type sessHandler struct{}
 
-func (h SessHandler) Created(s gwu.Session) {
+func (h sessHandler) Created(s gwu.Session) {
 	fmt.Println("SESSION created:", s.Id())
 	buildLoginWin(s)
 }
 
-func (h SessHandler) Removed(s gwu.Session) {
+func (h sessHandler) Removed(s gwu.Session) {
 	fmt.Println("SESSION removed:", s.Id())
 }
 
 func main() {
 	// Create GUI server
-	//server := gwu.NewServer("guitest", "")
-	folder := "../../../../../../test_tls/"
-	server := gwu.NewServerTLS("guitest", "", folder+"cert.pem", folder+"key.pem")
+	server := gwu.NewServer("guitest", "")
+	//folder := "../../../../../../test_tls/"
+	//server := gwu.NewServerTLS("guitest", "", folder+"cert.pem", folder+"key.pem")
 	server.SetText("Test GUI Application")
 
 	server.AddSessCreatorName("login", "Login Window")
-	server.AddSHandler(SessHandler{})
+	server.AddSHandler(sessHandler{})
 
 	win := gwu.NewWindow("home", "Home Window")
 	l := gwu.NewLabel("Home, sweet home of " + server.Text())
