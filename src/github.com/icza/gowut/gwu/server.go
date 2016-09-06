@@ -783,7 +783,7 @@ func (s *serverImpl) handleEvent(sess Session, win Window, wr http.ResponseWrite
 		if len(shared.dirtyComps) > 0 {
 			hasAction = true
 			w.Writev(eraDirtyComps)
-			for id, _ := range shared.dirtyComps {
+			for id := range shared.dirtyComps {
 				w.Write(strComma)
 				w.Writev(int(id))
 			}

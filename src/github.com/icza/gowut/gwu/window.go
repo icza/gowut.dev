@@ -140,7 +140,7 @@ func (c *windowImpl) Render(w Writer) {
 
 	// First render window event handlers as window functions.
 	found := false
-	for etype, _ := range c.handlers {
+	for etype := range c.handlers {
 		if etype.Category() != ECatWindow {
 			continue
 		}
