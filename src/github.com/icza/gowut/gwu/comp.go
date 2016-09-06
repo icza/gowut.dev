@@ -299,7 +299,7 @@ func (c *compImpl) renderEHandlers(w Writer) {
 
 // THIS IS AN EMPTY IMPLEMENTATION AS NOT ALL COMPONENTS NEED THIS.
 // THOSE WHO DO SHOULD DEFINE THEIR OWN.
-func (b *compImpl) preprocessEvent(event Event, r *http.Request) {
+func (c *compImpl) preprocessEvent(event Event, r *http.Request) {
 }
 
 func (c *compImpl) dispatchEvent(e Event) {

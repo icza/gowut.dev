@@ -18,7 +18,6 @@
 package gwu
 
 import (
-	"errors"
 	"fmt"
 	"html"
 	"io"
