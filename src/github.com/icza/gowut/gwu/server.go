@@ -75,7 +75,7 @@ type SessionHandler interface {
 	Removed(sess Session)
 }
 
-// Function type that handles the application root (when no window name is specified).
+// AppRootHandlerFunc is the function type that handles the application root (when no window name is specified).
 // sess is the shared, public session if no private session is created.
 type AppRootHandlerFunc func(w http.ResponseWriter, r *http.Request, sess Session)
 
