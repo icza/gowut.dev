@@ -453,8 +453,8 @@ func (s *styleImpl) SetClass(class string) Style {
 }
 
 func (s *styleImpl) RemoveClass(class string) Style {
-	for i, class_ := range s.classes {
-		if class_ == class {
+	for i, cl := range s.classes {
+		if cl == class {
 			oldClasses := s.classes
 			s.classes = append(oldClasses[0:i], oldClasses[i+1:]...)
 			oldClasses[len(oldClasses)-1] = ""
