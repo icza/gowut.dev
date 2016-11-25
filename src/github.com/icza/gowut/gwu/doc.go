@@ -264,7 +264,7 @@ https://github.com/icza/gowut/blob/master/examples/simple/simple_demo.go
 		// Create and build a window
 		win := gwu.NewWindow("main", "Test GUI Window")
 		win.Style().SetFullWidth()
-		win.SetHAlign(gwu.HaCenter)
+		win.SetHAlign(gwu.HACenter)
 		win.SetCellPadding(2)
 
 		// Button which changes window content

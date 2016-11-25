@@ -1,6 +1,6 @@
 
 -New event response action: show a dialog (e.g. confirmation, input).
-After dialog is closed, it should generate a new event transferring the action/input from the dialog. 
+After dialog is closed, it should generate a new event transferring the action/input from the dialog.
 
 -Clicking on the icon of the Expander's header should also expand/collapse.
 This might require to add the icon as a separate component, and also register event handler to it.
@@ -25,12 +25,12 @@ This might require to add the icon as a separate component, and also register ev
 -Implement Comp.RemoveEHandler() and Comp.RemoveEHandlerFunc() (and use it when removing tabs or expander headers...)
 
 -New components:
-	-new comps for input type (problem: weak support, mostly just by Chrome and Opera): date; color; range (jslider) 
+	-new comps for input type (problem: weak support, mostly just by Chrome and Opera): date; color; range (jslider)
 	-SuggestBox
 	-Absolute Panel
 	-Dialogs/Popups
 	-Slider
-	-iframe, in the showcase app it should link/contain the source code of the showcase app! 
+	-iframe, in the showcase app it should link/contain the source code of the showcase app!
 	-ProgressBar
 	-Form (+ fileuploader, submit button)
 	-Audio and Video (HTML5)
@@ -41,7 +41,7 @@ This might require to add the icon as a separate component, and also register ev
 Also display an error icon if an ajax call fails, gather messages and list them all when clicked.
 
 
--Rewrite window list to use gwu components (be a real Window); also allow replacing it (at Server)
+-Allow replacing root window (at Server)
 	-Consider a Home Window (also replacable)
 
 
