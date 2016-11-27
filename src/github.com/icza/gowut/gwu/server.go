@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -208,7 +209,8 @@ type serverImpl struct {
 	addr               string             // Server address
 	secure             bool               // Tells if the server is configured to run in secure (HTTPS) mode
 	appPath            string             // Application path
-	appUrl             string             // Application URL
+	appUrlString       string             // Application URL string
+	appURL             *url.URL           // Application URL, parsed
 	sessions           map[string]Session // Sessions
 	certFile, keyFile  string             // Certificate and key files for secure (HTTPS) mode
 	sessCreatorNames   map[string]string  // Session creator names
@@ -257,12 +259,16 @@ func newServerImpl(appName, addr, certFile, keyFile string) *serverImpl {
 
 	if certFile == "" || keyFile == "" {
 		s.secure = false
-		s.appUrl = "http://" + addr + s.appPath
+		s.appUrlString = "http://" + addr + s.appPath
 	} else {
 		s.secure = true
-		s.appUrl = "https://" + addr + s.appPath
+		s.appUrlString = "https://" + addr + s.appPath
 		s.certFile = certFile
 		s.keyFile = keyFile
+	}
+	var err error
+	if s.appURL, err = url.Parse(s.appUrlString); err != nil {
+		panic(fmt.Sprintf("Parse %q: %+v", s.appUrlString, err))
 	}
 
 	s.appRootHandlerFunc = s.renderWinList
@@ -275,7 +281,7 @@ func (s *serverImpl) Secure() bool {
 }
 
 func (s *serverImpl) AppUrl() string {
-	return s.appUrl
+	return s.appUrlString
 }
 
 func (s *serverImpl) AppPath() string {
@@ -359,8 +365,12 @@ func (s *serverImpl) addSessCookie(sess Session, w http.ResponseWriter) {
 	// HttpOnly: do not allow non-HTTP access to it (like javascript) to prevent stealing it...
 	// Secure: only send it over HTTPS
 	// MaxAge: to specify the max age of the cookie in seconds, else it's a session cookie and gets deleted after the browser is closed.
-	c := http.Cookie{Name: gwuSessidCookie, Value: sess.Id(), Path: s.appPath, HttpOnly: true, Secure: s.secure,
-		MaxAge: 72 * 60 * 60} // 72 hours max age
+	c := http.Cookie{
+		Name: gwuSessidCookie, Value: sess.Id(),
+		Path:     s.appURL.EscapedPath(),
+		HttpOnly: true, Secure: s.secure,
+		MaxAge: 72 * 60 * 60, // 72 hours max age
+	}
 	http.SetCookie(w, &c)
 
 	sess.clearNew()
