@@ -24,6 +24,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"path"
 	"strconv"
 	"strings"
 	"time"
@@ -658,48 +659,50 @@ func (s *serverImpl) renderWinList(wr http.ResponseWriter, r *http.Request, sess
 	if s.logger != nil {
 		s.logger.Println("\tRendering windows list.")
 	}
-	wr.Header().Set("Content-Type", "text/html; charset=utf-8")
+	win := NewWindow("windowList", "Window list")
+	panel := NewNaturalPanel()
+	win.Add(panel)
 
-	w := NewWriter(wr)
-
-	w.Writes(`<html><head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>`)
-	w.Writees(s.text)
-	w.Writes(" - Window list</title>")
-	w.Writess(s.rootHeads...)
-	w.Writes("</head><body><h2>")
-	w.Writees(s.text)
-	w.Writes(" - Window list</h2>")
+	addLinks := func(title string, nameTexts [][2]string) {
+		if len(nameTexts) == 0 {
+			return
+		}
+		p := NewVerticalPanel()
+		panel.Add(p)
+		p.Add(NewLabel(title))
+		for _, nameText := range nameTexts {
+			p.Add(NewLink(nameText[1], path.Join(s.appPath, nameText[0])))
+		}
+	}
 
 	// Render both private and public session windows
 	sessions := make([]Session, 1, 2)
 	sessions[0] = sess
+	nameTexts := make([][2]string, 0, len(s.sessCreatorNames)+1)
 	if sess.Private() {
 		sessions = append(sessions, &s.sessionImpl)
-	} else {
+	} else if len(s.sessCreatorNames) > 0 {
 		// No private session yet, render session creators:
-		if len(s.sessCreatorNames) > 0 {
-			w.Writes("Session creators:<ul>") // TODO needs a better name
-			for name, text := range s.sessCreatorNames {
-				w.Writess(`<li><a href="`, s.appPath, name, `">`, text, "</a>")
-			}
-			w.Writes("</ul>")
+		nameTexts = nameTexts[:0]
+		for name, text := range s.sessCreatorNames {
+			nameTexts = append(nameTexts, [2]string{name, text})
 		}
+		addLinks("Session creators:", nameTexts)
 	}
 
 	for _, session := range sessions {
+		text := "Public windows:"
 		if session.Private() {
-			w.Writes("Authenticated windows:")
-		} else {
-			w.Writes("Public windows:")
+			text = "Authenticated windows:"
 		}
-		w.Writes("<ul>")
+		nameTexts = nameTexts[:0]
 		for _, win := range session.SortedWins() {
-			w.Writess(`<li><a href="`, s.appPath, win.Name(), `">`, win.Text(), "</a>")
+			nameTexts = append(nameTexts, [2]string{win.Name(), win.Text()})
 		}
-		w.Writes("</ul>")
+		addLinks(text, nameTexts)
 	}
 
-	w.Writes("</body></html>")
+	win.RenderWin(NewWriter(wr), s)
 }
 
 // renderComp renders just a component.
