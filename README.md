@@ -1,7 +1,7 @@
 # gowut.dev
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/icza/gowut.dev)](https://goreportcard.com/report/github.com/icza/gowut.dev)
+This project was the home of [GOWUT](https://github.com/icza/gowut) development.
 
-Go Web UI Toolkit - Development
+As of 2016-11-27, development of Gowut has been moved to the `dev` branch of the `gowut` project: https://github.com/icza/gowut/tree/dev
 
-Development branch/project of [GOWUT](https://github.com/icza/gowut).
+This project is here for historical reason. Might get deleted in the future.
